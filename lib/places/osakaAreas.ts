@@ -1,0 +1,2 @@
+export const priorityAreas=[{name:"梅田",ward:"北区",slug:"kita"},{name:"心斎橋",ward:"中央区",slug:"chuo"},{name:"なんば",ward:"中央区",slug:"chuo"},{name:"本町",ward:"中央区",slug:"chuo"},{name:"堀江",ward:"西区",slug:"nishi"},{name:"福島",ward:"福島区",slug:"fukushima"},{name:"天王寺",ward:"天王寺区",slug:"tennoji"},{name:"阿倍野",ward:"阿倍野区",slug:"abeno"}] as const;
+export const wardAliases:Record<string,string>={kita:"北区",chuo:"中央区",nishi:"西区",fukushima:"福島区",tennoji:"天王寺区",naniwa:"浪速区",abeno:"阿倍野区",yodogawa:"淀川区"};
