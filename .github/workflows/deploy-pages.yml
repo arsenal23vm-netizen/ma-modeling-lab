@@ -1,4 +1,4 @@
-name: Deploy Next.js site to Pages
+name: Deploy Quattro Map Osaka to GitHub Pages
 
 on:
   push:
@@ -21,14 +21,16 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
           cache: npm
       - run: npm ci
       - run: npm run build
         env:
           PAGES_BASE_PATH: /ma-modeling-lab
+          NEXT_PUBLIC_BASE_PATH: /ma-modeling-lab
+          NEXT_PUBLIC_SITE_URL: https://arsenal23vm-netizen.github.io/ma-modeling-lab
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
 

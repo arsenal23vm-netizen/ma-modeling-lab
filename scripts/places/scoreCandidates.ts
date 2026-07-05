@@ -1,0 +1,2 @@
+import{loadCandidates,saveCandidates}from"../../lib/places/candidateStorage";import{scoreCandidate}from"../../lib/places/candidateScoring";
+export async function score(){const items=(await loadCandidates()).map(scoreCandidate);await saveCandidates(items);console.log(`${items.length}件をローカルデータだけでスコアリングしました。API呼び出し: 0件`)}if(process.argv[1]?.endsWith("scoreCandidates.ts"))void score().catch(error=>{console.error(error);process.exitCode=1});

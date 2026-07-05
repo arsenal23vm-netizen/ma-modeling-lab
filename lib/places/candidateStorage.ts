@@ -1,0 +1,5 @@
+import fs from"node:fs/promises";import path from"node:path";import type{PlaceCandidate}from"./types";
+const store=path.join(process.cwd(),"data/place-candidates-osaka.json");
+export async function loadCandidates():Promise<PlaceCandidate[]>{try{return JSON.parse(await fs.readFile(store,"utf8"))as PlaceCandidate[]}catch{return[]}}
+export async function saveCandidates(candidates:PlaceCandidate[]){const tmp=`${store}.tmp`;await fs.mkdir(path.dirname(store),{recursive:true});await fs.writeFile(tmp,JSON.stringify(candidates,null,2));await fs.rename(tmp,store)}
+export function mergeCandidates(existing:PlaceCandidate[],incoming:PlaceCandidate[]){const map=new Map(existing.map(c=>[c.googlePlaceId,c]));for(const next of incoming){const old=map.get(next.googlePlaceId);map.set(next.googlePlaceId,old?{...old,...next,id:old.id,firstSeenAt:old.firstSeenAt,sourceQueries:[...new Set([...old.sourceQueries,...next.sourceQueries])],sources:[...new Set([...old.sources,...next.sources])],manualCheckStatus:old.manualCheckStatus,notes:old.notes,verifiedSourceUrl:old.verifiedSourceUrl,verifiedSourceLabel:old.verifiedSourceLabel}:next)}return[...map.values()]}
