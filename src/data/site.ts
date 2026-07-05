@@ -5,6 +5,7 @@ export const navItems = [
   { href: "/bs-model", label: "BS設計" },
   { href: "/cf-model", label: "CF設計" },
   { href: "/excel-functions", label: "Excel関数" },
+  { href: "/books", label: "書籍" },
   { href: "/tools", label: "実務ツール" },
 ];
 
