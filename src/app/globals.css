@@ -7,6 +7,8 @@ body { margin:0; background:#fff; color:var(--ink); font-family:"Yu Gothic UI","
 a { color:inherit; text-decoration:none; }
 button,input,select { font:inherit; }
 .container { width:min(1180px, calc(100% - 40px)); margin-inline:auto; }
+.article-container { width:min(1500px, calc(100% - 32px)); margin-inline:auto; }
+.data-scroll { max-width:100%; overflow-x:auto; }
 .eyebrow { color:var(--teal); font-size:.75rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
 .section-title { margin:0; font-size:clamp(1.55rem,3vw,2.35rem); line-height:1.35; }
 .muted { color:var(--muted); }
@@ -25,4 +27,4 @@ button,input,select { font:inherit; }
 .article-copy p { margin:0 0 16px; }
 .article-copy ul,.article-copy ol { padding-left:1.4rem; }
 .article-copy li { margin:7px 0; }
-@media(max-width:760px){ .container{width:min(100% - 24px,1180px)} .data-scroll{overflow-x:auto}.data-table{min-width:680px} }
+@media(max-width:760px){ .container,.article-container{width:min(100% - 24px,1180px)} .data-table{min-width:680px} }

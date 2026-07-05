@@ -1,4 +1,4 @@
-# M&A Modeling Lab
+# Finance Modeling Lab
 
 非上場企業M&Aの財務モデリングを、設計思想からExcel実装まで体系的に学ぶ独立Webサイトです。既存のArsenalサイトとはコード・公開設定ともに分離しています。
 
