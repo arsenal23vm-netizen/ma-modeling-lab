@@ -1,0 +1,8 @@
+import type { Metadata } from "next"; import { ArticleShell } from "@/components/article-shell";
+export const metadata:Metadata={title:"前提条件とシナリオ管理"}; const sections=[{id:"map",label:"前提の全体像"},{id:"scenario",label:"シナリオ設計"},{id:"transaction",label:"取引前提"},{id:"audit",label:"証跡管理"}];
+export default function Page(){return <ArticleShell no="02" title="前提条件とシナリオ管理" lead="モデルの品質は、計算式より前提の所在と根拠で決まります。事業・会計・取引・資金調達を一つのコントロール面に集約します。" sections={sections}>
+  <h2 id="map">前提を4群に分ける</h2><div className="data-scroll"><table className="data-table"><thead><tr><th>分類</th><th>主な前提</th><th>確認資料</th></tr></thead><tbody><tr><td>事業</td><td>数量、単価、解約率、人員、賃金</td><td>事業計画、KPI実績</td></tr><tr><td>会計</td><td>償却年数、引当、税率、運転資本</td><td>試算表、税務申告書</td></tr><tr><td>取引</td><td>買収価格、クロージング日、手数料</td><td>LOI、SPAドラフト</td></tr><tr><td>資金調達</td><td>借入額、金利、返済、コベナンツ</td><td>タームシート</td></tr></tbody></table></div>
+  <h2 id="scenario">シナリオは「変数の束」として扱う</h2><p>Base・Upside・Downsideを列に並べ、選択セルからINDEXやXLOOKUPで有効値を取得します。数式そのものをシナリオごとに複製すると、修正漏れが生じます。</p><div className="formula">Active Assumption = XLOOKUP(Selected Case, Case Header, Assumption Row)</div><div className="callout warning"><strong>よくある失敗</strong><br/>売上成長率だけを下げ、必要人員・在庫・設備投資・借入返済を連動させない「部分的なDownside」は、資金不足を過小評価します。</div>
+  <h2 id="transaction">取引前提は事業計画と混ぜない</h2><p>Enterprise ValueからEquity Purchase Priceへのブリッジ、既存借入返済、取引費用、最低現金、ロールオーバーをSources & Usesで明示します。</p><div className="formula">Uses = Equity Purchase Price + Debt Refinance + Fees + Minimum Cash<br/>Sources = New Debt + Sponsor Equity + Rollover Equity</div>
+  <h2 id="audit">根拠と更新日を残す</h2><p>前提値には、出所、資料日付、作成者、コメントを併記します。数値の新しさだけでなく「誰と合意した前提か」がレビューで重要になります。</p><ul><li>Fact：実績資料から直接取得</li><li>Management case：経営陣計画</li><li>Deal team case：検証・調整後の投資判断用前提</li></ul>
+ </ArticleShell>}

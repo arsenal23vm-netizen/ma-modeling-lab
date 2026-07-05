@@ -1,0 +1,6 @@
+import Link from "next/link";
+export function ArticleShell({no,title,lead,sections,children}:{no:string,title:string,lead:string,sections:{id:string;label:string}[],children:React.ReactNode}){return <>
+  <section className="border-b border-[#d8e0e5] bg-[#f7f8f6]"><div className="container py-12 md:py-16"><div className="eyebrow">LESSON {no} / FINANCIAL MODELING</div><h1 className="mt-3 max-w-4xl text-3xl font-bold leading-tight md:text-5xl">{title}</h1><p className="mt-5 max-w-3xl text-lg text-[#607080]">{lead}</p></div></section>
+  <div className="container grid gap-12 py-10 lg:grid-cols-[minmax(0,1fr)_270px]"><article className="article-copy min-w-0">{children}<div className="callout warning"><strong>重要</strong><br/>本ページは教育目的です。実案件では会計士・税理士・弁護士などの専門家と、対象会社固有の事実関係を確認してください。</div></article>
+  <aside className="order-first lg:order-last"><div className="sticky top-24 border-t-4 border-[#102235] bg-[#f7f8f6] p-5"><strong className="text-sm">このページの内容</strong><ol className="mt-3 space-y-2 text-sm text-[#607080]">{sections.map((s,i)=><li key={s.id}><a href={`#${s.id}`} className="hover:text-[#147d73]">{String(i+1).padStart(2,"0")} {s.label}</a></li>)}</ol><Link href="/tools" className="button green mt-5 w-full text-sm">ツールで試す</Link></div></aside></div>
+  </>}
