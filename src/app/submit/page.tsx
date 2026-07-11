@@ -1,3 +1,0 @@
-import type { Metadata } from "next"; import { SubmitShopForm } from "@/components/SubmitShopForm";
-export const metadata:Metadata={title:"掲載・修正依頼",description:"クアトロフォルマッジを提供する大阪市のお店の掲載・修正情報をお寄せください。"};
-export default function SubmitPage(){return <div className="container submit-page"><div className="submit-intro"><span className="eyebrow">SHARE A PLACE</span><h1>お店の情報を<br/>教えてください。</h1><p>クアトロフォルマッジを提供しているお店の掲載依頼や、掲載内容の修正を受け付けています。</p><div className="process"><span>1</span><p><b>情報を送信</b><br/>分かる範囲で入力してください</p><span>2</span><p><b>運営が確認</b><br/>公式情報などと照合します</p><span>3</span><p><b>マップに掲載</b><br/>確認状況とともに公開します</p></div></div><SubmitShopForm/></div>}

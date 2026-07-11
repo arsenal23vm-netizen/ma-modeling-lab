@@ -1,3 +1,30 @@
-import type { MetadataRoute } from "next"; import { shops } from "@/data/shops"; import { wards } from "@/data/wards";
-export const dynamic="force-static";
-export default function sitemap():MetadataRoute.Sitemap{const base=process.env.NEXT_PUBLIC_SITE_URL??"https://arsenal23vm-netizen.github.io/ma-modeling-lab";const paths=["","/submit",...shops.map(s=>`/shops/${s.slug}`),...wards.map(w=>`/osaka/${w.slug}`)];return paths.map(path=>({url:base+path,lastModified:new Date(),changeFrequency:"monthly" as const,priority:path===""?1:.7}))}
+import type { MetadataRoute } from "next";
+import { lessons } from "@/data/site";
+
+export const dynamic = "force-static";
+
+const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://arsenal23vm-netizen.github.io/ma-modeling-lab";
+const lastModified = new Date("2026-07-11T00:00:00+09:00");
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const paths = [
+    { path: "", priority: 1, changeFrequency: "weekly" as const },
+    { path: "/tools", priority: 0.8, changeFrequency: "monthly" as const },
+    { path: "/books", priority: 0.8, changeFrequency: "monthly" as const },
+    { path: "/request", priority: 0.7, changeFrequency: "monthly" as const },
+    { path: "/disclaimer", priority: 0.3, changeFrequency: "yearly" as const },
+    { path: "/privacy", priority: 0.3, changeFrequency: "yearly" as const },
+    ...lessons.map((lesson) => ({
+      path: `/${lesson.slug}`,
+      priority: 0.85,
+      changeFrequency: "monthly" as const,
+    })),
+  ];
+
+  return paths.map((item) => ({
+    url: `${base}${item.path}`,
+    lastModified,
+    changeFrequency: item.changeFrequency,
+    priority: item.priority,
+  }));
+}

@@ -1,4 +1,4 @@
-name: Deploy Quattro Map Osaka to GitHub Pages
+name: Deploy Finance Modeling Lab to GitHub Pages
 
 on:
   push:
@@ -29,8 +29,9 @@ jobs:
           PAGES_BASE_PATH: /ma-modeling-lab
           NEXT_PUBLIC_BASE_PATH: /ma-modeling-lab
           NEXT_PUBLIC_SITE_URL: https://arsenal23vm-netizen.github.io/ma-modeling-lab
+          NEXT_PUBLIC_GA_ID: ${{ vars.NEXT_PUBLIC_GA_ID }}
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: ./out
 
