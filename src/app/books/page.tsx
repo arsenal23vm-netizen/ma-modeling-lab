@@ -1,18 +1,177 @@
 import type { Metadata } from "next";
 import { AmazonButton } from "@/components/AmazonButton";
 
-export const metadata:Metadata={title:"財務モデリングの推薦書籍",description:"財務モデリング、Excel設計、企業価値評価、M&A財務デューデリジェンスを学ぶための推薦書籍。"};
+export const metadata: Metadata = {
+  title: "財務モデリングの推薦書籍",
+  description: "財務モデリング、Excel設計、企業価値評価、M&A財務デューデリジェンスを学ぶための推薦書籍。",
+};
 
-const books=[
-  {theme:"財務モデリング入門",title:"Modelling プロフェッショナル財務モデリング 入門と実践",author:"中尾宏規",date:"2024年6月13日",content:"財務モデリングの全体像から、実務で使うExcelショートカット・関数、モデル作成時の考え方までを68ページに凝縮。",recommend:"最初の1冊に最適。短時間で全体像をつかみ、このサイトのPL・BS・CF講座へ進むための地図が手に入ります。",audience:"初心者向け",difficulty:1,isbn:"9784502489013",featured:true},
-  {theme:"Excelモデル設計",title:"ファイナンスのプロになる Excel財務モデリングの教科書Ⅰ ミスを減らせるルール編",author:"服部浩弥",date:"2020年4月1日",content:"入力・計算・出力の区分、色分け、数式、レビューしやすい構造など、財務モデルを壊れにくくする実務上の作法を体系化。",recommend:"モデルの見た目と保守性が劇的に変わる本。自己流のExcelから、他人が検証できるプロ仕様へ進みたい人に強く勧めます。",audience:"初心者〜実務者",difficulty:2,isbn:"9784419067113",featured:true},
-  {theme:"財務三表・DCF",title:"コーポレートファイナンス 戦略と実践",author:"田中慎一・保田隆明",date:"2019年4月",content:"会計の基礎から運転資本、予想財務三表、フリーキャッシュフロー、WACC、DCF法、マルチプル、M&Aまでをケースで解説。",recommend:"数式の意味を経営判断と結びつけられる一冊。モデルを作れるだけでなく、計算結果を説明できる人になりたいなら有力です。",audience:"初心者〜中級者",difficulty:2,isbn:"9784478105412",featured:true},
-  {theme:"企業価値評価入門",title:"バリュエーションの教科書",author:"森生明",date:"2016年2月",content:"企業価値がどのように形成され、DCF法や市場評価が現実のニュース・交渉とどう結びつくかを、手触りのある言葉で解説。",recommend:"難解な理論書へ進む前の橋渡しに最適。バリュエーションを計算手順ではなく、価格交渉の言語として理解できます。",audience:"初心者〜中級者",difficulty:2,isbn:"9784492602232"},
-  {theme:"企業価値評価・理論",title:"企業価値評価 第7版［上］ バリュエーションの理論と実践",author:"マッキンゼー・アンド・カンパニーほか",date:"2022年1月25日",content:"ROIC、成長率、キャッシュフローと企業価値の関係を原理から解説する世界的定番。DCFモデルの前提を支える理論を網羅。",recommend:"本気でプロを目指すなら避けて通れない基準書。モデルの各前提が企業価値へ効く理由を、理論的に説明できるようになります。",audience:"実務者・プロ向け",difficulty:4,isbn:"9784478112878"},
-  {theme:"財務デューデリジェンス",title:"M&A 財務デューデリジェンス",author:"デロイト トーマツ ファイナンシャルアドバイザリー合同会社 編",date:"2018年11月7日",content:"M&Aプロセス、財務DDの進め方、案件類型ごとの論点を、実務の最前線で培われた視点から網羅的に整理。",recommend:"モデルの前提をどこまで信用できるか判断する力が身につきます。正常収益力、純有利子負債、運転資本調整を深掘りしたい人向けです。",audience:"実務者・プロ向け",difficulty:4,isbn:"9784433660581"},
-  {theme:"財務DD・報告書",title:"M&A財務デューデリジェンス入門〔第2版〕 手順と報告書の書き方",author:"G&Sソリューションズ 編・山田勝也 監修",date:"2025年12月8日",content:"財務DDの受嘱から調査、貸借対照表・損益計算書の分析、報告書作成までをサンプルやチェックシートとともに解説。",recommend:"調査結果をモデルへ反映し、さらに報告書へ落とす一連の仕事を学べます。初めてDDを担当する実務家の手元に置きたい本です。",audience:"中級者〜実務者",difficulty:3,isbn:"9784419072865"},
+const books = [
+  {
+    theme: "財務モデリング入門",
+    title: "Modelling プロフェッショナル財務モデリング 入門と実践",
+    author: "中尾宏規",
+    date: "2024年6月13日",
+    content: "財務モデリングの全体像から、実務で使うExcelショートカット・関数、モデル作成時の考え方までを68ページに凝縮。",
+    recommend: "最初の1冊に最適。短時間で全体像をつかみ、このサイトのPL・BS・CF講座へ進むための地図が手に入ります。",
+    audience: "初心者向け",
+    difficulty: 1,
+    isbn: "9784502489013",
+    featured: true,
+  },
+  {
+    theme: "Excelモデル設計",
+    title: "ファイナンスのプロになる Excel財務モデリングの教科書Ⅰ ミスを減らせるルール編",
+    author: "服部浩弥",
+    date: "2020年4月1日",
+    content: "入力・計算・出力の区分、色分け、数式、レビューしやすい構造など、財務モデルを壊れにくくする実務上の作法を体系化。",
+    recommend: "モデルの見た目と保守性が劇的に変わる本。自己流のExcelから、他人が検証できるプロ仕様へ進みたい人に強く勧めます。",
+    audience: "初心者〜実務者",
+    difficulty: 2,
+    isbn: "9784419067113",
+    featured: true,
+  },
+  {
+    theme: "財務三表・DCF",
+    title: "コーポレートファイナンス 戦略と実践",
+    author: "田中慎一・保田隆明",
+    date: "2019年4月",
+    content: "会計の基礎から運転資本、予想財務三表、フリーキャッシュフロー、WACC、DCF法、マルチプル、M&Aまでをケースで解説。",
+    recommend: "数式の意味を経営判断と結びつけられる一冊。モデルを作れるだけでなく、計算結果を説明できる人になりたいなら有力です。",
+    audience: "初心者〜中級者",
+    difficulty: 2,
+    isbn: "9784478105412",
+    featured: true,
+  },
+  {
+    theme: "企業価値評価入門",
+    title: "バリュエーションの教科書",
+    author: "森生明",
+    date: "2016年2月",
+    content: "企業価値がどのように形成され、DCF法や市場評価が現実のニュース・交渉とどう結びつくかを、手触りのある言葉で解説。",
+    recommend: "難解な理論書へ進む前の橋渡しに最適。バリュエーションを計算手順ではなく、価格交渉の言語として理解できます。",
+    audience: "初心者〜中級者",
+    difficulty: 2,
+    isbn: "9784492602232",
+  },
+  {
+    theme: "企業価値評価・理論",
+    title: "企業価値評価 第7版［上］ バリュエーションの理論と実践",
+    author: "マッキンゼー・アンド・カンパニーほか",
+    date: "2022年1月25日",
+    content: "ROIC、成長率、キャッシュフローと企業価値の関係を原理から解説する世界的定番。DCFモデルの前提を支える理論を網羅。",
+    recommend: "本気でプロを目指すなら避けて通れない基準書。モデルの各前提が企業価値へ効く理由を、理論的に説明できるようになります。",
+    audience: "実務者・プロ向け",
+    difficulty: 4,
+    isbn: "9784478112878",
+  },
+  {
+    theme: "財務デューデリジェンス",
+    title: "M&A 財務デューデリジェンス",
+    author: "デロイト トーマツ ファイナンシャルアドバイザリー合同会社 編",
+    date: "2018年11月7日",
+    content: "M&Aプロセス、財務DDの進め方、案件類型ごとの論点を、実務の最前線で培われた視点から網羅的に整理。",
+    recommend: "モデルの前提をどこまで信用できるか判断する力が身につきます。正常収益力、純有利子負債、運転資本調整を深掘りしたい人向けです。",
+    audience: "実務者・プロ向け",
+    difficulty: 4,
+    isbn: "9784433660581",
+  },
+  {
+    theme: "財務DD・報告書",
+    title: "M&A財務デューデリジェンス入門〔第2版〕 手順と報告書の書き方",
+    author: "G&Sソリューションズ 編・山田勝也 監修",
+    date: "2025年12月8日",
+    content: "財務DDの受嘱から調査、貸借対照表・損益計算書の分析、報告書作成までをサンプルやチェックシートとともに解説。",
+    recommend: "調査結果をモデルへ反映し、さらに報告書へ落とす一連の仕事を学べます。初めてDDを担当する実務家の手元に置きたい本です。",
+    audience: "中級者〜実務者",
+    difficulty: 3,
+    isbn: "9784419072865",
+  },
 ];
 
-function Difficulty({value}:{value:number}){return <div className="flex items-center gap-1" aria-label={`難易度5段階中${value}`}>{[1,2,3,4,5].map(n=><span key={n} className={`h-2 w-7 ${n<=value?"bg-[#217346]":"bg-[#d8e0e5]"}`}/>)}</div>}
+function Difficulty({ value }: { value: number }) {
+  return (
+    <div className="flex items-center gap-1" aria-label={`難易度5段階中${value}`}>
+      {[1, 2, 3, 4, 5].map((number) => (
+        <span key={number} className={`h-2 w-7 ${number <= value ? "bg-[#217346]" : "bg-[#d8e0e5]"}`} />
+      ))}
+    </div>
+  );
+}
 
-export default function Page(){return <><section className="border-b border-[#d8e0e5] bg-[#f7f8f6]"><div className="container py-14"><div className="eyebrow">FINANCE MODELING BOOKSHELF</div><h1 className="mt-3 text-4xl font-bold md:text-5xl">財務モデリングを深める本</h1><p className="mt-5 max-w-3xl text-lg text-[#607080]">Excelの型を身につけ、数字の意味を理解し、案件で判断できるようになる。現在のレベルと次に伸ばしたい力から選べる7冊です。</p></div></section><div className="container py-12"><div className="mb-10 grid border-y border-[#d8e0e5] md:grid-cols-4"><div className="p-5"><span className="eyebrow">STEP 1</span><strong className="mt-1 block">全体像をつかむ</strong></div><div className="border-[#d8e0e5] p-5 md:border-l"><span className="eyebrow">STEP 2</span><strong className="mt-1 block">Excelの型を固める</strong></div><div className="border-[#d8e0e5] p-5 md:border-l"><span className="eyebrow">STEP 3</span><strong className="mt-1 block">価値評価へ進む</strong></div><div className="border-[#d8e0e5] p-5 md:border-l"><span className="eyebrow">STEP 4</span><strong className="mt-1 block">案件調査へ広げる</strong></div></div><div className="space-y-6">{books.map((book,index)=><article key={book.isbn} className="grid border border-[#d8e0e5] bg-white lg:grid-cols-[190px_1fr_220px]"><div className="border-b border-[#d8e0e5] bg-[#f1f6f3] p-6 lg:border-b-0 lg:border-r"><div className="font-mono text-4xl font-bold text-[#147d73]">{String(index+1).padStart(2,"0")}</div><div className="mt-5 text-xs font-bold tracking-[.08em] text-[#607080]">{book.theme}</div>{book.featured&&<span className="mt-4 inline-block bg-[#102235] px-2 py-1 text-[10px] font-bold text-white">編集部推薦</span>}</div><div className="p-6"><h2 className="text-xl font-bold leading-relaxed">{book.title}</h2><p className="mt-1 text-sm text-[#607080]">{book.author} ・ {book.date}</p><div className="mt-5 grid gap-5 md:grid-cols-2"><div><h3 className="text-xs font-bold text-[#147d73]">内容</h3><p className="mt-1 text-sm">{book.content}</p></div><div><h3 className="text-xs font-bold text-[#147d73]">おすすめポイント</h3><p className="mt-1 text-sm">{book.recommend}</p></div></div></div><div className="flex flex-col justify-between border-t border-[#d8e0e5] p-6 lg:border-l lg:border-t-0"><div><span className="text-xs text-[#607080]">対象</span><strong className="mb-5 block">{book.audience}</strong><span className="text-xs text-[#607080]">難易度</span><Difficulty value={book.difficulty}/></div><AmazonButton href={`https://www.amazon.co.jp/s?k=${book.isbn}`} bookTitle={book.title} asin={book.isbn} className="button green mt-6 w-full">Amazonで確認</AmazonButton></div></article>)}</div><div className="callout mt-10"><strong>迷ったときの選び方</strong><br/>初めてなら『プロフェッショナル財務モデリング 入門と実践』、Excelを仕事で使い始めたら『Excel財務モデリングの教科書Ⅰ』、DCFまで一気につなげたいなら『コーポレートファイナンス 戦略と実践』がおすすめです。</div><p className="mt-6 text-xs text-[#607080]">書誌情報は出版社等の公開情報をもとに作成しています。AmazonリンクはISBNによる検索ページです。価格、在庫、版、電子書籍の有無はAmazonの商品画面でご確認ください。当サイトは現在Amazonアソシエイトリンクを使用していません。</p></div></>}
+export default function Page() {
+  return (
+    <>
+      <section className="border-b border-[#d8e0e5] bg-[#f7f8f6]">
+        <div className="container py-14">
+          <div className="eyebrow">FINANCE MODELING BOOKSHELF</div>
+          <h1 className="mt-3 text-4xl font-bold tracking-[-.04em] text-[#102235] md:text-5xl">財務モデリングを深める本</h1>
+          <p className="mt-5 max-w-3xl text-lg text-[#607080]">
+            Excelの型を身につけ、数字の意味を理解し、案件で判断できるようになる。現在のレベルと次に伸ばしたい力から選べる7冊です。
+          </p>
+        </div>
+      </section>
+      <div className="container py-12">
+        <div className="callout">
+          <strong>掲載方針</strong>
+          <br />
+          書籍は、財務モデリング、Excel設計、企業価値評価、M&A財務デューデリジェンスの学習導線に沿って選定しています。AmazonリンクはISBNによる検索ページです。
+        </div>
+        <div className="mb-10 mt-8 grid border-y border-[#d8e0e5] bg-white md:grid-cols-4">
+          {["全体像をつかむ", "Excelの型を固める", "価値評価へ進む", "案件調査へ広げる"].map((step, index) => (
+            <div key={step} className="border-[#d8e0e5] p-5 md:border-l first:md:border-l-0">
+              <span className="eyebrow">STEP {index + 1}</span>
+              <strong className="mt-1 block text-[#102235]">{step}</strong>
+            </div>
+          ))}
+        </div>
+        <div className="space-y-6">
+          {books.map((book, index) => (
+            <article key={book.isbn} className="grid border border-[#d8e0e5] bg-white lg:grid-cols-[190px_1fr_220px]">
+              <div className="border-b border-[#d8e0e5] bg-[#f1f6f3] p-6 lg:border-b-0 lg:border-r">
+                <div className="font-mono text-4xl font-bold text-[#147d73]">{String(index + 1).padStart(2, "0")}</div>
+                <div className="mt-5 text-xs font-bold tracking-[.08em] text-[#607080]">{book.theme}</div>
+                {book.featured && <span className="mt-4 inline-block bg-[#102235] px-2 py-1 text-[10px] font-bold text-white">編集部推薦</span>}
+              </div>
+              <div className="p-6">
+                <h2 className="text-xl font-bold leading-relaxed text-[#102235]">{book.title}</h2>
+                <p className="mt-1 text-sm text-[#607080]">
+                  {book.author} ・ {book.date}
+                </p>
+                <div className="mt-5 grid gap-5 md:grid-cols-2">
+                  <div>
+                    <h3 className="text-xs font-bold text-[#147d73]">内容</h3>
+                    <p className="mt-1 text-sm">{book.content}</p>
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-bold text-[#147d73]">おすすめポイント</h3>
+                    <p className="mt-1 text-sm">{book.recommend}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col justify-between border-t border-[#d8e0e5] p-6 lg:border-l lg:border-t-0">
+                <div>
+                  <span className="text-xs text-[#607080]">対象</span>
+                  <strong className="mb-5 block text-[#102235]">{book.audience}</strong>
+                  <span className="text-xs text-[#607080]">難易度</span>
+                  <Difficulty value={book.difficulty} />
+                </div>
+                <AmazonButton href={`https://www.amazon.co.jp/s?k=${book.isbn}`} bookTitle={book.title} asin={book.isbn} className="button green mt-6 w-full">
+                  Amazonで確認
+                </AmazonButton>
+              </div>
+            </article>
+          ))}
+        </div>
+        <div className="callout mt-10">
+          <strong>迷ったときの選び方</strong>
+          <br />
+          初めてなら『プロフェッショナル財務モデリング 入門と実践』、Excelを仕事で使い始めたら『Excel財務モデリングの教科書Ⅰ』、DCFまで一気につなげたいなら『コーポレートファイナンス 戦略と実践』がおすすめです。
+        </div>
+        <p className="mt-6 text-xs text-[#607080]">
+          書誌情報は出版社等の公開情報をもとに作成しています。価格、在庫、版、電子書籍の有無はAmazonの商品画面でご確認ください。当サイトは現在Amazonアソシエイトリンクを使用していません。
+        </p>
+      </div>
+    </>
+  );
+}

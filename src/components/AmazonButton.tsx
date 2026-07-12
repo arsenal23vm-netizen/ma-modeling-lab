@@ -16,6 +16,7 @@ export function AmazonButton({ bookTitle, asin, href, className, children }: Pro
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      aria-label={`${bookTitle}をAmazonで確認する`}
       className={className}
       onClick={() => {
         trackAmazonClick(bookTitle, asin);

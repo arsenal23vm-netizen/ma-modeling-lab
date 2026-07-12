@@ -6,15 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "places:plan": "tsx scripts/places/planCollection.ts",
-    "places:collect": "tsx scripts/places/collectCandidates.ts",
-    "places:details": "tsx scripts/places/fetchDetails.ts",
-    "places:score": "tsx scripts/places/scoreCandidates.ts",
-    "places:export": "tsx scripts/places/exportCandidates.ts",
-    "places:quota": "tsx scripts/places/checkQuota.ts",
-    "places:import-shops": "tsx scripts/places/importToShops.ts",
-    "places:all": "tsx scripts/places/runAll.ts"
+    "lint": "eslint"
   },
   "dependencies": {
     "next": "16.2.10",
