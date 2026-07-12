@@ -1,4 +1,8 @@
 export const navItems = [
+  { href: "/learning-roadmap", label: "ロードマップ" },
+  { href: "/journal-lab", label: "仕訳ラボ" },
+  { href: "/quality-standard", label: "品質基準" },
+  { href: "/downloads", label: "DL" },
   { href: "/model-design", label: "モデル設計" },
   { href: "/assumptions", label: "前提条件" },
   { href: "/pl-model", label: "PL設計" },
@@ -6,7 +10,7 @@ export const navItems = [
   { href: "/cf-model", label: "CF設計" },
   { href: "/excel-functions", label: "Excel関数" },
   { href: "/books", label: "書籍" },
-  { href: "/tools", label: "実務ツール" },
+  { href: "/tools", label: "ツール" },
 ];
 
 export const lessons = [

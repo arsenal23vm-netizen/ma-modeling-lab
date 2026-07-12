@@ -20,6 +20,9 @@ export function CTASection({
         <CtaLink href="/tools" label="実務ツールを試す" location={location} className="button green">
           実務ツールを試す
         </CtaLink>
+        <CtaLink href="/downloads" label="Excelをダウンロード" location={location} className="button green">
+          Excelをダウンロード
+        </CtaLink>
         <CtaLink href="/books" label="推薦書籍を見る" location={location} className="button secondary">
           推薦書籍を見る
         </CtaLink>

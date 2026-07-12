@@ -47,7 +47,7 @@ export function SiteHeader() {
             <strong className="block text-lg tracking-tight text-[#102235]">FINANCE MODELING LAB</strong>
             <span className="text-[10px] text-[#607080]">実務家のための財務モデル設計室</span>
           </Link>
-          <nav className="hidden items-center gap-4 text-sm font-semibold lg:flex" aria-label="主要ナビゲーション">
+          <nav className="hidden max-w-4xl flex-wrap items-center justify-end gap-x-3 gap-y-1 text-sm font-semibold lg:flex" aria-label="主要ナビゲーション">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href} className="hover:text-[#147d73]">
                 {item.label}

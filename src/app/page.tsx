@@ -24,11 +24,14 @@ export default function Home() {
               各勘定科目の前提設計、財務三表の連動、Excelのセル接続まで。M&Aの現場で検証に耐える財務モデルを、自分の手で構築できるレベルへ引き上げます。
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <CtaLink className="button" href="/model-design" label="第1章から始める" location="home_hero">
-                第1章から始める
+              <CtaLink className="button" href="/learning-roadmap" label="学習を始める" location="home_hero">
+                学習を始める
               </CtaLink>
-              <CtaLink className="button secondary" href="/pl-model" label="勘定科目から学ぶ" location="home_hero">
-                勘定科目から学ぶ
+              <CtaLink className="button secondary" href="/downloads/05_完成3表モデル.xlsx" label="完成モデルを見る" location="home_hero">
+                完成モデルを見る
+              </CtaLink>
+              <CtaLink className="button green" href="/downloads" label="Excelをダウンロード" location="home_hero">
+                Excelをダウンロード
               </CtaLink>
             </div>
           </div>
@@ -141,6 +144,21 @@ export default function Home() {
               <span className="mt-2 block text-sm text-[#607080]">専門家確認と利用上の注意。</span>
             </Link>
           </div>
+        </div>
+      </section>
+      <section className="bg-[#f7f8f6]">
+        <div className="container grid gap-4 py-12 md:grid-cols-4">
+          {[
+            { href: "/learning-roadmap", title: "学ぶ", body: "8段階のロードマップで順番に進める。" },
+            { href: "/journal-lab", title: "仕訳する", body: "取引からPL・BS・CFへの流れを確認する。" },
+            { href: "/quality-standard", title: "確認する", body: "100点満点の品質基準でレビューする。" },
+            { href: "/downloads", title: "持ち帰る", body: "Excel成果物をダウンロードする。" },
+          ].map((item) => (
+            <Link key={item.href} href={item.href} className="border border-[#d8e0e5] bg-white p-5 hover:border-[#147d73]">
+              <strong className="text-xl text-[#102235]">{item.title}</strong>
+              <span className="mt-2 block text-sm text-[#607080]">{item.body}</span>
+            </Link>
+          ))}
         </div>
       </section>
       <section className="container py-16">

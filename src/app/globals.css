@@ -251,6 +251,36 @@ a {
   white-space: nowrap;
 }
 
+.cell-input {
+  background: #e7f0ff;
+  color: #143b78;
+  border-left: 4px solid #2f6fd6;
+}
+
+.cell-formula {
+  background: #f7f8f6;
+  color: #102235;
+  border-left: 4px solid #334456;
+}
+
+.cell-link {
+  background: #e9f6ef;
+  color: #176142;
+  border-left: 4px solid #217346;
+}
+
+.cell-check {
+  background: #eff7f5;
+  color: #0f665e;
+  border-left: 4px solid #147d73;
+}
+
+.cell-error {
+  background: #fff0f0;
+  color: #9b1c1c;
+  border-left: 4px solid #d33;
+}
+
 .prose h2 {
   color: var(--ink);
   font-size: 1.35rem;
