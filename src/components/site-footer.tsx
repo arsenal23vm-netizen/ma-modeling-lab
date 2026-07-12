@@ -8,16 +8,12 @@ export function SiteFooter() {
           <strong>FINANCE MODELING LAB</strong>
           <p className="mt-2 text-sm text-white/65">非上場企業M&Aの財務モデリングを、再現可能な実務へ。</p>
         </div>
-        <div className="text-sm">
-          <Link className="mr-5" href="/tools">
-            実務ツール
-          </Link>
-          <Link className="mr-5" href="/request">
-            リクエスト
-          </Link>
-          <Link className="mr-5" href="/disclaimer">
-            免責事項
-          </Link>
+        <div className="grid gap-2 text-sm md:grid-cols-2">
+          <Link href="/about">このサイトについて</Link>
+          <Link href="/editorial-policy">編集方針</Link>
+          <Link href="/tools">実務ツール</Link>
+          <Link href="/request">リクエスト</Link>
+          <Link href="/disclaimer">免責事項</Link>
           <Link href="/privacy">プライバシー</Link>
         </div>
         <p className="text-xs text-white/55 md:text-right">

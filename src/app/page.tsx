@@ -120,6 +120,29 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <section className="border-y border-[#d8e0e5] bg-white">
+        <div className="container grid gap-8 py-12 lg:grid-cols-[.75fr_1.25fr]">
+          <div>
+            <div className="eyebrow">TRUST & EDITORIAL</div>
+            <h2 className="mt-2 text-3xl font-bold tracking-[-.04em] text-[#102235]">実務メディアとして、誇張せずに積み上げる。</h2>
+            <p className="mt-3 text-sm text-[#607080]">教育目的、サンプルデータ、専門家確認が必要な領域を明示しながら、財務モデリングの学習に使える情報へ整えています。</p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            <Link href="/about" className="border border-[#d8e0e5] p-5 hover:border-[#147d73]">
+              <strong className="text-[#102235]">このサイトについて</strong>
+              <span className="mt-2 block text-sm text-[#607080]">目的、対象読者、運営方針。</span>
+            </Link>
+            <Link href="/editorial-policy" className="border border-[#d8e0e5] p-5 hover:border-[#147d73]">
+              <strong className="text-[#102235]">編集方針</strong>
+              <span className="mt-2 block text-sm text-[#607080]">記事制作、更新、広告表記。</span>
+            </Link>
+            <Link href="/disclaimer" className="border border-[#d8e0e5] p-5 hover:border-[#147d73]">
+              <strong className="text-[#102235]">免責事項</strong>
+              <span className="mt-2 block text-sm text-[#607080]">専門家確認と利用上の注意。</span>
+            </Link>
+          </div>
+        </div>
+      </section>
       <section className="container py-16">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>

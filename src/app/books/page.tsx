@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { AmazonButton } from "@/components/AmazonButton";
 
 export const metadata: Metadata = {
@@ -112,10 +113,13 @@ export default function Page() {
         </div>
       </section>
       <div className="container py-12">
-        <div className="callout">
-          <strong>掲載方針</strong>
-          <br />
-          書籍は、財務モデリング、Excel設計、企業価値評価、M&A財務デューデリジェンスの学習導線に沿って選定しています。AmazonリンクはISBNによる検索ページです。
+        <div className="grid gap-4 lg:grid-cols-[1fr_.9fr]">
+          <div className="callout">
+            <strong>掲載方針</strong>
+            <br />
+            書籍は、財務モデリング、Excel設計、企業価値評価、M&A財務デューデリジェンスの学習導線に沿って選定しています。
+          </div>
+          <AffiliateDisclosure compact />
         </div>
         <div className="mb-10 mt-8 grid border-y border-[#d8e0e5] bg-white md:grid-cols-4">
           {["全体像をつかむ", "Excelの型を固める", "価値評価へ進む", "案件調査へ広げる"].map((step, index) => (

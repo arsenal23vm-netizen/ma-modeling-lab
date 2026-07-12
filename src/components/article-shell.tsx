@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CTASection } from "@/components/CTASection";
 import { StatementOverview } from "@/components/statement-overview";
 import { bsRows, cfRows, plRows } from "@/data/statements";
 import { lessons } from "@/data/site";
@@ -107,6 +108,7 @@ export function ArticleShell({
               <span className="mt-1 block text-sm text-[#607080]">{nextLesson.summary}</span>
             </Link>
           )}
+          <CTASection location={`article_bottom_${lesson?.slug ?? no}`} />
         </article>
         <aside className="lg:pt-1">
           <div className="sticky top-24 border-t-4 border-[#102235] bg-white p-5 shadow-sm">
