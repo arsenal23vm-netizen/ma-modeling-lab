@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/journal-lab", priority: 0.9, changeFrequency: "monthly" as const },
     { path: "/quality-standard", priority: 0.85, changeFrequency: "monthly" as const },
     { path: "/downloads", priority: 0.9, changeFrequency: "monthly" as const },
+    { path: "/private-company-valuation", priority: 0.9, changeFrequency: "monthly" as const },
     { path: "/books", priority: 0.8, changeFrequency: "monthly" as const },
     { path: "/request", priority: 0.7, changeFrequency: "monthly" as const },
     { path: "/about", priority: 0.6, changeFrequency: "yearly" as const },
