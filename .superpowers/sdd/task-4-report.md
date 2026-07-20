@@ -36,3 +36,22 @@
 
 - ExcelJS writes formulas but does not calculate them; Excel recalculates them on open because the workbook requests full calculation on load.
 - The pinned ExcelJS dependency emits upstream deprecation notices during installation; no generated-workbook validation warnings occurred.
+
+## Review remediation: source flags, metadata, and exhaustive validator
+
+### RED evidence
+
+- Expanded the validator before changing the generator, then ran `npx.cmd tsx scripts/test-comps-selection-workbook.ts` against the existing workbook.
+- It failed as intended: `Selection Matrix Q reflects service=false and close=true criticalMismatch source flags` expected `[false, true]`, but Q11 and Q13 contained the score-derived formulas `COUNTIF(D11:F11,"<2")+COUNTIF(K11:K11,"<2")` and `COUNTIF(D13:F13,"<2")+COUNTIF(K13:K13,"<2")`.
+
+### GREEN evidence
+
+- Ran `npm.cmd run generate:comps-workbook`; output: `Comps selection workbook generated: public/downloads/Comps_Selection_Worksheet.xlsx`.
+- Ran `npm.cmd run test:comps-workbook`; output: `Comps workbook validation passed`.
+- Ran `npm.cmd run build`; the production build completed successfully.
+
+### Remediation details
+
+- Selection Matrix Q now writes `candidatePeers[].criticalMismatch` directly, and R writes `candidatePeers[].role` directly. The score-derived low-critical-score warning moved to S.
+- The S formula and note derive all critical criteria from `selectionCriteria.filter((criterion) => criterion.critical)` and dynamically map those criteria to score columns; no critical-score coordinates are hard-coded.
+- The validator now checks target values B4:B8; every Task 1 candidate ID/name and D:O score; P formulas for every candidate; Q/R source data; Role list validation; Review Memo and Checks formulas; required sheets, Japanese content, styling, freeze panes, filters, print setup, widths, and no external workbook relationships or parts.

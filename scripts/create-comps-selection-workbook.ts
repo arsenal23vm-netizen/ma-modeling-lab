@@ -66,6 +66,25 @@ function setWidths(sheet: ExcelJS.Worksheet, widths: number[]) {
   widths.forEach((width, index) => {
     sheet.getColumn(index + 1).width = width;
   });
+  sheet.pageSetup = {
+    orientation: "landscape",
+    paperSize: 9,
+    fitToPage: true,
+    fitToWidth: 1,
+    fitToHeight: 0,
+    margins: { left: 0.25, right: 0.25, top: 0.5, bottom: 0.5, header: 0.2, footer: 0.2 },
+  };
+}
+
+function columnLetter(column: number) {
+  let value = column;
+  let letters = "";
+  while (value > 0) {
+    const remainder = (value - 1) % 26;
+    letters = String.fromCharCode(65 + remainder) + letters;
+    value = Math.floor((value - 1) / 26);
+  }
+  return letters;
 }
 
 function addGuide(workbook: ExcelJS.Workbook) {
@@ -147,28 +166,34 @@ function addLongList(workbook: ExcelJS.Workbook) {
 
 function addSelectionMatrix(workbook: ExcelJS.Workbook) {
   const sheet = workbook.addWorksheet("Selection Matrix");
-  styleTitle(sheet, "Selection Matrix", "0〜3点で採点（0=不一致、3=高い一致）。重大基準の不一致はRole判断時に必ず確認します。", 18);
-  sheet.getRow(3).values = ["ID", "候補企業", "Role", ...selectionCriteria.map((criterion) => criterion.label), "総合スコア", "重大基準", "コメント"];
+  styleTitle(sheet, "Selection Matrix", "0〜3点で採点（0=不一致、3=高い一致）。重大基準の不一致はTask 1データのフラグを保持し、低スコアは別列で補足します。", 20);
+  sheet.getRow(3).values = ["ID", "候補企業", "Role", ...selectionCriteria.map((criterion) => criterion.label), "総合スコア", "重大基準の不一致", "Role（source）", "重大基準の低スコア", "コメント"];
   styleHeader(sheet.getRow(3));
+  const criticalCriteria = selectionCriteria.filter((criterion) => criterion.critical);
   candidatePeers.forEach((peer, index) => {
     const row = index + 4;
-    const criticalFailures = selectionCriteria.filter((criterion) => criterion.critical && peer.scores[criterion.id] < 2).length;
-    sheet.getRow(row).values = [peer.id, peer.name, peer.role, ...selectionCriteria.map((criterion) => peer.scores[criterion.id]), { formula: `SUM(D${row}:O${row})` }, { formula: `COUNTIF(D${row}:F${row},"<2")+COUNTIF(K${row}:K${row},"<2")` }, peer.rationale];
+    const criticalFailures = criticalCriteria.filter((criterion) => peer.scores[criterion.id] < 2).length;
+    const criticalScoreFormula = criticalCriteria.map((criterion) => {
+      const scoreColumn = columnLetter(selectionCriteria.indexOf(criterion) + 4);
+      return `COUNTIF(${scoreColumn}${row}:${scoreColumn}${row},"<2")`;
+    }).join("+");
+    sheet.getRow(row).values = [peer.id, peer.name, peer.role, ...selectionCriteria.map((criterion) => peer.scores[criterion.id]), { formula: `SUM(D${row}:O${row})` }, peer.criticalMismatch, peer.role, { formula: criticalScoreFormula }, peer.rationale];
     sheet.getCell(row, 16).numFmt = "0";
-    sheet.getCell(row, 17).numFmt = "0";
-    sheet.getCell(row, 17).note = `重大基準の低スコア: ${criticalFailures}`;
+    sheet.getCell(row, 19).numFmt = "0";
+    sheet.getCell(row, 19).note = `重大基準（データ定義）: ${criticalCriteria.map((criterion) => criterion.id).join(", ")} / 低スコア数: ${criticalFailures}`;
     sheet.getRow(row).height = 58;
   });
-  styleDataRange(sheet, 4, 15, 18);
+  styleDataRange(sheet, 4, 15, 20);
   for (let row = 4; row <= 15; row += 1) {
     for (let column = 4; column <= 15; column += 1) sheet.getCell(row, column).alignment = { horizontal: "center", vertical: "middle" };
     sheet.getCell(row, 16).fill = { type: "pattern", pattern: "solid", fgColor: { argb: `FF${colors.link}` } };
   }
   sheet.addConditionalFormatting({ ref: "D4:O15", rules: [{ type: "colorScale", priority: 1, cfvo: [{ type: "min" }, { type: "percentile", value: 50 }, { type: "max" }], color: [{ argb: "FFFDECEC" }, { argb: "FFFFF2CC" }, { argb: "FFE9F6EF" }] }] });
-  sheet.addConditionalFormatting({ ref: "Q4:Q15", rules: [{ type: "cellIs", priority: 2, operator: "greaterThan", formulae: ["0"], style: { fill: { type: "pattern", pattern: "solid", fgColor: { argb: `FF${colors.error}` } } } }] });
-  setWidths(sheet, [12, 24, 22, ...selectionCriteria.map(() => 13), 14, 14, 58]);
+  sheet.addConditionalFormatting({ ref: "Q4:Q15", rules: [{ type: "cellIs", priority: 2, operator: "equal", formulae: ["TRUE"], style: { fill: { type: "pattern", pattern: "solid", fgColor: { argb: `FF${colors.error}` } } } }] });
+  sheet.addConditionalFormatting({ ref: "S4:S15", rules: [{ type: "cellIs", priority: 3, operator: "greaterThan", formulae: ["0"], style: { fill: { type: "pattern", pattern: "solid", fgColor: { argb: `FF${colors.error}` } } } }] });
+  setWidths(sheet, [12, 24, 22, ...selectionCriteria.map(() => 13), 14, 18, 24, 18, 58]);
   sheet.views = [{ state: "frozen", ySplit: 3, xSplit: 3 }];
-  sheet.autoFilter = "A3:R15";
+  sheet.autoFilter = "A3:T15";
 }
 
 function addPeerRoles(workbook: ExcelJS.Workbook) {
@@ -218,7 +243,7 @@ function addChecks(workbook: ExcelJS.Workbook) {
   const rows: (string | { formula: string })[][] = [
     ["Role未入力", { formula: 'COUNTBLANK(\'Peer Roles\'!$C$5:$C$16)' }, "0であること"],
     ["データ未確認", { formula: 'COUNTIF(\'Peer Roles\'!$F$5:$F$16,"未確認")' }, "0が望ましい"],
-    ["重大基準の不一致", { formula: 'COUNTIF(\'Selection Matrix\'!$Q$4:$Q$15,">0")' }, "Roleと根拠を確認"],
+    ["重大基準の不一致", { formula: 'COUNTIF(\'Selection Matrix\'!$Q$4:$Q$15,TRUE)' }, "Roleと根拠を確認"],
     ["Core Peer数", { formula: 'COUNTIF(\'Peer Roles\'!$C$5:$C$16,"core_peer")' }, "5〜8社を目安"],
     ["候補数", { formula: 'COUNTA(\'Peer Roles\'!$A$5:$A$16)' }, "12社であること"],
     ["外部リンク", "なし", "教育用ケースデータのみを使用"],
