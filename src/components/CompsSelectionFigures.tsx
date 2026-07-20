@@ -120,7 +120,7 @@ export function ExcelSelectionMatrix({ peers, criteria }: { peers: CandidatePeer
       </div>
       <div className="formula-bar" aria-label="数式バー">
         <span>fx</span>
-        <code>=AVERAGE(C2:N2)</code>
+        <code>=AVERAGE(D2:O2)</code>
       </div>
       <div className="data-scroll">
         <table className="data-table">

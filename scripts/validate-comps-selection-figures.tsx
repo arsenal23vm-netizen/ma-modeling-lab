@@ -29,6 +29,8 @@ const closeRow = matrix.match(new RegExp(`<tr[^>]*>.*?${closePeer.name}.*?</tr>`
 assert.ok(closeRow, "matrix renders the unavailable peer");
 assert.match(closeRow[0], /class="number average-score">N\/A<\/td>/, "unavailable peers render N/A for the average score");
 assert.match(matrix, /class="formula-bar"/, "matrix shows a formula bar");
+assert.match(matrix, /=AVERAGE\(D2:O2\)/, "formula bar averages the 12 score columns");
+assert.doesNotMatch(matrix, /=AVERAGE\(C2:N2\)/, "formula bar does not include the role column");
 assert.match(matrix, /class="excel-column-letters"/, "matrix shows column letters");
 assert.match(matrix, /class="row-number"/, "matrix shows row numbers");
 assert.match(matrix, /近接除外/, "matrix uses the Japanese close-exclusion role label");
