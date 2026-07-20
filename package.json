@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "validate:comps-case": "tsx scripts/validate-comps-case.ts"
+    "validate:comps-case": "tsx scripts/validate-comps-case.ts",
+    "generate:comps-workbook": "tsx scripts/create-comps-selection-workbook.ts",
+    "test:comps-workbook": "tsx scripts/test-comps-selection-workbook.ts"
   },
   "dependencies": {
     "next": "16.2.10",
@@ -21,6 +23,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
+    "exceljs": "^4.4.0",
     "tailwindcss": "^4",
     "tsx": "^4.20.5",
     "typescript": "^5"
