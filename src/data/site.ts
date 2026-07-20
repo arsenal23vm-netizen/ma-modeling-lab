@@ -4,6 +4,7 @@ export const navItems = [
   { href: "/quality-standard", label: "品質基準" },
   { href: "/downloads", label: "DL" },
   { href: "/private-company-valuation", label: "Valuation" },
+  { href: "/comps-peer-selection", label: "Comps選定" },
   { href: "/model-design", label: "モデル設計" },
   { href: "/assumptions", label: "前提条件" },
   { href: "/pl-model", label: "PL設計" },

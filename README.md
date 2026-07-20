@@ -36,12 +36,22 @@ npm run build
 - `/pl-model` PL設計
 - `/bs-model` BS設計
 - `/cf-model` CF設計
+- `/comps-peer-selection` Comps選定：類似会社の選定・除外判断とレビュー観点
 - `/excel-functions` Excel関数
 - `/books` 推薦書籍
 - `/tools` 実務ツール
 - `/request` リクエスト
 - `/privacy` プライバシーポリシー
 - `/disclaimer` 免責事項
+
+## Comps選定ワークシート
+
+`/comps-peer-selection` では、対象会社プロファイル、候補2社の比較、除外判断、Peer Role、Review Memo、Checksを通じて、類似会社選定の考え方を学べます。Excel教材は次のコマンドで生成・検証できます。
+
+```bash
+npm run generate:comps-workbook
+npm run test:comps-workbook
+```
 
 ## アクセス解析
 
