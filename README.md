@@ -46,7 +46,7 @@ npm run build
 
 ## Comps選定ワークシート
 
-`/comps-peer-selection` では、対象会社プロファイル、候補2社の比較、除外判断、Peer Role、Review Memo、Checksを通じて、類似会社選定の考え方を学べます。Excel教材は次のコマンドで生成・検証できます。
+`/comps-peer-selection` では、対象会社プロファイル、候補12社の比較、除外判断、Peer Role、Review Memo、Checksを通じて、類似会社選定の考え方を学べます。Excel教材は次のコマンドで生成・検証できます。
 
 ```bash
 npm run generate:comps-workbook
