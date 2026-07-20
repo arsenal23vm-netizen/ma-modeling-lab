@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "validate:dcf-series": "tsx scripts/validate-dcf-series.ts",
     "validate:comps-case": "tsx scripts/validate-comps-case.ts",
     "generate:comps-workbook": "tsx scripts/create-comps-selection-workbook.ts",
     "test:comps-workbook": "tsx scripts/test-comps-selection-workbook.ts"
