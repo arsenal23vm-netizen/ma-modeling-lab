@@ -39,7 +39,7 @@ export function SelectionFunnel() {
 }
 
 export function TargetComparisonCards({ target, peers }: { target: TargetProfile; peers: CandidatePeer[] }) {
-  const comparisonRoles: PeerRole[] = ["core_peer", "secondary_peer", "aspirational_peer", "negative_peer"];
+  const comparisonRoles: PeerRole[] = ["core_peer", "secondary_peer", "negative_peer"];
 
   return (
     <section className="target-comparison" aria-labelledby="target-comparison-title">
@@ -136,7 +136,7 @@ export function ExcelSelectionMatrix({ peers, criteria }: { peers: CandidatePeer
                   const score = peer.scores[criterion.id];
                   return <td className={`number ${unavailable ? "score-na" : `score-${score}`}`} key={criterion.id}>{unavailable ? "N/A" : score}</td>;
                 })}
-                <td className="number average-score">{scoreAverage(peer).toFixed(1)}</td>
+                <td className="number average-score">{peer.dataAvailable ? scoreAverage(peer).toFixed(1) : "N/A"}</td>
               </tr>
             ))}
           </tbody>
