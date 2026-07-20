@@ -15,9 +15,9 @@ import {
 } from "@/data/comps-selection";
 
 export const metadata: Metadata = {
-  title: "Compsの選定――類似上場会社を選ぶ実務フレームワーク",
+  title: "Compsの選定方法｜類似上場会社を選ぶ実務フレームワーク",
   description:
-    "Comps選定の考え方、対象企業プロフィール、選定基準、Role Peerと除外基準、Excel選定マトリクスまでを架空事例で解説します。",
+    "Comps候補の探し方、事業モデル・規模・成長率・利益率による比較、Core Peerと除外企業の整理、Excel選定マトリクスまで解説します。",
 };
 
 const toc = [
@@ -36,9 +36,12 @@ const toc = [
 const corePeers = candidatePeers.filter((peer) => peer.role === "core_peer");
 
 const failureExamples = [
-  ["セクター名だけで選ぶ", "同じ『機械』でも、顧客、収益源、設備投資の重さが異なればマルチプルの意味が変わります。"],
-  ["財務スコアだけで採用する", "高得点でも、セグメント開示が粗い、または一過性要因が強い場合はCore Peerにしません。"],
-  ["近い会社を無条件で採用する", "中央FAテクノロジーのように利益情報がない近似企業は、事業理解には使えてもマルチプル比較には使えません。"],
+  ["セクター漏れ", "狭い業種分類だけでLong Listを閉じると、顧客市場や収益モデルが近い周辺企業を見落とします。地域、製品、サービス、顧客から候補を広げます。"],
+  ["規模不一致", "売上規模や時価総額が大きく異なる企業をCore Peerへ混ぜると、流動性、交渉力、マージン、成長期待の差を見落とします。"],
+  ["成長率・利益率の不一致", "一時的な高成長・低収益や再建局面の企業は、通常局面の対象会社と同じレンジに置きません。"],
+  ["会計基準不一致", "IFRSと日本基準、会計方針、セグメント開示の違いを確認せずに比較すると、EBITDAやネットデットの意味がずれます。"],
+  ["データ取得都合の除外", "入手しやすい企業だけを残すのはバイアスです。中央FAテクノロジーのような情報不足企業は、使えない指標と除外理由を記録します。"],
+  ["中央値の盲目的採用", "中央値は正解ではありません。Core Peer、Secondary Peer、除外候補の構成を確認し、対象会社との違いを反映した採用レンジを説明します。"],
   ["除外理由を残さない", "後日のレビューで恣意的に見えないよう、候補ごとの採用・不採用の根拠をメモに残します。"],
   ["データ時点を混在させる", "株価、財務実績、会社予想、為替の基準日をそろえ、時点差は注記します。"],
 ];
@@ -103,7 +106,7 @@ export default function CompsPeerSelectionPage() {
           <dl className="mt-6 grid gap-3 text-sm text-[#607080] md:grid-cols-4">
             <div className="border border-[#d8e0e5] bg-white p-3"><dt className="font-bold text-[#102235]">対象</dt><dd>M&amp;A / FAS / 投資 / 経営企画</dd></div>
             <div className="border border-[#d8e0e5] bg-white p-3"><dt className="font-bold text-[#102235]">難易度</dt><dd>実務入門〜中級</dd></div>
-            <div className="border border-[#d8e0e5] bg-white p-3"><dt className="font-bold text-[#102235]">目安時間</dt><dd>20〜25分</dd></div>
+            <div className="border border-[#d8e0e5] bg-white p-3"><dt className="font-bold text-[#102235]">目安時間</dt><dd>30〜45分</dd></div>
             <div className="border border-[#d8e0e5] bg-white p-3"><dt className="font-bold text-[#102235]">ケース</dt><dd>架空の製造業</dd></div>
           </dl>
         </div>
@@ -115,6 +118,17 @@ export default function CompsPeerSelectionPage() {
             <strong>教育目的の架空事例</strong><br />
             本ページの会社名、数値、比較対象、選定結果はすべて学習用の架空事例です。投資判断、会計・税務・法務判断、実案件の評価意見を代替するものではありません。
           </div>
+
+          <section className="mb-10 border border-[#d8e0e5] bg-[#f7f8f6] p-6 md:p-8">
+            <div className="eyebrow">WORKSHEET</div>
+            <h2 className="mt-2 text-2xl font-bold text-[#102235]">選定ワークシートで判断を始める</h2>
+            <p className="mt-3 max-w-2xl text-sm text-[#607080]">
+              本文を読む前に、Target ProfileとLong Listの欄を確認し、比較対象の選定基準と除外理由を記録する準備をします。
+            </p>
+            <CtaLink href="/downloads/Comps_Selection_Worksheet.xlsx" label="download_comps_selection_worksheet_top" location="comps_peer_selection_top" className="button green mt-5">
+              Comps_Selection_Worksheet.xlsx をダウンロード
+            </CtaLink>
+          </section>
 
           <h2 id="why-peer-selection">1. Compsの意味とComparableの違い</h2>
           <p>
@@ -161,6 +175,19 @@ export default function CompsPeerSelectionPage() {
             対象は{targetProfile.name}です。製造業向けの自動化装置・部品と保守サービスを提供し、売上高は{targetProfile.revenue.toLocaleString("ja-JP")} {targetProfile.unit}、EBITDAマージンは{targetProfile.ebitdaMargin}%と仮定します。以下は実在企業を表すものではありません。
           </p>
           <TargetComparisonCards target={targetProfile} peers={candidatePeers} />
+          <h3>対象会社と架空候補12社の一覧</h3>
+          <DataTable
+            headers={["会社", "事業", "地域", "売上高", "成長率", "EBITDA margin", "Role"]}
+            rows={candidatePeers.map((peer) => [
+              peer.name,
+              peer.business,
+              peer.geography,
+              `${peer.revenue.toLocaleString("ja-JP")} ${targetProfile.unit}`,
+              `${peer.growth}%`,
+              peer.ebitdaMargin === null ? "N/A（情報不足）" : `${peer.ebitdaMargin.toFixed(1)}%`,
+              peer.role,
+            ])}
+          />
           <p>
             例えば、グローバル産業ロボティクスは事業領域が近くても規模・地域・会計基準が異なるためSecondaryです。中央FAテクノロジーは事業面では近似していますが、EBITDA情報がないためマルチプル検証からは除外します。このように「似ているが採用しない」判断こそ、選定メモに残すべき重要な情報です。
           </p>
@@ -189,10 +216,10 @@ export default function CompsPeerSelectionPage() {
           <DataTable
             headers={["候補", "判定", "メモに残す理由"]}
             rows={[
-              ["中央FAテクノロジー", "近接除外", "事業面は近いが、EBITDA情報が取得できずマルチプル比較に使えない"],
-              ["大和重機械", "Negative", "大型重機・建設顧客中心で、資本集約度と循環性が異なる"],
-              ["統合エンジニアリングHD", "比較限定", "近接事業はあるが、複合企業でセグメント純度が低い"],
-              ["グローバル産業ロボティクス", "Secondary", "事業は近いが、規模・地域・会計基準の差を注記して補助比較にとどめる"],
+              ["悪い例：業界が近いから採用", "根拠不足", "『機械』という分類だけで採用し、収益モデル、顧客、開示、規模の差を記録していない"],
+              ["良い採用例：匠オートメーション", "Core", "装置・保守の構成、売上規模、利益率、製造業顧客が対象に近く、重大基準に不一致がない"],
+              ["良い除外例：中央FAテクノロジー", "近接除外", "事業面は近いが、EBITDA情報が取得できずマルチプル比較に使えないため、情報不足を明記して除外する"],
+              ["良い補助例：グローバル産業ロボティクス", "Secondary", "事業は近いが、規模・地域・会計基準の差を注記して補助比較にとどめる"],
             ]}
           />
 
