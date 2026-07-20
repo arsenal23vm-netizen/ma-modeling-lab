@@ -43,7 +43,6 @@ export const journalEntries = [
 ];
 
 export const downloads = [
-  { file: "Comps_Selection_Worksheet.xlsx", audience: "類似会社の選定基準を理解したい方", content: "対象会社プロファイル、候補2社、除外のチェック、Peer Role、Review Memo、Checks", size: "約21KB", updated: "2026-07-20", terms: "教育目的・免責事項・転載禁止" },
   { file: "01_仕訳演習.xlsx", audience: "会計仕訳を3表へつなげたい方", content: "売上、仕入、給与、固定資産、借入、税金の仕訳演習と3表影響", size: "約3KB", updated: "2026-07-12", terms: "教育目的・再配布不可" },
   { file: "02_前提条件入力.xlsx", audience: "前提シートとシナリオを作りたい方", content: "Base/Upside/Downsideの売上、原価、運転資本、税率入力欄", size: "約4KB", updated: "2026-07-12", terms: "教育目的・再配布不可" },
   { file: "03_PLモデル練習.xlsx", audience: "PLをドライバーから組みたい方", content: "数量×単価、材料費、労務費、製造経費、税金のPL練習", size: "約5KB", updated: "2026-07-12", terms: "教育目的・再配布不可" },
@@ -51,4 +50,5 @@ export const downloads = [
   { file: "05_完成3表モデル.xlsx", audience: "完成モデルの構造を確認したい方", content: "Inputs、Assumptions、PL、BS、CF、Schedules、Checks、Guide", size: "約7KB", updated: "2026-07-12", terms: "教育目的・再配布不可" },
   { file: "06_DCF評価モデル.xlsx", audience: "DCFと感応度分析へ進みたい方", content: "FCF、WACC、継続価値、事業価値、株主価値、感応度表", size: "約8KB", updated: "2026-07-12", terms: "教育目的・再配布不可" },
   { file: "07_モデル品質チェックリスト.xlsx", audience: "モデルレビューを標準化したい方", content: "100点満点の品質基準、主要チェック、エラー表示例", size: "約4KB", updated: "2026-07-12", terms: "教育目的・再配布不可" },
+  { file: "Comps_Selection_Worksheet.xlsx", audience: "類似会社の選定根拠を整理したい方", content: "対象会社プロファイル、候補12社、選定マトリクス、Peer Role、Review Memo、Checks", size: "約21KB", updated: "2026-07-20", terms: "教育目的・再配布不可" },
 ];
