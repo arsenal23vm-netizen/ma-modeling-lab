@@ -1,19 +1,19 @@
 import type { CandidatePeer, PeerRole, SelectionCriterion, TargetProfile } from "@/data/comps-selection";
 
 const roleDetails: Record<PeerRole, { label: string; note: string }> = {
-  core_peer: { label: "Core", note: "バリュエーションの中心レンジ" },
-  secondary_peer: { label: "Secondary", note: "補助的な比較対象" },
-  aspirational_peer: { label: "Aspirational", note: "改善余地の参考" },
-  negative_peer: { label: "Negative", note: "除外判断の比較対象" },
+  core_peer: { label: "中核（Core）", note: "バリュエーションの中心レンジ" },
+  secondary_peer: { label: "補助（Secondary）", note: "補助的な比較対象" },
+  aspirational_peer: { label: "将来像（Aspirational）", note: "改善余地の参考" },
+  negative_peer: { label: "不採用例（Negative）", note: "除外判断の比較対象" },
   excluded_close_peer: { label: "近接除外", note: "情報不足の近似企業" },
   not_clean_comp: { label: "比較限定", note: "事業構成が異なる参考企業" },
 };
 
 const funnelSteps = [
-  ["候補母集団", 30, "業界・事業領域から抽出"],
-  ["一次スクリーニング", 18, "事業モデルと顧客市場を確認"],
-  ["類似性評価", 12, "規模・成長性・収益性を比較"],
-  ["Core peers", 6, "評価に採用する中核企業"],
+  ["業種候補", 30, "業界・事業領域から抽出"],
+  ["事業モデル", 18, "事業モデルと顧客市場を確認"],
+  ["財務比較", 12, "規模・成長性・収益性を比較"],
+  ["Core", 6, "評価に採用する中核企業"],
 ] as const;
 
 const formatNumber = (value: number) => new Intl.NumberFormat("ja-JP").format(value);
@@ -132,7 +132,7 @@ export function ExcelSelectionMatrix({ peers, criteria }: { peers: CandidatePeer
             <tr>
               <th scope="col" className="row-number">1</th>
               <th scope="col">候補会社</th>
-              <th scope="col">Role</th>
+              <th scope="col">役割</th>
               {criteria.map((criterion) => <th scope="col" key={criterion.id}>{criterion.label}</th>)}
               <th scope="col" className="number">平均</th>
             </tr>
@@ -140,7 +140,7 @@ export function ExcelSelectionMatrix({ peers, criteria }: { peers: CandidatePeer
           <tbody>
             {peers.map((peer, index) => (
               <tr key={peer.id}>
-                <th scope="row" className="row-number">{index + 2}</th>
+                <td className="row-number">{index + 2}</td>
                 <th scope="row">{peer.name}{peer.criticalMismatch && <strong className="matrix-warning">要注意</strong>}</th>
                 <td>{roleDetails[peer.role].label}</td>
                 {criteria.map((criterion) => {
