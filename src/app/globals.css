@@ -425,10 +425,16 @@ a {
 .sheet-tabs { display: flex; gap: 0.2rem; padding: 0 1.1rem; }
 .sheet-tabs span { border: 1px solid var(--line); border-bottom: 0; background: #edf3f1; padding: 0.38rem 0.7rem; color: var(--muted); font-size: 0.75rem; font-weight: 800; }
 .sheet-tabs .active { background: var(--primary); color: #fff; }
+.formula-bar { display: flex; align-items: center; gap: 0.65rem; border-block: 1px solid var(--line); background: #f7f8f6; padding: 0.5rem 1.1rem; }
+.formula-bar span { display: inline-grid; width: 1.8rem; height: 1.5rem; place-items: center; border: 1px solid var(--line-strong); background: #fff; color: var(--primary-dark); font-family: Georgia, serif; font-weight: 900; }
+.formula-bar code { color: var(--ink); font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.8rem; }
 .selection-matrix .data-scroll { border-inline: 0; border-bottom: 0; }
 .selection-matrix .data-table { min-width: 62rem; }
 .selection-matrix .data-table th { white-space: nowrap; }
 .selection-matrix .data-table td { min-width: 3.2rem; font-weight: 800; }
+.excel-column-letters th { background: #d8e0e5 !important; color: #526171 !important; font-size: 0.68rem !important; text-align: center !important; }
+.row-number { width: 2.7rem; min-width: 2.7rem !important; background: #edf3f1 !important; color: #607080 !important; font-variant-numeric: tabular-nums; text-align: center !important; }
+.matrix-warning { display: inline-block; margin-left: 0.45rem; border-radius: 999px; background: #fbe7e7; padding: 0.08rem 0.35rem; color: #9b1c1c; font-size: 0.68rem; font-weight: 900; vertical-align: middle; }
 .score-0 { background: #fbe7e7; color: #9b1c1c; }
 .score-1 { background: #fff4dc; color: #865a00; }
 .score-2 { background: #edf3f1; color: #365569; }

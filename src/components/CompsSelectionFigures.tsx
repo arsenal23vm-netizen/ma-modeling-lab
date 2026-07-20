@@ -5,8 +5,8 @@ const roleDetails: Record<PeerRole, { label: string; note: string }> = {
   secondary_peer: { label: "Secondary", note: "補助的な比較対象" },
   aspirational_peer: { label: "Aspirational", note: "改善余地の参考" },
   negative_peer: { label: "Negative", note: "除外判断の比較対象" },
-  excluded_close_peer: { label: "Close 除外", note: "情報不足の近似企業" },
-  not_clean_comp: { label: "Not clean", note: "事業構成が異なる参考企業" },
+  excluded_close_peer: { label: "近接除外", note: "情報不足の近似企業" },
+  not_clean_comp: { label: "比較限定", note: "事業構成が異なる参考企業" },
 };
 
 const funnelSteps = [
@@ -52,7 +52,8 @@ export function TargetComparisonCards({ target, peers }: { target: TargetProfile
           <dl>
             <div><dt>売上高</dt><dd>{formatNumber(target.revenue)} {target.unit}</dd></div>
             <div><dt>EBITDA margin</dt><dd>{target.ebitdaMargin.toFixed(1)}%</dd></div>
-            <div><dt>海外売上</dt><dd>{target.overseasSales}%</dd></div>
+            <div><dt>成長率</dt><dd>N/A</dd></div>
+            <div><dt>メンテナンス・サービス比率</dt><dd>{target.serviceSales}%</dd></div>
           </dl>
         </article>
         {comparisonRoles.map((role) => {
@@ -66,7 +67,8 @@ export function TargetComparisonCards({ target, peers }: { target: TargetProfile
               <dl>
                 <div><dt>売上高</dt><dd>{formatNumber(peer.revenue)} {target.unit}</dd></div>
                 <div><dt>EBITDA margin</dt><dd>{peer.ebitdaMargin === null ? "N/A" : `${peer.ebitdaMargin.toFixed(1)}%`}</dd></div>
-                <div><dt>海外売上</dt><dd>{peer.geography}</dd></div>
+                <div><dt>成長率</dt><dd>{peer.growth}%</dd></div>
+                <div><dt>メンテナンス・サービス比率</dt><dd>{peer.serviceMix}%</dd></div>
               </dl>
             </article>
           );
@@ -116,10 +118,19 @@ export function ExcelSelectionMatrix({ peers, criteria }: { peers: CandidatePeer
       <div className="sheet-tabs" aria-label="ワークシートタブ">
         <span>候補一覧</span><span className="active">選定スコア</span><span>注記</span>
       </div>
+      <div className="formula-bar" aria-label="数式バー">
+        <span>fx</span>
+        <code>=AVERAGE(C2:N2)</code>
+      </div>
       <div className="data-scroll">
         <table className="data-table">
           <thead>
+            <tr className="excel-column-letters">
+              <th aria-label="行番号" />
+              {Array.from({ length: criteria.length + 3 }, (_, index) => <th key={index}>{String.fromCharCode(65 + index)}</th>)}
+            </tr>
             <tr>
+              <th scope="col" className="row-number">1</th>
               <th scope="col">候補会社</th>
               <th scope="col">Role</th>
               {criteria.map((criterion) => <th scope="col" key={criterion.id}>{criterion.label}</th>)}
@@ -127,9 +138,10 @@ export function ExcelSelectionMatrix({ peers, criteria }: { peers: CandidatePeer
             </tr>
           </thead>
           <tbody>
-            {peers.map((peer) => (
+            {peers.map((peer, index) => (
               <tr key={peer.id}>
-                <th scope="row">{peer.name}</th>
+                <th scope="row" className="row-number">{index + 2}</th>
+                <th scope="row">{peer.name}{peer.criticalMismatch && <strong className="matrix-warning">要注意</strong>}</th>
                 <td>{roleDetails[peer.role].label}</td>
                 {criteria.map((criterion) => {
                   const unavailable = peer.id === "close" && !peer.dataAvailable;
