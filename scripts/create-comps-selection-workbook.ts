@@ -1,5 +1,6 @@
 import ExcelJS from "exceljs";
 import { candidatePeers, selectionCriteria, targetProfile } from "../src/data/comps-selection";
+import { peerRoleControls } from "../src/data/comps-selection-controls";
 
 const outputPath = "public/downloads/Comps_Selection_Worksheet.xlsx";
 const colors = { navy: "102235", teal: "147D73", input: "E7F0FF", link: "E9F6EF", error: "FDECEC", line: "D8E0E5" };
@@ -224,7 +225,7 @@ function addReviewMemo(workbook: ExcelJS.Workbook) {
     ["Core Peer候補", { formula: 'TEXTJOIN(", ",TRUE,IF(\'Peer Roles\'!$C$5:$C$16="core_peer",\'Peer Roles\'!$B$5:$B$16,""))' }, "名称とRoleを確認", ""],
     ["Secondary Peer候補", { formula: 'TEXTJOIN(", ",TRUE,IF(\'Peer Roles\'!$C$5:$C$16="secondary_peer",\'Peer Roles\'!$B$5:$B$16,""))' }, "補助的に参照する範囲", ""],
     ["除外・非Clean Comp", { formula: 'TEXTJOIN(", ",TRUE,IF((\'Peer Roles\'!$C$5:$C$16="excluded_close_peer")+(\'Peer Roles\'!$C$5:$C$16="not_clean_comp"),\'Peer Roles\'!$B$5:$B$16,""))' }, "除外理由を説明可能にする", ""],
-    ["データ未確認数", { formula: 'COUNTIF(\'Peer Roles\'!$F$5:$F$16,"未確認")' }, "必要な追加確認を実施", ""],
+    ["データ未確認数", { formula: 'COUNTIF(\'Peer Roles\'!$F$5:$F$16,"*未確認*")' }, "必要な追加確認を実施", ""],
     ["レビュー結論", "Core Peerを中心にレンジを検討。重大基準の不一致とデータ未確認を再確認する。", "最終採用レンジを別途記録", ""],
   ];
   rows.forEach((row, index) => { sheet.getRow(index + 5).values = row; sheet.getRow(index + 5).height = 50; });
@@ -241,14 +242,7 @@ function addChecks(workbook: ExcelJS.Workbook) {
   sheet.getRow(3).values = ["チェック", "結果", "判定基準"];
   styleHeader(sheet.getRow(3));
   const rows: (string | { formula: string })[][] = [
-    ["Role未入力", { formula: 'COUNTBLANK(\'Peer Roles\'!$C$5:$C$16)' }, "0であること"],
-    ["理由未入力", { formula: 'COUNTBLANK(\'Peer Roles\'!$D$5:$D$16)' }, "0であること"],
-    ["ID重複", { formula: 'SUMPRODUCT((COUNTIF(\'Peer Roles\'!$A$5:$A$16,\'Peer Roles\'!$A$5:$A$16)>1)*1)' }, "0であること"],
-    ["Core＋重大不一致", { formula: 'COUNTIFS(\'Peer Roles\'!$C$5:$C$16,"core_peer",\'Peer Roles\'!$G$5:$G$16,TRUE)' }, "0であること"],
-    ["Core＋データ欠損", { formula: 'COUNTIFS(\'Peer Roles\'!$C$5:$C$16,"core_peer",\'Peer Roles\'!$H$5:$H$16,"?*")' }, "0であること"],
-    ["Core適格性ブロック", { formula: 'COUNTIFS(\'Peer Roles\'!$C$5:$C$16,"core_peer",\'Peer Roles\'!$I$5:$I$16,TRUE)' }, "0であること"],
-    ["Core Peer数", { formula: 'COUNTIF(\'Peer Roles\'!$C$5:$C$16,"core_peer")' }, "5〜8社を目安"],
-    ["候補社数", { formula: 'COUNTA(\'Peer Roles\'!$A$5:$A$16)' }, "12社であること"],
+    ...peerRoleControls.map((control) => [control.label, { formula: control.formula }, control.standard]),
     ["外部リンク", "なし", "教育用ケースデータのみを使用"],
   ];
   rows.forEach((row, index) => { sheet.getRow(index + 4).values = row; });

@@ -28,7 +28,7 @@ assert.ok(closePeer, "case data includes a peer without available data");
 const closeRow = matrix.match(new RegExp(`<tr[^>]*>.*?${closePeer.name}.*?</tr>`));
 assert.ok(closeRow, "matrix renders the unavailable peer");
 assert.equal((closeRow[0].match(/>N\/A<\/td>/g) ?? []).length, closePeer.dataGaps.length, "only unavailable criteria render N/A");
-assert.match(closeRow[0], /class="number average-score">[0-3]\.[0-9]<\/td>/, "available observations still produce an average score");
+assert.match(closeRow[0], /class="number average-score">2\.9<\/td>/, "close-peer average excludes only margin and liquidity data gaps");
 assert.match(matrix, /class="formula-bar"/, "matrix shows a formula bar");
 assert.match(matrix, /=AVERAGE\(D2:O2\)/, "formula bar averages the 12 score columns");
 assert.doesNotMatch(matrix, /=AVERAGE\(C2:N2\)/, "formula bar does not include the role column");

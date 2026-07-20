@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import ExcelJS from "exceljs";
 import JSZip from "jszip";
 import { candidatePeers, selectionCriteria } from "../src/data/comps-selection";
+import { evaluatePeerRoleControls, peerRoleControls, type PeerRoleControlRow } from "../src/data/comps-selection-controls";
 
 const workbookPath = "public/downloads/Comps_Selection_Worksheet.xlsx";
 const sheetNames = ["Guide", "Target Profile", "Long List", "Selection Matrix", "Peer Roles", "Review Memo", "Checks"];
@@ -99,41 +100,37 @@ async function main() {
   ["COUNTIF", "TEXTJOIN", "TEXTJOIN", "TEXTJOIN", "COUNTIF"].forEach((formulaToken, index) => {
     assert.match(reviewMemo.getCell(index + 5, 2).formula ?? "", new RegExp(formulaToken), `Review Memo row ${index + 5} has ${formulaToken}`);
   });
+  assert.equal(peerRoles.getCell(closeRow + 1, 6).value, "一部未確認", "close peer carries a nonblank 未確認 status into Review Memo");
+  assert.equal(reviewMemo.getCell("B9").formula, 'COUNTIF(\'Peer Roles\'!$F$5:$F$16,"*未確認*")', "Review Memo counts both 未確認 and 一部未確認 statuses");
   assert.match(String(reviewMemo.getCell("B10").value), /Core Peer/, "Review Memo has a conclusion");
 
-  const expectedChecks = ["Role未入力", "理由未入力", "ID重複", "Core＋重大不一致", "Core＋データ欠損", "Core適格性ブロック", "Core Peer数", "候補社数", "外部リンク"];
+  const expectedChecks = [...peerRoleControls.map((control) => control.label), "外部リンク"];
   expectedChecks.forEach((label, index) => {
     assert.equal(checks.getCell(index + 4, 1).value, label, `Checks includes ${label}`);
   });
-  const expectedFormulas = [
-    'COUNTBLANK(\'Peer Roles\'!$C$5:$C$16)',
-    'COUNTBLANK(\'Peer Roles\'!$D$5:$D$16)',
-    'SUMPRODUCT((COUNTIF(\'Peer Roles\'!$A$5:$A$16,\'Peer Roles\'!$A$5:$A$16)>1)*1)',
-    'COUNTIFS(\'Peer Roles\'!$C$5:$C$16,"core_peer",\'Peer Roles\'!$G$5:$G$16,TRUE)',
-    'COUNTIFS(\'Peer Roles\'!$C$5:$C$16,"core_peer",\'Peer Roles\'!$H$5:$H$16,"?*")',
-    'COUNTIFS(\'Peer Roles\'!$C$5:$C$16,"core_peer",\'Peer Roles\'!$I$5:$I$16,TRUE)',
-    'COUNTIF(\'Peer Roles\'!$C$5:$C$16,"core_peer")',
-    'COUNTA(\'Peer Roles\'!$A$5:$A$16)',
-  ];
-  expectedFormulas.forEach((formula, index) => assert.equal(checks.getCell(index + 4, 2).formula, formula, `Checks row ${index + 4} has exact control formula`));
+  peerRoleControls.forEach((control, index) => assert.equal(checks.getCell(index + 4, 2).formula, control.formula, `Checks row ${index + 4} uses the ${control.key} control formula`));
   assert.equal(checks.getCell("B12").value, "なし", "Checks records no external links");
 
-  const evaluateControls = () => {
-    const rows = Array.from({ length: 12 }, (_, index) => index + 5);
-    const ids = rows.map((row) => String(peerRoles.getCell(row, 1).value ?? ""));
-    return {
-      missingReasons: rows.filter((row) => !String(peerRoles.getCell(row, 4).value ?? "").trim()).length,
-      duplicateIds: ids.filter((id, index) => id && ids.indexOf(id) !== index).length * 2,
-      coreCritical: rows.filter((row) => peerRoles.getCell(row, 3).value === "core_peer" && peerRoles.getCell(row, 7).value === true).length,
-      coreDataGap: rows.filter((row) => peerRoles.getCell(row, 3).value === "core_peer" && String(peerRoles.getCell(row, 8).value ?? "").length > 0).length,
-      coreBlocked: rows.filter((row) => peerRoles.getCell(row, 3).value === "core_peer" && peerRoles.getCell(row, 9).value === true).length,
-    };
-  };
-  assert.deepEqual(evaluateControls(), { missingReasons: 0, duplicateIds: 0, coreCritical: 0, coreDataGap: 0, coreBlocked: 0 }, "clean workbook passes behavioral controls");
+  const workbookControlRows = (): PeerRoleControlRow[] => Array.from({ length: 12 }, (_, index) => index + 5).map((row) => ({
+    id: String(peerRoles.getCell(row, 1).value ?? ""),
+    role: String(peerRoles.getCell(row, 3).value ?? ""),
+    rationale: String(peerRoles.getCell(row, 4).value ?? ""),
+    criticalMismatch: peerRoles.getCell(row, 7).value === true,
+    dataGaps: String(peerRoles.getCell(row, 8).value ?? ""),
+    coreEligibilityBlocked: peerRoles.getCell(row, 9).value === true,
+  }));
+  assert.deepEqual(evaluatePeerRoleControls(workbookControlRows()), {
+    missingRoles: 0, missingReasons: 0, duplicateIds: 0, coreCritical: 0,
+    coreDataGap: 0, coreBlocked: 0, corePeers: 6, candidateCount: 12,
+  }, "clean workbook passes the same controls used to generate Checks formulas");
   peerRoles.getCell(5, 4).value = "";
   peerRoles.getCell(6, 1).value = peerRoles.getCell(5, 1).value;
   peerRoles.getCell(closeRow + 1, 3).value = "core_peer";
-  assert.deepEqual(evaluateControls(), { missingReasons: 1, duplicateIds: 2, coreCritical: 0, coreDataGap: 1, coreBlocked: 1 }, "mutated workbook triggers completeness, duplicate, and Core eligibility controls");
+  peerRoles.getCell(serviceRow + 1, 3).value = "core_peer";
+  assert.deepEqual(evaluatePeerRoleControls(workbookControlRows()), {
+    missingRoles: 0, missingReasons: 1, duplicateIds: 2, coreCritical: 1,
+    coreDataGap: 1, coreBlocked: 2, corePeers: 8, candidateCount: 12,
+  }, "mutated workbook triggers generated completeness, duplicate, critical mismatch, data gap, and eligibility controls");
 
   [
     [guide, "A4:D9"],
