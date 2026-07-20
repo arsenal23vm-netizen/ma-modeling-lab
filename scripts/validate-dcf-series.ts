@@ -9,31 +9,52 @@ import {
   dcfCase,
 } from "../src/data/dcf-series";
 
+const EPSILON = 1e-9;
+const nearlyEqual = (actual: number, expected: number) => Math.abs(actual - expected) < EPSILON;
+
 assert.equal(dcfCase.forecasts.length, 5);
 assert.ok(
   dcfCase.forecasts
     .map(calculateFcff)
-    .every((fcff, index) => Math.abs(fcff - [76.8, 91.1, 104.1, 116.5, 132.3][index]) < 1e-9),
+    .every((fcff, index) => nearlyEqual(fcff, [76.8, 91.1, 104.1, 116.5, 132.3][index])),
 );
-assert.equal(Number(calculateWacc(dcfCase.wacc).toFixed(4)), 0.0651);
+assert.equal(dcfCase.wacc.riskFreeRate, 0.015);
+assert.equal(dcfCase.wacc.equityRiskPremium, 0.06);
+assert.equal(dcfCase.wacc.beta, 1.1);
+assert.equal(dcfCase.wacc.preTaxCostOfDebt, 0.025);
+assert.equal(dcfCase.wacc.taxRate, 0.3);
+assert.equal(dcfCase.wacc.equityWeight, 0.75);
+assert.equal(dcfCase.wacc.debtWeight, 0.25);
+assert.ok(nearlyEqual(dcfCase.wacc.equityWeight + dcfCase.wacc.debtWeight, 1));
+assert.ok(nearlyEqual(calculateWacc(dcfCase.wacc), 0.065125));
 assert.throws(() => calculateTerminalValue(100, 0.015, 0.015), /WACC must exceed/);
 
 const valuation = calculateDcf(dcfCase);
-assert.equal(
-  valuation.pvExplicitFcff,
-  dcfCase.forecasts.reduce(
-    (total, forecast, index) => total + calculateFcff(forecast) / (1 + valuation.wacc) ** (index + 1),
-    0,
+assert.ok(
+  nearlyEqual(
+    valuation.pvExplicitFcff,
+    dcfCase.forecasts.reduce(
+      (total, forecast, index) => total + calculateFcff(forecast) / (1 + valuation.wacc) ** (index + 1),
+      0,
+    ),
   ),
 );
-assert.equal(valuation.enterpriseValue, valuation.pvExplicitFcff + valuation.pvTerminalValue);
-assert.equal(
-  calculateEquityBridge(valuation.enterpriseValue, dcfCase.bridge).equityValue,
-  valuation.enterpriseValue +
-    dcfCase.bridge.cash -
-    dcfCase.bridge.debt -
-    dcfCase.bridge.debtLikeItems -
-    dcfCase.bridge.nonControllingInterests,
+assert.ok(
+  nearlyEqual(
+    valuation.pvTerminalValue,
+    valuation.terminalValue / (1 + valuation.wacc) ** dcfCase.forecasts.length,
+  ),
+);
+assert.ok(nearlyEqual(valuation.enterpriseValue, valuation.pvExplicitFcff + valuation.pvTerminalValue));
+assert.ok(
+  nearlyEqual(
+    calculateEquityBridge(valuation.enterpriseValue, dcfCase.bridge).equityValue,
+    valuation.enterpriseValue +
+      dcfCase.bridge.cash -
+      dcfCase.bridge.debt -
+      dcfCase.bridge.debtLikeItems -
+      dcfCase.bridge.nonControllingInterests,
+  ),
 );
 
 const sensitivity = buildSensitivityMatrix(dcfCase);
