@@ -9,7 +9,7 @@ Author identity: Finance Modeling Lab 編集部
 Finance Modeling Labへの非指名検索流入、教材ダウンロード、記事回遊を増やすため、以下の4施策を一体として実装する。
 
 1. DCF関連の検索意図別解説ページを5本公開する。
-2. 既存DCF Excel教材の専用ランディングページを公開する。
+2. DCF Excel教材を標準準拠のXLSXとして再生成し、専用ランディングページを公開する。
 3. 著者、参考資料、公開日、更新日、変更履歴を記事単位で明示する。
 4. トピックハブと全コンテンツ対応のサイト内検索を実装する。
 
@@ -47,15 +47,17 @@ Route: `/downloads/dcf-valuation-model`
 Required sections:
 
 - 対象読者と到達点
-- Workbookのシート構成
+- Workbookの9シート構成（Cover、Inputs、Assumptions、PL、BS、CF、Schedules、DCF、Checks）
 - Excelワークシートを模したHTMLプレビュー
 - 青セル入力、計算セル、出力セル、Checksの説明
 - 主要数式と5ページの対応表
 - 対応Excel環境と教育目的の注意事項
-- `/downloads/06_DCF評価モデル.xlsx`へのCTA（上部と下部）
+- 標準準拠形式で再生成した`/downloads/06_DCF評価モデル.xlsx`へのCTA（上部と下部）
 - 関連するDCFシリーズへのリンク
 
 ダウンロードをメール登録必須にはしない。
+
+WorkbookはExcelJSで生成・再読込できるOOXMLとし、ZIP内のパス区切りを含めて標準形式にする。先頭シート`Cover`には`Calculation integrity`と`Decision readiness`を分けて表示し、教育用サンプルであることを明示する。計算シートは共有DCFケースを参照し、WACC、Terminal Value、感応度、EV-to-Equity Bridge、Checksを数式で保持する。
 
 ### 3.3 Topic hubs
 
@@ -186,6 +188,7 @@ New shared units:
 - カタログに存在する内部リンクが実在routeまたはpublic fileを指すことを検証する。
 - 参考URLは外部リンクとして新しいタブで開き、`noopener noreferrer`を付ける。
 - Excelファイルが存在しない場合にランディングページの検証を失敗させる。
+- ExcelJSで9シートを再読込できない場合、外部リンクが存在する場合、またはChecksの必須数式が欠ける場合に検証を失敗させる。
 
 ## 10. Testing and acceptance
 
@@ -196,21 +199,26 @@ Add focused validation scripts before implementation:
    - WACC and Terminal Growth guard
    - Enterprise-to-Equity reconciliation
    - Sensitivity matrix dimensions and valid cells
-2. Route/content validator
+2. DCF workbook validator
+   - ExcelJSで9シートを再読込
+   - Coverの2つのステータス
+   - WACC、Terminal Value、EV-to-Equity、感応度、Checksの数式
+   - Freeze panes、印刷設定、入力セル書式、外部リンクなし
+3. Route/content validator
    - Hub plus 5 lesson routes
    - DCF Excel landing page and two CTAs
    - Required headings, formulas and numeric example
-3. Editorial validator
+4. Editorial validator
    - Author identity
    - Dates and revision summary
    - Sources section
    - Article and BreadcrumbList JSON-LD
-4. Catalog/search validator
+5. Catalog/search validator
    - Unique hrefs
    - Coverage of existing and new content
    - Japanese/English query matches
    - Same-topic related content
-5. Project gates
+6. Project gates
    - `eslint --max-warnings=0`
    - production build
    - static export contains every new route
@@ -222,7 +230,6 @@ Visual acceptance covers desktop and 390px mobile for the DCF hub, one formula-h
 
 - メールマガジン、RSS、SNS共有ボタンの実装
 - ブラウザ上のフルDCF計算ツール
-- 新しいExcelファイルの作り直し
 - PPA、LBO、Sources & Usesの本文記事
 - 実在しない個人経歴や資格の掲載
 - FAQリッチリザルトを目的としたFAQ量産
@@ -232,7 +239,7 @@ Visual acceptance covers desktop and 390px mobile for the DCF hub, one formula-h
 Implementation is complete only when:
 
 - all new and modified pages pass the focused validators;
-- the existing DCF workbook remains downloadable;
+- the regenerated nine-sheet DCF workbook passes structural and formula validation and remains downloadable;
 - search covers all catalog entries;
 - production build succeeds with no lint warnings;
 - the changes are reviewed, merged to `main`, pushed, and the published URLs return HTTP 200.

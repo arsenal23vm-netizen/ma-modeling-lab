@@ -11,7 +11,7 @@
 ## Global Constraints
 
 - Display the author as `Finance Modeling Lab 編集部`; do not invent qualifications, employers, deal experience, or individual reviewers.
-- Use the existing file `/downloads/06_DCF評価モデル.xlsx`; do not rebuild or replace the workbook.
+- Rebuild `/downloads/06_DCF評価モデル.xlsx` as a standards-compliant nine-sheet OOXML workbook generated from the shared DCF case.
 - Use a shared sample company named `サンプル部品株式会社`, unit `百万円`, forecast period FY2026–FY2030, tax rate 30.0%, and base terminal growth 1.5%.
 - Every sensitivity cell must satisfy `WACC > g`; invalid combinations render `N/A` and must never divide by zero or a negative spread.
 - Keep the existing visual language: navy `#102235`, teal `#147d73`, Excel green `#217346`, square cards, data tables, and horizontally scrollable worksheet previews.
@@ -95,7 +95,7 @@ import {
 } from "../src/data/dcf-series";
 
 assert.equal(dcfCase.forecasts.length, 5);
-assert.equal(calculateFcff(dcfCase.forecasts[0]), 76.8);
+assert.ok(Math.abs(calculateFcff(dcfCase.forecasts[0]) - 76.8) < 1e-9);
 assert.equal(Number(calculateWacc(dcfCase.wacc).toFixed(4)), 0.0651);
 assert.throws(() => calculateTerminalValue(100, 0.015, 0.015), /WACC must exceed/);
 const valuation = calculateDcf(dcfCase);
@@ -469,19 +469,22 @@ git commit -m "feat: publish the DCF learning series"
 
 **Files:**
 - Create: `scripts/validate-dcf-workbook-landing.tsx`
+- Create: `scripts/create-dcf-workbook.ts`
+- Create: `scripts/test-dcf-workbook.ts`
 - Create: `src/components/DcfWorkbookPreview.tsx`
 - Create: `src/app/downloads/dcf-valuation-model/page.tsx`
+- Replace: `public/downloads/06_DCF評価モデル.xlsx`
 - Modify: `src/app/downloads/page.tsx`
 - Modify: `src/data/content-catalog.ts`
 - Modify: `src/app/globals.css`
 
 **Interfaces:**
 - Consumes: shared DCF case and catalog.
-- Produces: `/downloads/dcf-valuation-model` and two direct workbook CTAs.
+- Produces: a standards-compliant nine-sheet workbook, `/downloads/dcf-valuation-model`, and two direct workbook CTAs.
 
 - [ ] **Step 1: Write the failing landing-page validator**
 
-Assert that the existing workbook is present, the page renders two links with the exact encoded browser path, all required sections, seven named sheet roles, an accessible preview caption, and links to all five DCF lessons.
+Assert that the generated workbook is present, the page renders two links with the exact encoded browser path, all required sections, nine named sheet roles, an accessible preview caption, and links to all five DCF lessons.
 
 ```tsx
 import assert from "node:assert/strict";
@@ -502,23 +505,67 @@ console.log("DCF workbook landing validation passed");
 Run: `npx.cmd tsx scripts/validate-dcf-workbook-landing.tsx`  
 Expected: FAIL because the landing route does not exist.
 
-- [ ] **Step 3: Implement the preview and landing page**
+- [ ] **Step 3: Write the failing workbook validator**
 
-Render Workbook Map, Assumptions, FCFF, WACC, DCF, Sensitivity, and Checks roles. The preview must show blue input cells, formula cells, output cells, a formula bar, row/column headers, and sheet tabs without using an image asset.
+Load the existing workbook with ExcelJS and assert nine exact sheet names. This must fail against the pre-existing nonstandard archive because ExcelJS reads zero sheets.
 
-- [ ] **Step 4: Link from the download center**
+```ts
+import assert from "node:assert/strict";
+import ExcelJS from "exceljs";
+import JSZip from "jszip";
+import { readFile } from "node:fs/promises";
+
+const workbook = new ExcelJS.Workbook();
+await workbook.xlsx.readFile("public/downloads/06_DCF評価モデル.xlsx");
+assert.deepEqual(workbook.worksheets.map((sheet) => sheet.name), ["Cover", "Inputs", "Assumptions", "PL", "BS", "CF", "Schedules", "DCF", "Checks"]);
+assert.equal(workbook.getWorksheet("Cover")?.getCell("B5").value, "Calculation integrity");
+assert.equal(workbook.getWorksheet("Cover")?.getCell("B6").value, "Decision readiness");
+const zip = await JSZip.loadAsync(await readFile("public/downloads/06_DCF評価モデル.xlsx"));
+assert.ok(zip.file("xl/workbook.xml"));
+assert.ok(!Object.keys(zip.files).some((name) => name.includes("externalLinks")));
+console.log("DCF workbook validation passed");
+```
+
+Run: `npx.cmd tsx scripts/test-dcf-workbook.ts`
+Expected: FAIL because the old workbook is not readable as a standard nine-sheet archive.
+
+- [ ] **Step 4: Implement the workbook generator**
+
+Generate exact sheets `Cover`, `Inputs`, `Assumptions`, `PL`, `BS`, `CF`, `Schedules`, `DCF`, `Checks` with ExcelJS. `Cover` opens first and displays `Calculation integrity: OK` and `Decision readiness: Educational sample / source review required`. Use blue fill for editable assumptions, formulas for FCFF/WACC/Terminal Value/discount factors/EV/Equity Value, a 5×5 WACC-growth sensitivity, and Checks formulas for weights sum, WACC greater than growth, EV bridge, and formula-error count. Freeze headers, set print areas and fit-to-width, bound column widths, and create no external relationships.
+
+Add package scripts:
+
+```json
+"generate:dcf-workbook": "tsx scripts/create-dcf-workbook.ts",
+"test:dcf-workbook": "tsx scripts/test-dcf-workbook.ts"
+```
+
+Run:
+
+```powershell
+npm.cmd run generate:dcf-workbook
+npm.cmd run test:dcf-workbook
+```
+
+Expected: `DCF workbook validation passed` and ExcelJS reports all nine sheets.
+
+- [ ] **Step 5: Implement the preview and landing page**
+
+Render Cover, Inputs, Assumptions, PL, BS, CF, Schedules, DCF, and Checks roles. The preview must show blue input cells, formula cells, output cells, a formula bar, row/column headers, and sheet tabs without using an image asset.
+
+- [ ] **Step 6: Link from the download center**
 
 Add a `詳しい使い方を見る` link for the DCF workbook card while keeping the direct download available. Register the landing route in the catalog.
 
-- [ ] **Step 5: Run GREEN**
+- [ ] **Step 7: Run GREEN**
 
 Run: `npx.cmd tsx scripts/validate-dcf-workbook-landing.tsx`  
 Expected: `DCF workbook landing validation passed`.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 8: Commit**
 
 ```bash
-git add scripts/validate-dcf-workbook-landing.tsx src/components/DcfWorkbookPreview.tsx src/app/downloads/dcf-valuation-model src/app/downloads/page.tsx src/data/content-catalog.ts src/app/globals.css
+git add scripts/create-dcf-workbook.ts scripts/test-dcf-workbook.ts scripts/validate-dcf-workbook-landing.tsx public/downloads/06_DCF評価モデル.xlsx src/components/DcfWorkbookPreview.tsx src/app/downloads/dcf-valuation-model src/app/downloads/page.tsx src/data/content-catalog.ts src/app/globals.css package.json package-lock.json
 git commit -m "feat: add DCF workbook landing page"
 ```
 
@@ -586,6 +633,7 @@ npm.cmd run validate:editorial
 npm.cmd run validate:catalog
 npm.cmd run validate:growth-pages
 npm.cmd run validate:dcf-landing
+npm.cmd run test:dcf-workbook
 npm.cmd run lint -- --max-warnings=0
 npm.cmd run build
 npm.cmd run validate:growth-static
