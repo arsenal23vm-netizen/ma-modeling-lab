@@ -23,11 +23,12 @@ for (const label of ["中核（Core）", "補助（Secondary）", "将来像（A
 }
 
 const matrix = renderToStaticMarkup(<ExcelSelectionMatrix peers={candidatePeers} criteria={selectionCriteria} />);
-const closePeer = candidatePeers.find((peer) => !peer.dataAvailable);
+const closePeer = candidatePeers.find((peer) => peer.dataGaps.length > 0);
 assert.ok(closePeer, "case data includes a peer without available data");
 const closeRow = matrix.match(new RegExp(`<tr[^>]*>.*?${closePeer.name}.*?</tr>`));
 assert.ok(closeRow, "matrix renders the unavailable peer");
-assert.match(closeRow[0], /class="number average-score">N\/A<\/td>/, "unavailable peers render N/A for the average score");
+assert.equal((closeRow[0].match(/>N\/A<\/td>/g) ?? []).length, closePeer.dataGaps.length, "only unavailable criteria render N/A");
+assert.match(closeRow[0], /class="number average-score">[0-3]\.[0-9]<\/td>/, "available observations still produce an average score");
 assert.match(matrix, /class="formula-bar"/, "matrix shows a formula bar");
 assert.match(matrix, /=AVERAGE\(D2:O2\)/, "formula bar averages the 12 score columns");
 assert.doesNotMatch(matrix, /=AVERAGE\(C2:N2\)/, "formula bar does not include the role column");
@@ -41,5 +42,7 @@ for (const label of ["中核（Core）", "補助（Secondary）", "将来像（A
 assert.doesNotMatch(matrix, /<th scope="row" class="row-number"/, "row numbers are data cells, not row headers");
 assert.equal((matrix.match(/scope="row"/g) ?? []).length, candidatePeers.length, "each matrix row has one company row header");
 assert.equal((matrix.match(/class="matrix-warning"/g) ?? []).length, candidatePeers.filter((peer) => peer.criticalMismatch).length, "matrix visibly flags every critical mismatch");
+assert.equal((matrix.match(/class="matrix-data-gap"/g) ?? []).length, candidatePeers.filter((peer) => peer.dataGaps.length > 0).length, "matrix separately flags every data gap");
+assert.match(matrix, /aria-label="比較対象選定マトリクス"/, "matrix table has an accessible label");
 
 console.log("Comps selection figure validation passed.");

@@ -17,7 +17,12 @@ const funnelSteps = [
 ] as const;
 
 const formatNumber = (value: number) => new Intl.NumberFormat("ja-JP").format(value);
-const scoreAverage = (peer: CandidatePeer) => Object.values(peer.scores).reduce<number>((total, score) => total + score, 0) / Object.values(peer.scores).length;
+const scoreAverage = (peer: CandidatePeer) => {
+  const availableScores = Object.entries(peer.scores)
+    .filter(([criterion]) => !peer.dataGaps.includes(criterion as keyof typeof peer.scores))
+    .map(([, score]) => score);
+  return availableScores.reduce<number>((total, score) => total + score, 0) / availableScores.length;
+};
 
 export function SelectionFunnel() {
   return (
@@ -123,7 +128,7 @@ export function ExcelSelectionMatrix({ peers, criteria }: { peers: CandidatePeer
         <code>=AVERAGE(D2:O2)</code>
       </div>
       <div className="data-scroll">
-        <table className="data-table">
+        <table className="data-table" aria-label="比較対象選定マトリクス">
           <thead>
             <tr className="excel-column-letters">
               <th aria-label="行番号" />
@@ -141,14 +146,18 @@ export function ExcelSelectionMatrix({ peers, criteria }: { peers: CandidatePeer
             {peers.map((peer, index) => (
               <tr key={peer.id}>
                 <td className="row-number">{index + 2}</td>
-                <th scope="row">{peer.name}{peer.criticalMismatch && <strong className="matrix-warning">要注意</strong>}</th>
+                <th scope="row">
+                  {peer.name}
+                  {peer.criticalMismatch && <strong className="matrix-warning">重大不一致</strong>}
+                  {peer.dataGaps.length > 0 && <strong className="matrix-data-gap">データ欠損</strong>}
+                </th>
                 <td>{roleDetails[peer.role].label}</td>
                 {criteria.map((criterion) => {
-                  const unavailable = peer.id === "close" && !peer.dataAvailable;
+                  const unavailable = peer.dataGaps.includes(criterion.id);
                   const score = peer.scores[criterion.id];
                   return <td className={`number ${unavailable ? "score-na" : `score-${score}`}`} key={criterion.id}>{unavailable ? "N/A" : score}</td>;
                 })}
-                <td className="number average-score">{peer.dataAvailable ? scoreAverage(peer).toFixed(1) : "N/A"}</td>
+                <td className="number average-score">{scoreAverage(peer).toFixed(1)}</td>
               </tr>
             ))}
           </tbody>

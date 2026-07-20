@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import ExcelJS from "exceljs";
 import JSZip from "jszip";
-import { candidatePeers, selectionCriteria, targetProfile } from "../src/data/comps-selection";
+import { candidatePeers, selectionCriteria } from "../src/data/comps-selection";
 
 const workbookPath = "public/downloads/Comps_Selection_Worksheet.xlsx";
 const sheetNames = ["Guide", "Target Profile", "Long List", "Selection Matrix", "Peer Roles", "Review Memo", "Checks"];
@@ -66,7 +66,8 @@ async function main() {
   candidatePeers.forEach((peer, index) => {
     const row = index + 4;
     selectionCriteria.forEach((criterion, scoreIndex) => {
-      assert.equal(matrix.getCell(row, scoreIndex + 4).value, peer.scores[criterion.id], `${peer.id} ${criterion.id} score matches Task 1 data`);
+      const expected = peer.dataGaps.includes(criterion.id) ? "N/A" : peer.scores[criterion.id];
+      assert.equal(matrix.getCell(row, scoreIndex + 4).value, expected, `${peer.id} ${criterion.id} score or data gap matches Task 1 data`);
     });
     assert.equal(matrix.getCell(row, 16).formula, `SUM(D${row}:O${row})`, `${peer.id} total-score formula is present`);
   });
@@ -75,17 +76,19 @@ async function main() {
   const closeRow = candidatePeers.findIndex((peer) => peer.id === "close") + 4;
   assert.deepEqual(
     [matrix.getCell(serviceRow, 17).value, matrix.getCell(closeRow, 17).value],
-    [false, true],
-    "Selection Matrix Q reflects service=false and close=true criticalMismatch source flags",
+    [true, false],
+    "Selection Matrix Q separates service critical mismatch from close-peer data gaps",
   );
   candidatePeers.forEach((peer, index) => {
     const row = index + 4;
     assert.equal(matrix.getCell(row, 17).value, peer.criticalMismatch, `${peer.id} criticalMismatch source flag is in Q`);
-    assert.equal(matrix.getCell(row, 18).value, peer.role, `${peer.id} source role is in R`);
+    assert.equal(matrix.getCell(row, 18).value, peer.dataGaps.join(", "), `${peer.id} data gaps are in R`);
+    assert.equal(matrix.getCell(row, 19).value, peer.coreEligibilityBlocked, `${peer.id} Core eligibility block is in S`);
+    assert.equal(matrix.getCell(row, 20).value, peer.role, `${peer.id} source role is in T`);
   });
-  assert.equal(matrix.getCell(3, 19).value, "重大基準の低スコア", "score-derived warning is separate from source criticalMismatch");
+  assert.equal(matrix.getCell(3, 21).value, "重大基準の低スコア", "score-derived warning is separate from source criticalMismatch");
   const criticalIds = selectionCriteria.filter((criterion) => criterion.critical).map((criterion) => criterion.id).join(", ");
-  assert.match(String(matrix.getCell(4, 19).note), new RegExp(criticalIds.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), "critical-score note is derived from criterion metadata");
+  assert.match(String(matrix.getCell(4, 21).note), new RegExp(criticalIds.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), "critical-score note is derived from criterion metadata");
 
   candidatePeers.forEach((peer, index) => {
     const validation = peerRoles.getCell(index + 5, 3).dataValidation;
@@ -98,23 +101,48 @@ async function main() {
   });
   assert.match(String(reviewMemo.getCell("B10").value), /Core Peer/, "Review Memo has a conclusion");
 
-  const expectedChecks = ["Role未入力", "データ未確認", "重大基準の不一致", "Core Peer数", "候補数", "外部リンク"];
+  const expectedChecks = ["Role未入力", "理由未入力", "ID重複", "Core＋重大不一致", "Core＋データ欠損", "Core適格性ブロック", "Core Peer数", "候補社数", "外部リンク"];
   expectedChecks.forEach((label, index) => {
     assert.equal(checks.getCell(index + 4, 1).value, label, `Checks includes ${label}`);
   });
-  ["COUNTBLANK", "COUNTIF", "COUNTIF", "COUNTIF", "COUNTA"].forEach((formulaToken, index) => {
-    assert.match(checks.getCell(index + 4, 2).formula ?? "", new RegExp(formulaToken), `Checks row ${index + 4} has ${formulaToken}`);
-  });
-  assert.equal(checks.getCell("B9").value, "なし", "Checks records no external links");
+  const expectedFormulas = [
+    'COUNTBLANK(\'Peer Roles\'!$C$5:$C$16)',
+    'COUNTBLANK(\'Peer Roles\'!$D$5:$D$16)',
+    'SUMPRODUCT((COUNTIF(\'Peer Roles\'!$A$5:$A$16,\'Peer Roles\'!$A$5:$A$16)>1)*1)',
+    'COUNTIFS(\'Peer Roles\'!$C$5:$C$16,"core_peer",\'Peer Roles\'!$G$5:$G$16,TRUE)',
+    'COUNTIFS(\'Peer Roles\'!$C$5:$C$16,"core_peer",\'Peer Roles\'!$H$5:$H$16,"?*")',
+    'COUNTIFS(\'Peer Roles\'!$C$5:$C$16,"core_peer",\'Peer Roles\'!$I$5:$I$16,TRUE)',
+    'COUNTIF(\'Peer Roles\'!$C$5:$C$16,"core_peer")',
+    'COUNTA(\'Peer Roles\'!$A$5:$A$16)',
+  ];
+  expectedFormulas.forEach((formula, index) => assert.equal(checks.getCell(index + 4, 2).formula, formula, `Checks row ${index + 4} has exact control formula`));
+  assert.equal(checks.getCell("B12").value, "なし", "Checks records no external links");
+
+  const evaluateControls = () => {
+    const rows = Array.from({ length: 12 }, (_, index) => index + 5);
+    const ids = rows.map((row) => String(peerRoles.getCell(row, 1).value ?? ""));
+    return {
+      missingReasons: rows.filter((row) => !String(peerRoles.getCell(row, 4).value ?? "").trim()).length,
+      duplicateIds: ids.filter((id, index) => id && ids.indexOf(id) !== index).length * 2,
+      coreCritical: rows.filter((row) => peerRoles.getCell(row, 3).value === "core_peer" && peerRoles.getCell(row, 7).value === true).length,
+      coreDataGap: rows.filter((row) => peerRoles.getCell(row, 3).value === "core_peer" && String(peerRoles.getCell(row, 8).value ?? "").length > 0).length,
+      coreBlocked: rows.filter((row) => peerRoles.getCell(row, 3).value === "core_peer" && peerRoles.getCell(row, 9).value === true).length,
+    };
+  };
+  assert.deepEqual(evaluateControls(), { missingReasons: 0, duplicateIds: 0, coreCritical: 0, coreDataGap: 0, coreBlocked: 0 }, "clean workbook passes behavioral controls");
+  peerRoles.getCell(5, 4).value = "";
+  peerRoles.getCell(6, 1).value = peerRoles.getCell(5, 1).value;
+  peerRoles.getCell(closeRow + 1, 3).value = "core_peer";
+  assert.deepEqual(evaluateControls(), { missingReasons: 1, duplicateIds: 2, coreCritical: 0, coreDataGap: 1, coreBlocked: 1 }, "mutated workbook triggers completeness, duplicate, and Core eligibility controls");
 
   [
     [guide, "A4:D9"],
     [target, "A3:C13"],
     [longList, "A3:K15"],
-    [matrix, "A3:T15"],
-    [peerRoles, "A4:F16"],
+    [matrix, "A3:V15"],
+    [peerRoles, "A4:I16"],
     [reviewMemo, "A4:D10"],
-    [checks, "A3:C9"],
+    [checks, "A3:C12"],
   ].forEach(([sheet, filter]) => assertFrozenAndPrintable(sheet as ExcelJS.Worksheet, filter as string));
   assert.equal(patternFillColor(matrix.getCell("A3")), colors.teal, "Selection Matrix header uses teal fill");
 

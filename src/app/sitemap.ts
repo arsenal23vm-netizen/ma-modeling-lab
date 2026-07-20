@@ -31,7 +31,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return paths.map((item) => ({
     url: `${base}${item.path}`,
-    lastModified,
+    lastModified: item.path === "/comps-peer-selection" ? new Date("2026-07-20T00:00:00+09:00") : lastModified,
     changeFrequency: item.changeFrequency,
     priority: item.priority,
   }));

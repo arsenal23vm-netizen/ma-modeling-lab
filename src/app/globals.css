@@ -435,6 +435,7 @@ a {
 .excel-column-letters th { background: #d8e0e5 !important; color: #526171 !important; font-size: 0.68rem !important; text-align: center !important; }
 .row-number { width: 2.7rem; min-width: 2.7rem !important; background: #edf3f1 !important; color: #607080 !important; font-variant-numeric: tabular-nums; text-align: center !important; }
 .matrix-warning { display: inline-block; margin-left: 0.45rem; border-radius: 999px; background: #fbe7e7; padding: 0.08rem 0.35rem; color: #9b1c1c; font-size: 0.68rem; font-weight: 900; vertical-align: middle; }
+.matrix-data-gap { display: inline-block; margin-left: 0.45rem; border-radius: 999px; background: #fff2cc; padding: 0.08rem 0.35rem; color: #7a5200; font-size: 0.68rem; font-weight: 900; vertical-align: middle; }
 .score-0 { background: #fbe7e7; color: #9b1c1c; }
 .score-1 { background: #fff4dc; color: #865a00; }
 .score-2 { background: #edf3f1; color: #365569; }

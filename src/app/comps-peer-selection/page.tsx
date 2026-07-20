@@ -59,12 +59,13 @@ const reviewQuestions = [
   "比較可能性の限界を評価メモと最終アウトプットに明記したか？",
 ];
 
-function DataTable({ headers, rows }: { headers: string[]; rows: string[][] }) {
+function DataTable({ caption, headers, rows }: { caption: string; headers: string[]; rows: string[][] }) {
   return (
     <div className="data-scroll">
       <table className="data-table min-w-[760px]">
+        <caption className="sr-only">{caption}</caption>
         <thead>
-          <tr>{headers.map((header) => <th key={header}>{header}</th>)}</tr>
+          <tr>{headers.map((header) => <th scope="col" key={header}>{header}</th>)}</tr>
         </thead>
         <tbody>
           {rows.map((row) => (
@@ -153,6 +154,7 @@ export default function CompsPeerSelectionPage() {
             以下の12基準を0〜3点で評価します。重大基準は事業モデル、製品ミックス、顧客市場、資本集約度です。合計点は会話を構造化するための補助であり、機械的な採用判定ではありません。
           </p>
           <DataTable
+            caption="12の選定基準"
             headers={["選定基準", "確認する質問", "扱い"]}
             rows={selectionCriteria.map((criterion) => [criterion.label, criterion.question, criterion.critical ? "重大基準" : "補助基準"])}
           />
@@ -177,6 +179,7 @@ export default function CompsPeerSelectionPage() {
           <TargetComparisonCards target={targetProfile} peers={candidatePeers} />
           <h3>対象会社と架空候補12社の一覧</h3>
           <DataTable
+            caption="対象会社と架空候補12社の一覧"
             headers={["会社", "事業", "地域", "売上高", "成長率", "EBITDA margin", "Role"]}
             rows={candidatePeers.map((peer) => [
               peer.name,
@@ -197,6 +200,7 @@ export default function CompsPeerSelectionPage() {
             選定プロセスは一枚の表に詰め込まず、目的と更新頻度に応じてシートを分けます。各シートは入力・判定・出力の役割を明確にし、最終レンジがどの候補と判断に基づくかを追えるようにします。
           </p>
           <DataTable
+            caption="Excelワークブックのシート構成"
             headers={["シート", "役割", "主な内容"]}
             rows={[
               ["Target Profile", "対象会社の定義", "事業、製品ミックス、顧客、地域、規模、利益率、資本集約度"],
@@ -214,6 +218,7 @@ export default function CompsPeerSelectionPage() {
             Review Memoには、候補名、役割、採用または除外の理由、確認した資料、データ基準日、残論点を残します。除外企業を消すのではなく、理由とともに残すことで、レビュー者が判断の一貫性を確認できます。
           </p>
           <DataTable
+            caption="選定理由メモの良い例と悪い例"
             headers={["候補", "判定", "メモに残す理由"]}
             rows={[
               ["悪い例：業界が近いから採用", "根拠不足", "『機械』という分類だけで採用し、収益モデル、顧客、開示、規模の差を記録していない"],

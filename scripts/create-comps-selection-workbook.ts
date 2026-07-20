@@ -166,8 +166,8 @@ function addLongList(workbook: ExcelJS.Workbook) {
 
 function addSelectionMatrix(workbook: ExcelJS.Workbook) {
   const sheet = workbook.addWorksheet("Selection Matrix");
-  styleTitle(sheet, "Selection Matrix", "0〜3点で採点（0=不一致、3=高い一致）。重大基準の不一致はTask 1データのフラグを保持し、低スコアは別列で補足します。", 20);
-  sheet.getRow(3).values = ["ID", "候補企業", "Role", ...selectionCriteria.map((criterion) => criterion.label), "総合スコア", "重大基準の不一致", "Role（source）", "重大基準の低スコア", "コメント"];
+  styleTitle(sheet, "Selection Matrix", "0〜3点で採点。重大基準の不一致、データ欠損、Core適格性ブロックを分けて記録します。", 22);
+  sheet.getRow(3).values = ["ID", "候補企業", "Role", ...selectionCriteria.map((criterion) => criterion.label), "総合スコア", "重大基準の不一致", "データ欠損", "Core適格性ブロック", "Role（Source）", "重大基準の低スコア", "コメント"];
   styleHeader(sheet.getRow(3));
   const criticalCriteria = selectionCriteria.filter((criterion) => criterion.critical);
   candidatePeers.forEach((peer, index) => {
@@ -177,13 +177,13 @@ function addSelectionMatrix(workbook: ExcelJS.Workbook) {
       const scoreColumn = columnLetter(selectionCriteria.indexOf(criterion) + 4);
       return `COUNTIF(${scoreColumn}${row}:${scoreColumn}${row},"<2")`;
     }).join("+");
-    sheet.getRow(row).values = [peer.id, peer.name, peer.role, ...selectionCriteria.map((criterion) => peer.scores[criterion.id]), { formula: `SUM(D${row}:O${row})` }, peer.criticalMismatch, peer.role, { formula: criticalScoreFormula }, peer.rationale];
+    sheet.getRow(row).values = [peer.id, peer.name, peer.role, ...selectionCriteria.map((criterion) => peer.dataGaps.includes(criterion.id) ? "N/A" : peer.scores[criterion.id]), { formula: `SUM(D${row}:O${row})` }, peer.criticalMismatch, peer.dataGaps.join(", "), peer.coreEligibilityBlocked, peer.role, { formula: criticalScoreFormula }, peer.rationale];
     sheet.getCell(row, 16).numFmt = "0";
-    sheet.getCell(row, 19).numFmt = "0";
-    sheet.getCell(row, 19).note = `重大基準（データ定義）: ${criticalCriteria.map((criterion) => criterion.id).join(", ")} / 低スコア数: ${criticalFailures}`;
+    sheet.getCell(row, 21).numFmt = "0";
+    sheet.getCell(row, 21).note = `重大基準（データ定義）: ${criticalCriteria.map((criterion) => criterion.id).join(", ")} / 低スコア数: ${criticalFailures}`;
     sheet.getRow(row).height = 58;
   });
-  styleDataRange(sheet, 4, 15, 20);
+  styleDataRange(sheet, 4, 15, 22);
   for (let row = 4; row <= 15; row += 1) {
     for (let column = 4; column <= 15; column += 1) sheet.getCell(row, column).alignment = { horizontal: "center", vertical: "middle" };
     sheet.getCell(row, 16).fill = { type: "pattern", pattern: "solid", fgColor: { argb: `FF${colors.link}` } };
@@ -191,27 +191,27 @@ function addSelectionMatrix(workbook: ExcelJS.Workbook) {
   sheet.addConditionalFormatting({ ref: "D4:O15", rules: [{ type: "colorScale", priority: 1, cfvo: [{ type: "min" }, { type: "percentile", value: 50 }, { type: "max" }], color: [{ argb: "FFFDECEC" }, { argb: "FFFFF2CC" }, { argb: "FFE9F6EF" }] }] });
   sheet.addConditionalFormatting({ ref: "Q4:Q15", rules: [{ type: "cellIs", priority: 2, operator: "equal", formulae: ["TRUE"], style: { fill: { type: "pattern", pattern: "solid", fgColor: { argb: `FF${colors.error}` } } } }] });
   sheet.addConditionalFormatting({ ref: "S4:S15", rules: [{ type: "cellIs", priority: 3, operator: "greaterThan", formulae: ["0"], style: { fill: { type: "pattern", pattern: "solid", fgColor: { argb: `FF${colors.error}` } } } }] });
-  setWidths(sheet, [12, 24, 22, ...selectionCriteria.map(() => 13), 14, 18, 24, 18, 58]);
+  setWidths(sheet, [12, 24, 22, ...selectionCriteria.map(() => 13), 14, 18, 22, 20, 24, 18, 58]);
   sheet.views = [{ state: "frozen", ySplit: 3, xSplit: 3 }];
-  sheet.autoFilter = "A3:T15";
+  sheet.autoFilter = "A3:V15";
 }
 
 function addPeerRoles(workbook: ExcelJS.Workbook) {
   const sheet = workbook.addWorksheet("Peer Roles");
-  styleTitle(sheet, "Peer Roles", "Roleを分類し、採用・除外の根拠と追加調査事項を残します。Role列はプルダウンから選択します。", 6);
-  sheet.getRow(4).values = ["ID", "候補企業", "Role", "採用・除外の根拠", "追加調査事項", "データ利用可否"];
+  styleTitle(sheet, "Peer Roles", "Roleと根拠に加え、重大不一致、データ欠損、Core適格性ブロックを独立して確認します。", 9);
+  sheet.getRow(4).values = ["ID", "候補企業", "Role", "採用・除外の根拠", "追加調査事項", "データ利用可否", "重大基準の不一致", "データ欠損", "Core適格性ブロック"];
   styleHeader(sheet.getRow(4));
   candidatePeers.forEach((peer, index) => {
     const row = index + 5;
-    sheet.getRow(row).values = [peer.id, peer.name, peer.role, peer.rationale, peer.dataAvailable ? "なし" : "EBITDAマージンの確認", peer.dataAvailable ? "利用可" : "未確認"];
+    sheet.getRow(row).values = [peer.id, peer.name, peer.role, peer.rationale, peer.dataGaps.length === 0 ? "なし" : `${peer.dataGaps.join(", ")}の確認`, peer.dataGaps.length === 0 ? "利用可" : "一部未確認", peer.criticalMismatch, peer.dataGaps.join(", "), peer.coreEligibilityBlocked];
     sheet.getCell(row, 3).dataValidation = { type: "list", allowBlank: false, formulae: [roleOptions], showErrorMessage: true, errorStyle: "stop", errorTitle: "Roleを選択してください", error: "プルダウンのRoleから選択してください。" };
     sheet.getCell(row, 3).fill = { type: "pattern", pattern: "solid", fgColor: { argb: `FF${colors.input}` } };
     sheet.getRow(row).height = 70;
   });
-  styleDataRange(sheet, 5, 16, 6);
-  setWidths(sheet, [12, 25, 24, 58, 32, 16]);
+  styleDataRange(sheet, 5, 16, 9);
+  setWidths(sheet, [12, 25, 24, 58, 32, 16, 18, 22, 20]);
   sheet.views = [{ state: "frozen", ySplit: 4, xSplit: 2 }];
-  sheet.autoFilter = "A4:F16";
+  sheet.autoFilter = "A4:I16";
 }
 
 function addReviewMemo(workbook: ExcelJS.Workbook) {
@@ -242,20 +242,26 @@ function addChecks(workbook: ExcelJS.Workbook) {
   styleHeader(sheet.getRow(3));
   const rows: (string | { formula: string })[][] = [
     ["Role未入力", { formula: 'COUNTBLANK(\'Peer Roles\'!$C$5:$C$16)' }, "0であること"],
-    ["データ未確認", { formula: 'COUNTIF(\'Peer Roles\'!$F$5:$F$16,"未確認")' }, "0が望ましい"],
-    ["重大基準の不一致", { formula: 'COUNTIF(\'Selection Matrix\'!$Q$4:$Q$15,TRUE)' }, "Roleと根拠を確認"],
+    ["理由未入力", { formula: 'COUNTBLANK(\'Peer Roles\'!$D$5:$D$16)' }, "0であること"],
+    ["ID重複", { formula: 'SUMPRODUCT((COUNTIF(\'Peer Roles\'!$A$5:$A$16,\'Peer Roles\'!$A$5:$A$16)>1)*1)' }, "0であること"],
+    ["Core＋重大不一致", { formula: 'COUNTIFS(\'Peer Roles\'!$C$5:$C$16,"core_peer",\'Peer Roles\'!$G$5:$G$16,TRUE)' }, "0であること"],
+    ["Core＋データ欠損", { formula: 'COUNTIFS(\'Peer Roles\'!$C$5:$C$16,"core_peer",\'Peer Roles\'!$H$5:$H$16,"?*")' }, "0であること"],
+    ["Core適格性ブロック", { formula: 'COUNTIFS(\'Peer Roles\'!$C$5:$C$16,"core_peer",\'Peer Roles\'!$I$5:$I$16,TRUE)' }, "0であること"],
     ["Core Peer数", { formula: 'COUNTIF(\'Peer Roles\'!$C$5:$C$16,"core_peer")' }, "5〜8社を目安"],
-    ["候補数", { formula: 'COUNTA(\'Peer Roles\'!$A$5:$A$16)' }, "12社であること"],
+    ["候補社数", { formula: 'COUNTA(\'Peer Roles\'!$A$5:$A$16)' }, "12社であること"],
     ["外部リンク", "なし", "教育用ケースデータのみを使用"],
   ];
   rows.forEach((row, index) => { sheet.getRow(index + 4).values = row; });
-  styleDataRange(sheet, 4, 9, 3);
+  styleDataRange(sheet, 4, 12, 3);
   sheet.addConditionalFormatting({ ref: "B4:B4", rules: [{ type: "cellIs", priority: 1, operator: "greaterThan", formulae: ["0"], style: { fill: { type: "pattern", pattern: "solid", fgColor: { argb: `FF${colors.error}` } } } }] });
   sheet.addConditionalFormatting({ ref: "B5:B5", rules: [{ type: "cellIs", priority: 2, operator: "greaterThan", formulae: ["0"], style: { fill: { type: "pattern", pattern: "solid", fgColor: { argb: `FF${colors.error}` } } } }] });
   sheet.addConditionalFormatting({ ref: "B6:B6", rules: [{ type: "cellIs", priority: 3, operator: "greaterThan", formulae: ["0"], style: { fill: { type: "pattern", pattern: "solid", fgColor: { argb: `FF${colors.error}` } } } }] });
   setWidths(sheet, [28, 22, 38]);
   sheet.views = [{ state: "frozen", ySplit: 3 }];
-  sheet.autoFilter = "A3:C9";
+  for (let row = 7; row <= 9; row += 1) {
+    sheet.addConditionalFormatting({ ref: `B${row}:B${row}`, rules: [{ type: "cellIs", priority: row, operator: "greaterThan", formulae: ["0"], style: { fill: { type: "pattern", pattern: "solid", fgColor: { argb: `FF${colors.error}` } } } }] });
+  }
+  sheet.autoFilter = "A3:C12";
 }
 
 async function main() {

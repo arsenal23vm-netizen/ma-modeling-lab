@@ -5,6 +5,7 @@ import { candidatePeers, peerSelectionFaqs } from "../src/data/comps-selection";
 
 const pagePath = join(process.cwd(), "src/app/comps-peer-selection/page.tsx");
 const page = readFileSync(pagePath, "utf8");
+const sitemap = readFileSync(join(process.cwd(), "src/app/sitemap.ts"), "utf8");
 const caseStudy = page.slice(page.indexOf('id="case-study"'), page.indexOf('id="excel-workflow"'));
 
 const expectedMetadata = [
@@ -28,5 +29,9 @@ for (const expected of ["悪い例", "良い採用例", "良い除外例"]) {
 assert.ok(caseStudy.includes("targetProfile"), "case study must show the target profile");
 assert.ok(caseStudy.includes("candidatePeers.map"), "case study must render all candidates from candidatePeers");
 assert.equal(candidatePeers.length, 12, "case-study source must contain 12 fictional candidates");
+assert.ok(page.includes("<caption className=\"sr-only\">{caption}</caption>"), "generic tables must expose captions");
+assert.ok(page.includes("<th scope=\"col\""), "generic table headers must use column scope");
+assert.ok(page.includes('caption="12の選定基準"'), "criteria table must have a useful accessible caption");
+assert.ok(sitemap.includes('item.path === "/comps-peer-selection" ? new Date("2026-07-20T00:00:00+09:00")'), "new Comps route must use its 2026-07-20 lastModified date");
 
 console.log("Comps page validation passed: metadata / CTAs / 5 FAQs / failures / review memo / 12 candidates");
