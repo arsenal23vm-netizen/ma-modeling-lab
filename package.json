@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "validate:comps-case": "tsx scripts/validate-comps-case.ts"
   },
   "dependencies": {
     "next": "16.2.10",
