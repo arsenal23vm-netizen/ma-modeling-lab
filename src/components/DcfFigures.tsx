@@ -88,7 +88,7 @@ export function SensitivityFigure({ matrix = buildSensitivityMatrix(dcfCase) }: 
   const nearestBaseWacc = dcfCase.sensitivity.waccRates.reduce((nearest, rate) =>
     Math.abs(rate - baseWacc) < Math.abs(nearest - baseWacc) ? rate : nearest,
   );
-  const proxyLabel = `基準ケースに最も近いグリッド点: WACC ${percent(nearestBaseWacc)}, Terminal Growth ${percent(dcfCase.terminalGrowthRate)}. Exact base WACC ${percent(baseWacc, 4)}`;
+  const proxyExplanation = `基準ケースに最も近いグリッド点: WACC ${percent(nearestBaseWacc)}, Terminal Growth ${percent(dcfCase.terminalGrowthRate)}. Exact base WACC ${percent(baseWacc, 4)}`;
   return (
     <FigureFrame caption="WACC × Terminal Growth 感応度（Enterprise Value、単位：百万円）" formula="=TABLE($B$4,$B$3)">
       <div className="data-scroll">
@@ -98,7 +98,10 @@ export function SensitivityFigure({ matrix = buildSensitivityMatrix(dcfCase) }: 
           <tbody>{matrix.map((row) => <tr key={row.wacc}><th scope="row">{percent(row.wacc)}</th>{row.cells.map((cell) => {
             const invalid = cell.status === "N/A" || cell.enterpriseValue === null;
             const isBaseProxy = row.wacc === nearestBaseWacc && cell.terminalGrowthRate === dcfCase.terminalGrowthRate;
-            return <td data-sensitivity-status={invalid ? "invalid" : undefined} aria-label={isBaseProxy ? proxyLabel : undefined} title={isBaseProxy ? proxyLabel : undefined} className={`number ${isBaseProxy ? "dcf-output" : ""}`} key={cell.terminalGrowthRate}>{invalid ? "N/A" : money(cell.enterpriseValue!)}</td>;
+            const accessibleProxyLabel = isBaseProxy && cell.enterpriseValue !== null
+              ? `Enterprise Value ${money(cell.enterpriseValue)} 百万円。${proxyExplanation}`
+              : undefined;
+            return <td data-sensitivity-status={invalid ? "invalid" : undefined} aria-label={accessibleProxyLabel} title={isBaseProxy ? proxyExplanation : undefined} className={`number ${isBaseProxy ? "dcf-output" : ""}`} key={cell.terminalGrowthRate}>{invalid ? "N/A" : money(cell.enterpriseValue!)}</td>;
           })}</tr>)}</tbody>
           <tfoot><tr><th scope="row">入力ガード</th><td colSpan={growthRates.length}>WACC ≤ g のセルは N/A</td></tr></tfoot>
         </table>

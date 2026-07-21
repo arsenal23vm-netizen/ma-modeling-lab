@@ -249,10 +249,18 @@ assert.ok(
   "Sensitivity lesson must instruct the Data Table to reference the guarded output",
 );
 assert.match(sensitivityMarkup, /基準ケースに最も近いグリッド点/);
-assert.match(
-  sensitivityMarkup,
-  /aria-label="基準ケースに最も近いグリッド点: WACC 6\.5%, Terminal Growth 1\.5%\. Exact base WACC 6\.5125%"/,
-  "Nearest sensitivity cell must disclose that it proxies the exact base WACC",
+const exactBaseWacc = calculateWacc(dcfCase.wacc);
+const nearestGridWacc = dcfCase.sensitivity.waccRates.reduce((nearest, rate) =>
+  Math.abs(rate - exactBaseWacc) < Math.abs(nearest - exactBaseWacc) ? rate : nearest,
+);
+const nearestGridCell = buildSensitivityMatrix(dcfCase)
+  .find((row) => row.wacc === nearestGridWacc)?.cells
+  .find((cell) => cell.terminalGrowthRate === dcfCase.terminalGrowthRate);
+assert.ok(nearestGridCell?.enterpriseValue !== null && nearestGridCell?.enterpriseValue !== undefined);
+const nearestGridAccessibleName = `Enterprise Value ${nearestGridCell.enterpriseValue.toLocaleString("ja-JP", { minimumFractionDigits: 1, maximumFractionDigits: 1 })} 百万円。基準ケースに最も近いグリッド点: WACC ${(nearestGridWacc * 100).toFixed(1)}%, Terminal Growth ${(dcfCase.terminalGrowthRate * 100).toFixed(1)}%. Exact base WACC ${(exactBaseWacc * 100).toFixed(4)}%`;
+assert.ok(
+  sensitivityMarkup.includes(`aria-label="${nearestGridAccessibleName}"`),
+  "Nearest sensitivity cell accessible name must include its value, unit, and proxy explanation",
 );
 assert.match(sensitivityMarkup, /N\/A/, "Sensitivity lesson must explain the invalid-cell state");
 const invalidSensitivityFigureMarkup = renderToStaticMarkup(createElement(SensitivityFigure, {
