@@ -8,7 +8,7 @@ const lastModified = new Date("2026-07-11T00:00:00+09:00");
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [
-    { path: "", priority: 1, changeFrequency: "weekly" as const },
+    { path: "/", priority: 1, changeFrequency: "weekly" as const },
     { path: "/tools", priority: 0.8, changeFrequency: "monthly" as const },
     { path: "/learning-roadmap", priority: 0.9, changeFrequency: "monthly" as const },
     { path: "/three-statements", priority: 0.85, changeFrequency: "monthly" as const },

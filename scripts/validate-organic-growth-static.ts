@@ -214,6 +214,8 @@ for (const { htmlPath, route } of exportedPages) {
   assert.ok(openGraphDescription, `${route} Open Graph description must not be empty`);
   assert.equal(canonical, expectedCanonical, `${route} canonical must match its Pages deployment URL`);
   assert.equal(openGraphUrl, expectedCanonical, `${route} Open Graph URL must match its Pages deployment URL`);
+  assert.ok(sitemapEntries.some((entry) => entry.url === canonical), `${route} sitemap URL must exactly match its canonical`);
+  assert.ok(generatedSitemap.includes(`<loc>${canonical}</loc>`), `${route} generated sitemap URL must exactly match its canonical`);
 
   uniqueRenderedValue(renderedTitleOwners, title, route, "an exported title");
   uniqueRenderedValue(renderedDescriptionOwners, description, route, "an exported description");
