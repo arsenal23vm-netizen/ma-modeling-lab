@@ -4,6 +4,9 @@ import { TopicHub } from "@/components/TopicHub";
 export const metadata: Metadata = {
   title: "企業価値評価（Valuation） | Finance Modeling Lab",
   description: "企業価値から株主価値まで、DCFと類似会社比較法を使ったValuationの考え方と教材を案内します。",
+  alternates: {
+    canonical: "https://arsenal23vm-netizen.github.io/ma-modeling-lab/valuation",
+  },
 };
 
 export default function ValuationPage() {
