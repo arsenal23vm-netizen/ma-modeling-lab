@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { ArticleShell } from "@/components/article-shell";
+import { createPageMetadata } from "@/lib/page-metadata";
 import flowDiagram from "../../../public/financial-statements-flow.png";
 
-export const metadata:Metadata={title:"壊れにくいM&Aモデルの設計",description:"入力・計算・出力を分離するM&A財務モデルの基本設計を解説。"};
+export const metadata:Metadata=createPageMetadata("/model-design", {title:"壊れにくいM&Aモデルの設計",description:"入力・計算・出力を分離するM&A財務モデルの基本設計を解説。"});
 const sections=[{id:"purpose",label:"モデルの目的"},{id:"statements-flow",label:"財務三表の連動"},{id:"architecture",label:"基本構造"},{id:"rules",label:"Excel設計ルール"},{id:"checks",label:"モデルチェック"}];
 export default function Page(){return <ArticleShell no="01" href="/model-design" title="壊れにくいM&Aモデルの設計" lead="良いモデルは、計算が合うだけでは足りません。第三者が前提を見つけ、ロジックを追い、短時間で異常値を発見できることが重要です。" sections={sections}>
   <h2 id="purpose">モデルの目的を一文で定義する</h2><p>M&Aモデルの目的は、将来を正確に当てることではありません。限られた情報の下で、取引条件と事業前提が投資リターン、資金繰り、財務健全性へどう波及するかを比較可能にします。</p><div className="callout"><strong>最初に固定する3つの問い</strong><br/>いくらまでなら買えるか。借入金を返済できるか。計画が下振れしたとき、どこで資金が不足するか。</div>

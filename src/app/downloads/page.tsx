@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { DownloadCard } from "@/components/DownloadCard";
 import { downloads } from "@/data/lab";
+import { createPageMetadata } from "@/lib/page-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata("/downloads", {
   title: "ダウンロードセンター",
   description: "財務モデリング演習に使えるExcelファイルをダウンロードできます。",
-};
+});
 
 export default function DownloadsPage() {
   return (

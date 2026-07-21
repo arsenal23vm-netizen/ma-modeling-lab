@@ -15,12 +15,13 @@ import {
   targetProfile,
 } from "@/data/comps-selection";
 import { getEditorialRecord } from "@/data/editorial";
+import { createPageMetadata } from "@/lib/page-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata("/comps-peer-selection", {
   title: "Compsの選定方法｜類似上場会社を選ぶ実務フレームワーク",
   description:
     "Comps候補の探し方、事業モデル・規模・成長率・利益率による比較、Core Peerと除外企業の整理、Excel選定マトリクスまで解説します。",
-};
+});
 
 const toc = [
   ["why-peer-selection", "Compsの意味とComparableの違い"],

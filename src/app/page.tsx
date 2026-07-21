@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { CtaLink } from "@/components/CtaLink";
 import { lessons } from "@/data/site";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "https://arsenal23vm-netizen.github.io/ma-modeling-lab/" },
+};
 
 const principles = [
   { title: "入力・計算・出力を分ける", body: "前提と計算ロジックを混ぜず、第三者が追えるモデルへ。" },

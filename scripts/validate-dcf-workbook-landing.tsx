@@ -44,6 +44,10 @@ const downloadCardSource = readFileSync("src/components/DownloadCard.tsx", "utf8
 assert.match(downloadCardSource, /<Link href=\{detailsHref\}/u, "details link must apply the deployment base path");
 const previewSource = readFileSync("src/components/DcfWorkbookPreview.tsx", "utf8");
 assert.doesNotMatch(previewSource, /role="tablist"|role="tab"/u, "static sheet labels must not expose interactive tab semantics");
+assert.match(previewSource, /Inputs!B19:B21/u, "preview must identify the editable WACC assumptions on the Inputs sheet");
+assert.match(previewSource, /DCF!B25:G25/u, "preview must identify DCF row 25 as the sensitivity header row");
+assert.match(html, /<th[^>]*scope="col"[^>]*>WACC \/ g<\/th>/u, "DCF row 25 must render WACC / g as a sensitivity column header");
+assert.doesNotMatch(html, /<tr><th[^>]*>25<\/th><th[^>]*>WACC \/ g<\/th><td class="workbook-input/u, "DCF row 25 must not present base WACC or g as editable input cells");
 
 const downloadCenterHtml = renderToStaticMarkup(<DownloadsPage />);
 const dcfCardStart = downloadCenterHtml.indexOf("DCF評価モデル");

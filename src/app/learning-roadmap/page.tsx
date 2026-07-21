@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { DownloadCard } from "@/components/DownloadCard";
 import { caseCompany, downloads, roadmapSteps } from "@/data/lab";
+import { createPageMetadata } from "@/lib/page-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata("/learning-roadmap", {
   title: "学習ロードマップ",
   description: "財務三表モデルとDCFモデルを実務順に組み立てる8段階の学習ロードマップ。",
-};
+});
 
 export default function LearningRoadmapPage() {
   return (

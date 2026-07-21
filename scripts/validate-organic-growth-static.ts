@@ -74,6 +74,29 @@ function htmlAttribute(html: string, tagName: string, identifyingAttribute: stri
   return undefined;
 }
 
+function htmlTags(html: string, tagName: string) {
+  return (html.match(new RegExp(`<${tagName}\\b[^>]*>`, "gi")) ?? []).map((tag) => ({
+    tag,
+    attributes: Object.fromEntries(
+      [...tag.matchAll(/([\w-]+)=(?:"([^"]*)"|'([^']*)')/g)]
+        .map((match) => [match[1].toLowerCase(), match[2] ?? match[3]]),
+    ),
+  }));
+}
+
+function exportedHtmlRoute(htmlPath: string) {
+  const relativePath = path.relative(outRoot, htmlPath).split(path.sep).join("/");
+  if (relativePath === "index.html") return "/";
+  if (relativePath.endsWith("/index.html")) return `/${relativePath.slice(0, -"/index.html".length)}`;
+  return `/${relativePath.slice(0, -".html".length)}`;
+}
+
+function uniqueRenderedValue(owners: Map<string, string>, value: string, route: string, label: string) {
+  const priorRoute = owners.get(value);
+  assert.ok(!priorRoute, `${route} duplicates ${label} from ${priorRoute}: ${value}`);
+  owners.set(value, route);
+}
+
 function exportedRouteFile(route: string) {
   return path.join(outRoot, `${route.slice(1)}.html`);
 }
@@ -139,6 +162,65 @@ const canonicals = new Set<string>();
 const exportedTitles = new Set<string>();
 const exportedDescriptions = new Set<string>();
 const generatedSitemap = readFileSync(path.join(outRoot, "sitemap.xml"), "utf8");
+
+const exportedHtmlFiles = listFiles(outRoot).filter((filePath) => filePath.endsWith(".html"));
+const notFoundArtifacts = exportedHtmlFiles.filter((filePath) => ["404.html", "_not-found.html"].includes(path.basename(filePath)));
+const exportedPages = exportedHtmlFiles
+  .filter((filePath) => !notFoundArtifacts.includes(filePath))
+  .map((htmlPath) => ({ htmlPath, route: exportedHtmlRoute(htmlPath) }));
+
+assert.equal(exportedPages.length, 34, "Static export must contain all 34 user-facing HTML routes");
+assert.equal(new Set(exportedPages.map(({ route }) => route)).size, exportedPages.length, "Every exported HTML file must map to one unique route");
+
+for (const htmlPath of notFoundArtifacts) {
+  const html = readFileSync(htmlPath, "utf8");
+  const canonicals = htmlTags(html, "link").filter(({ attributes }) => attributes.rel?.split(/\s+/u).includes("canonical"));
+  assert.equal(canonicals.length, 0, `${path.basename(htmlPath)} must not publish a canonical`);
+}
+
+const renderedTitleOwners = new Map<string, string>();
+const renderedDescriptionOwners = new Map<string, string>();
+const renderedCanonicalOwners = new Map<string, string>();
+const renderedOpenGraphTitleOwners = new Map<string, string>();
+const renderedOpenGraphDescriptionOwners = new Map<string, string>();
+
+for (const { htmlPath, route } of exportedPages) {
+  const html = readFileSync(htmlPath, "utf8");
+  const expectedCanonical = `${deploymentBase}${route === "/" ? "/" : route}`;
+  const titleTags = [...html.matchAll(/<title>([\s\S]*?)<\/title>/gi)];
+  const descriptions = htmlTags(html, "meta").filter(({ attributes }) => attributes.name === "description");
+  const canonicals = htmlTags(html, "link").filter(({ attributes }) => attributes.rel?.split(/\s+/u).includes("canonical"));
+  const openGraphTitles = htmlTags(html, "meta").filter(({ attributes }) => attributes.property === "og:title");
+  const openGraphDescriptions = htmlTags(html, "meta").filter(({ attributes }) => attributes.property === "og:description");
+  const openGraphUrls = htmlTags(html, "meta").filter(({ attributes }) => attributes.property === "og:url");
+
+  assert.equal(titleTags.length, 1, `${route} must publish exactly one title`);
+  assert.equal(descriptions.length, 1, `${route} must publish exactly one meta description`);
+  assert.equal(canonicals.length, 1, `${route} must publish exactly one canonical`);
+  assert.equal(openGraphTitles.length, 1, `${route} must publish exactly one Open Graph title`);
+  assert.equal(openGraphDescriptions.length, 1, `${route} must publish exactly one Open Graph description`);
+  assert.equal(openGraphUrls.length, 1, `${route} must publish exactly one Open Graph URL`);
+
+  const title = decodeHtmlText(titleTags[0][1]).trim();
+  const description = decodeHtmlText(descriptions[0].attributes.content ?? "").trim();
+  const canonical = canonicals[0].attributes.href;
+  const openGraphTitle = decodeHtmlText(openGraphTitles[0].attributes.content ?? "").trim();
+  const openGraphDescription = decodeHtmlText(openGraphDescriptions[0].attributes.content ?? "").trim();
+  const openGraphUrl = openGraphUrls[0].attributes.content;
+
+  assert.ok(title, `${route} title must not be empty`);
+  assert.ok(description, `${route} description must not be empty`);
+  assert.ok(openGraphTitle, `${route} Open Graph title must not be empty`);
+  assert.ok(openGraphDescription, `${route} Open Graph description must not be empty`);
+  assert.equal(canonical, expectedCanonical, `${route} canonical must match its Pages deployment URL`);
+  assert.equal(openGraphUrl, expectedCanonical, `${route} Open Graph URL must match its Pages deployment URL`);
+
+  uniqueRenderedValue(renderedTitleOwners, title, route, "an exported title");
+  uniqueRenderedValue(renderedDescriptionOwners, description, route, "an exported description");
+  uniqueRenderedValue(renderedCanonicalOwners, canonical, route, "an exported canonical");
+  uniqueRenderedValue(renderedOpenGraphTitleOwners, openGraphTitle, route, "an Open Graph title");
+  uniqueRenderedValue(renderedOpenGraphDescriptionOwners, openGraphDescription, route, "an Open Graph description");
+}
 
 for (const item of routes) {
   const expectedCanonical = `${deploymentBase}${item.route}`;

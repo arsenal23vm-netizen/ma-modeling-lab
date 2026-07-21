@@ -1,5 +1,6 @@
 import type { Metadata } from "next"; import { ArticleShell } from "@/components/article-shell";
-export const metadata:Metadata={title:"完成までの実務ロードマップ"}; const sections=[{id:"scope",label:"スコープ設定"},{id:"build",label:"構築手順"},{id:"review",label:"レビュー"},{id:"deliver",label:"意思決定資料"}];
+import { createPageMetadata } from "@/lib/page-metadata";
+export const metadata:Metadata=createPageMetadata("/roadmap", {title:"完成までの実務ロードマップ",description:"情報受領からドライバー、財務三表、取引、リターン、レビューまで、M&Aモデルを完成させる実務手順と完了条件を整理します。"}); const sections=[{id:"scope",label:"スコープ設定"},{id:"build",label:"構築手順"},{id:"review",label:"レビュー"},{id:"deliver",label:"意思決定資料"}];
 export default function Page(){return <ArticleShell no="05" href="/roadmap" title="完成までの実務ロードマップ" lead="締切直前にモデルを作り直さないために、情報受領、構築、検証、意思決定の順序と成果物を明確にします。" sections={sections}>
   <h2 id="scope">最初の90分でスコープを固定する</h2><p>対象期間、月次・年次粒度、必要シナリオ、買収ストラクチャー、最終アウトプットを合意します。データ不足は空欄で放置せず、暫定前提と差替期限をIssue Logへ記録します。</p>
   <h2 id="build">推奨する構築順序</h2><div className="data-scroll"><table className="data-table"><thead><tr><th>工程</th><th>成果物</th><th>完了条件</th></tr></thead><tbody><tr><td>1. Historical</td><td>3期実績・KPI</td><td>試算表と一致</td></tr><tr><td>2. Drivers</td><td>売上・費用モデル</td><td>実績再現が可能</td></tr><tr><td>3. 3 Statements</td><td>PL・BS・CF</td><td>BS Check = 0</td></tr><tr><td>4. Transaction</td><td>S&U・PPA・Debt</td><td>資金使途が一致</td></tr><tr><td>5. Returns</td><td>IRR・MOIC・感応度</td><td>主要前提を切替可能</td></tr></tbody></table></div>

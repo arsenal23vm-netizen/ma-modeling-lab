@@ -1,5 +1,6 @@
 import type { Metadata } from "next"; import { ArticleShell } from "@/components/article-shell";
-export const metadata:Metadata={title:"損益計算書（PL）のExcel設計",description:"M&Aモデルの損益計算書を前提条件から将来計画までExcelで構築する方法。"};
+import { createPageMetadata } from "@/lib/page-metadata";
+export const metadata:Metadata=createPageMetadata("/pl-model", {title:"損益計算書（PL）のExcel設計",description:"M&Aモデルの損益計算書を前提条件から将来計画までExcelで構築する方法。"});
 const sections=[{id:"layout",label:"シート構造"},{id:"revenue",label:"売上高計画"},{id:"cost",label:"費用計画"},{id:"formula",label:"Excel実装"},{id:"output",label:"出力連携"}];
 export default function Page(){return <ArticleShell no="04" href="/pl-model" title="損益計算書（PL）のExcel設計" lead="売上高から当期純利益までを、事業ドライバーと前提条件から積み上げます。増減率を直接置くのではなく、計画を実現する数量・単価・人員を数式で示します。" sections={sections}>
 <h2 id="layout">損益計算書シートの行構成</h2><div className="data-scroll"><table className="data-table"><thead><tr><th>行</th><th>勘定科目</th><th>予測方法</th><th>主な参照元</th></tr></thead><tbody><tr><td>10</td><td>売上高</td><td>数量×平均単価</td><td>前提条件、売上高計画</td></tr><tr><td>20</td><td>売上原価</td><td>材料費＋労務費＋製造経費</td><td>原価計画</td></tr><tr><td>21</td><td>売上総利益</td><td>売上高－売上原価</td><td>同一シート</td></tr><tr><td>30</td><td>販売費及び一般管理費</td><td>人件費＋その他経費</td><td>人員計画、費用前提</td></tr><tr><td>31</td><td>営業利益</td><td>売上総利益－販売費及び一般管理費</td><td>同一シート</td></tr><tr><td>40</td><td>経常利益</td><td>営業利益＋営業外収益－営業外費用</td><td>借入金計画</td></tr><tr><td>50</td><td>税引前当期純利益</td><td>経常利益＋特別損益</td><td>取引前提</td></tr><tr><td>60</td><td>当期純利益</td><td>税引前当期純利益－法人税等</td><td>税務前提</td></tr></tbody></table></div>

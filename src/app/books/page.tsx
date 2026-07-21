@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { AmazonButton } from "@/components/AmazonButton";
+import { createPageMetadata } from "@/lib/page-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata("/books", {
   title: "財務モデリングの推薦書籍",
   description: "財務モデリング、Excel設計、企業価値評価、M&A財務デューデリジェンスを学ぶための推薦書籍。",
-};
+});
 
 const books = [
   {

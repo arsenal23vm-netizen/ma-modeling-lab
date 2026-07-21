@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { createPageMetadata } from "@/lib/page-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata("/about", {
   title: "Finance Modeling Labについて",
   description: "Finance Modeling Labの目的、対象読者、運営方針について。",
-};
+});
 
 const values = [
   {

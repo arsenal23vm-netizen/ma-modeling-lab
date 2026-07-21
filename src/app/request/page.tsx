@@ -1,3 +1,4 @@
 import type { Metadata } from "next"; import { RequestForm } from "@/components/request-form";
-export const metadata:Metadata={title:"機能・コンテンツのリクエスト",description:"Finance Modeling Labへ追加してほしい機能や解説を送信できます。"};
+import { createPageMetadata } from "@/lib/page-metadata";
+export const metadata:Metadata=createPageMetadata("/request", {title:"機能・コンテンツのリクエスト",description:"Finance Modeling Labへ追加してほしい機能や解説を送信できます。"});
 export default function Page(){return <><section className="border-b border-[#d8e0e5] bg-[#f7f8f6]"><div className="container py-14"><div className="eyebrow">REQUEST BOX</div><h1 className="mt-3 text-4xl font-bold md:text-5xl">このサイトを、もっと実務で使える場所へ。</h1><p className="mt-5 max-w-3xl text-lg text-[#607080]">追加してほしい勘定科目、モデル機能、Excelの解説、テンプレートなどを自由に送ってください。内容を確認し、今後の開発候補として管理します。</p></div></section><div className="container grid gap-10 py-12 lg:grid-cols-[.65fr_1.35fr]"><div><h2 className="text-2xl font-bold">届いた内容について</h2><p className="mt-3 text-[#607080]">リクエストはGitHub Issuesで受け付けます。投稿後は対応状況や回答を同じページで確認できます。</p><div className="callout"><strong>歓迎するリクエスト</strong><br/>新しい財務モデル、細かな勘定科目、数式例、操作ツール、記事の改善、誤りの指摘。</div></div><RequestForm/></div></>}
