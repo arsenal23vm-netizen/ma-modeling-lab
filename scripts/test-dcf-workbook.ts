@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import ExcelJS from "exceljs";
 import JSZip from "jszip";
@@ -11,6 +12,31 @@ const formulaFill = "FFF3F6F8";
 const outputFill = "FFE9F6EF";
 
 async function main() {
+const generatorSource = await readFile("scripts/create-dcf-workbook.ts", "utf8");
+assert.match(generatorSource, /export async function createDcfWorkbookBuffer\(\)/u, "generator must expose a side-effect-free buffer API");
+const { createDcfWorkbookBuffer } = await import("./create-dcf-workbook");
+const generatedBuffers = await Promise.all([
+  createDcfWorkbookBuffer(),
+  createDcfWorkbookBuffer(),
+  createDcfWorkbookBuffer(),
+]);
+const generatedHashes = generatedBuffers.map((buffer) => createHash("sha256").update(buffer).digest("hex"));
+assert.equal(new Set(generatedHashes).size, 1, `identical workbook generations must have one SHA-256: ${generatedHashes.join(", ")}`);
+const committedBuffer = await readFile(workbookPath);
+assert.equal(createHash("sha256").update(committedBuffer).digest("hex"), generatedHashes[0], "committed workbook must match deterministic generator output");
+const deterministicZip = await JSZip.loadAsync(generatedBuffers[0]);
+const deterministicNames = Object.keys(deterministicZip.files);
+assert.deepEqual(deterministicNames, [...deterministicNames].sort(), "normalized ZIP entries must use stable lexical ordering");
+for (const [name, entry] of Object.entries(deterministicZip.files)) {
+  assert.equal(entry.date.toISOString(), "2000-01-01T00:00:00.000Z", `${name} must use the fixed ZIP timestamp`);
+}
+const generatedCoreXml = await deterministicZip.file("docProps/core.xml")!.async("string");
+assert.match(generatedCoreXml, /<dcterms:created[^>]*>2026-07-20T15:00:00Z<\/dcterms:created>/u);
+assert.match(generatedCoreXml, /<dcterms:modified[^>]*>2026-07-20T15:00:00Z<\/dcterms:modified>/u);
+const generatedWorkbook = new ExcelJS.Workbook();
+await generatedWorkbook.xlsx.load(Uint8Array.from(generatedBuffers[0]).buffer);
+assert.deepEqual(generatedWorkbook.worksheets.map((worksheet) => worksheet.name), expectedSheets, "deterministic buffer must remain ExcelJS-readable");
+
 const workbook = new ExcelJS.Workbook();
 await workbook.xlsx.readFile(workbookPath);
 
@@ -157,7 +183,7 @@ for (const worksheet of workbook.worksheets) {
   }
 }
 
-const zip = await JSZip.loadAsync(await readFile(workbookPath));
+const zip = await JSZip.loadAsync(committedBuffer);
 assert.ok(zip.file("xl/workbook.xml"));
 const workbookXml = await zip.file("xl/workbook.xml")!.async("string");
 assert.match(workbookXml, /<calcPr[^>]*fullCalcOnLoad="1"/u, "workbook must request a full recalculation when opened");
@@ -168,7 +194,7 @@ for (const name of archiveNames.filter((entry) => entry.endsWith(".rels"))) {
   assert.doesNotMatch(xml, /TargetMode=["']External["']/i, `${name} must not contain external relationships`);
 }
 
-console.log(`DCF workbook validation passed (${workbook.worksheets.length} sheets)`);
+console.log(`DCF workbook validation passed (${workbook.worksheets.length} sheets; deterministic SHA-256 ${generatedHashes[0]})`);
 }
 
 main().catch((error) => {

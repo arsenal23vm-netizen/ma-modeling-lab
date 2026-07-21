@@ -1,7 +1,11 @@
+import { writeFile } from "node:fs/promises";
 import ExcelJS from "exceljs";
+import JSZip from "jszip";
 import { buildSensitivityMatrix, calculateDcf, calculateEquityBridge, calculateFcff, calculateWacc, dcfCase } from "../src/data/dcf-series";
 
-const outputPath = "public/downloads/06_DCF評価モデル.xlsx";
+const defaultOutputPath = "public/downloads/06_DCF評価モデル.xlsx";
+const fixedDocumentTimestamp = "2026-07-20T15:00:00Z";
+const fixedZipDate = new Date("2000-01-01T00:00:00.000Z");
 const colors = {
   navy: "FF102235",
   teal: "FF147D73",
@@ -93,14 +97,52 @@ function setFormula(cell: ExcelJS.Cell, formula: string, result: ExcelJS.CellFor
 function percent(cell: ExcelJS.Cell) { cell.numFmt = "0.00%"; }
 function amount(cell: ExcelJS.Cell) { cell.numFmt = "#,##0.0;[Red](#,##0.0);-"; }
 
-async function main() {
+function normalizeCoreProperties(xml: string) {
+  return xml
+    .replace(/(<dcterms:created[^>]*>)[^<]*(<\/dcterms:created>)/u, `$1${fixedDocumentTimestamp}$2`)
+    .replace(/(<dcterms:modified[^>]*>)[^<]*(<\/dcterms:modified>)/u, `$1${fixedDocumentTimestamp}$2`);
+}
+
+async function normalizeXlsxArchive(rawBuffer: Buffer) {
+  const sourceZip = await JSZip.loadAsync(rawBuffer);
+  const normalizedZip = new JSZip();
+
+  for (const name of Object.keys(sourceZip.files).sort()) {
+    const sourceEntry = sourceZip.files[name];
+    if (sourceEntry.dir) {
+      normalizedZip.file(name, null, { createFolders: false, date: fixedZipDate, dir: true });
+      continue;
+    }
+
+    const content = name === "docProps/core.xml"
+      ? normalizeCoreProperties(await sourceEntry.async("string"))
+      : await sourceEntry.async("uint8array");
+    normalizedZip.file(name, content, {
+      binary: typeof content !== "string",
+      compression: "DEFLATE",
+      compressionOptions: { level: 9 },
+      createFolders: false,
+      date: fixedZipDate,
+    });
+  }
+
+  return normalizedZip.generateAsync({
+    type: "nodebuffer",
+    platform: "DOS",
+    compression: "DEFLATE",
+    compressionOptions: { level: 9 },
+    streamFiles: false,
+  });
+}
+
+export async function createDcfWorkbookBuffer() {
   const workbook = new ExcelJS.Workbook();
   workbook.creator = "Finance Modeling Lab 編集部";
   workbook.title = "DCF評価モデル（教育用サンプル）";
   workbook.subject = "FCFF, WACC, Terminal Value and EV-to-Equity educational model";
   workbook.company = "Finance Modeling Lab";
-  workbook.created = new Date("2026-07-21T00:00:00+09:00");
-  workbook.modified = new Date("2026-07-21T00:00:00+09:00");
+  workbook.created = new Date(fixedDocumentTimestamp);
+  workbook.modified = new Date(fixedDocumentTimestamp);
   workbook.calcProperties.fullCalcOnLoad = true;
   workbook.views = [{ x: 0, y: 0, width: 16000, height: 9000, firstSheet: 0, activeTab: 0, visibility: "visible" }];
 
@@ -378,11 +420,19 @@ async function main() {
   checks.getCell("B7").numFmt = "0.0000";
   checks.getCell("B8").numFmt = "0";
 
-  await workbook.xlsx.writeFile(outputPath);
-  console.log(`Generated ${outputPath} (${workbook.worksheets.length} sheets)`);
+  const rawBuffer = Buffer.from(await workbook.xlsx.writeBuffer());
+  return normalizeXlsxArchive(rawBuffer);
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+export async function generateDcfWorkbook(outputPath = defaultOutputPath) {
+  const buffer = await createDcfWorkbookBuffer();
+  await writeFile(outputPath, buffer);
+  console.log(`Generated ${outputPath} (9 sheets)`);
+}
+
+if (require.main === module) {
+  generateDcfWorkbook(process.argv[2]).catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+}

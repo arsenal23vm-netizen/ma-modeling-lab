@@ -13,6 +13,8 @@ Date: 2026-07-21
 - Made workbook and details links base-path-aware with Next links; a Pages-base-path export confirmed the emitted `/ma-modeling-lab/...` hrefs.
 - Made `Cover` calculation integrity and decision readiness formula-reference the corresponding aggregate `Checks` statuses.
 - Published the dedicated landing page through both the Valuation and Excel Templates hubs.
+- Made workbook generation byte-deterministic by rebuilding the ExcelJS archive with stable lexical entry ordering, fixed ZIP timestamps, fixed core-property timestamps, DOS ZIP platform metadata, and DEFLATE level 9.
+- Exposed a side-effect-free `createDcfWorkbookBuffer()` API and an output-path-aware writer so reproducibility tests never overwrite the committed artifact.
 
 ## TDD evidence
 
@@ -20,10 +22,12 @@ Date: 2026-07-21
 - Workbook RED: `npx.cmd tsx scripts/test-dcf-workbook.ts` read the legacy archive and failed with zero worksheets versus the required nine-sheet list.
 - Workbook GREEN: `DCF workbook validation passed (9 sheets)`.
 - Landing GREEN: `DCF workbook landing validation passed`.
+- Determinism GREEN: three independent generations produced SHA-256 `7858e5f31b5d96ba45e1106add0b9dc3d7568c22a50e7f4dd5befa4bcba3d790`.
 
 ## Verification
 
 - All focused validators passed: DCF series, workbook, workbook landing, content catalog, growth pages, editorial, Comps case/page/figures/workbook.
+- The workbook validator generates three in-memory archives and asserts identical SHA-256, stable ZIP entry order, fixed timestamps, normalized core properties, and ExcelJS readability.
 - `npm.cmd run lint -- --max-warnings=0` passed with zero warnings.
 - `npx.cmd tsc --noEmit` passed.
 - `PAGES_BASE_PATH=/ma-modeling-lab npx.cmd next build --webpack` passed and statically generated `/downloads/dcf-valuation-model` among 39 pages.
