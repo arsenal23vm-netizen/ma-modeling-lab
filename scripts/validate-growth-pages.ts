@@ -18,9 +18,7 @@ import { contentCatalog, type ContentEntry } from "../src/data/content-catalog";
 import { buildSensitivityMatrix, calculateDcf, calculateEquityBridge, calculateFcff, calculateWacc, dcfCase } from "../src/data/dcf-series";
 
 const deploymentBase = "https://arsenal23vm-netizen.github.io/ma-modeling-lab";
-const unpublishedHrefs = new Set([
-  "/downloads/dcf-valuation-model",
-]);
+const unpublishedHrefs = new Set<string>();
 
 const hubs = [
   {
@@ -63,7 +61,9 @@ const headings = new Set<string>();
 
 function getExpectedLinks(topic: ContentEntry["topic"], currentHref: string) {
   return contentCatalog
-    .filter((item) => item.topic === topic && item.href !== currentHref && !unpublishedHrefs.has(item.href))
+    .filter((item) => (
+      item.topic === topic || (topic === "excel" && item.href === "/downloads/dcf-valuation-model")
+    ) && item.href !== currentHref && !unpublishedHrefs.has(item.href))
     .sort((a, b) => Number(b.featured) - Number(a.featured) || a.title.localeCompare(b.title, "ja"))
     .map((item) => item.href);
 }

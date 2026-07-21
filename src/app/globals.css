@@ -527,6 +527,53 @@ a {
 .dcf-figure-note { margin: 0; border-top: 1px solid var(--line); padding: 0.75rem 1.1rem; color: var(--muted); font-size: 0.78rem; }
 .dcf-proxy-swatch { display: inline-block; width: 0.8rem; height: 0.8rem; margin-right: 0.45rem; border: 1px solid var(--primary); background: #dff3ec; vertical-align: -0.08rem; }
 
+.dcf-model-status,
+.dcf-download-panel {
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--excel);
+  background: #eef7f2;
+  padding: 1.35rem;
+}
+.dcf-model-status strong { color: var(--ink); }
+.dcf-model-status ul { margin-bottom: 0; padding-left: 1.2rem; color: var(--muted); }
+.dcf-sheet-role-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: 0.85rem; }
+.dcf-sheet-role-grid article { position: relative; border: 1px solid var(--line); border-top: 4px solid var(--primary); background: #fff; padding: 1rem; }
+.dcf-sheet-role-grid article > span { color: #9aa8b1; font-size: 0.75rem; font-weight: 900; }
+.dcf-sheet-role-grid h3 { margin: 0.3rem 0; color: var(--ink); font-size: 1.05rem; }
+.dcf-sheet-role-grid p { margin: 0; color: var(--muted); font-size: 0.84rem; line-height: 1.55; }
+.dcf-workbook-preview { margin: 1.5rem 0 0; border: 1px solid var(--line); background: #fff; box-shadow: var(--shadow); }
+.dcf-workbook-preview > figcaption { padding: 1rem 1.1rem; color: var(--ink); font-weight: 900; }
+.dcf-workbook-legend,
+.dcf-cell-legend { display: flex; flex-wrap: wrap; gap: 0.55rem; }
+.dcf-workbook-legend { border-top: 1px solid var(--line); padding: 0.7rem 1.1rem; }
+.dcf-workbook-legend span,
+.dcf-cell-legend span { border: 1px solid var(--line); padding: 0.35rem 0.55rem; font-size: 0.74rem; font-weight: 800; }
+.legend-input { background: #e7f0ff; color: #1f4e78; }
+.legend-formula { background: #f3f6f8; color: var(--ink); }
+.legend-output { background: #e9f6ef; color: var(--primary-dark); }
+.workbook-formula-bar { display: grid; grid-template-columns: auto auto minmax(0, 1fr); align-items: center; gap: 0.55rem; border-block: 1px solid var(--line); background: #f7f8f6; padding: 0.5rem 1.1rem; }
+.workbook-formula-bar .cell-reference { min-width: 3rem; border: 1px solid var(--line-strong); background: #fff; padding: 0.25rem 0.4rem; text-align: center; }
+.workbook-formula-bar .fx { color: var(--primary-dark); font-family: Georgia, serif; font-weight: 900; }
+.workbook-formula-bar code { overflow: hidden; color: var(--ink); font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.75rem; text-overflow: ellipsis; white-space: nowrap; }
+.dcf-workbook-preview .data-scroll { border: 0; }
+.workbook-preview-sheet caption { padding: 0.7rem 0.9rem; color: var(--muted); font-size: 0.78rem; text-align: left; }
+.workbook-preview-sheet th[scope="row"] { color: var(--ink); text-align: left; }
+.workbook-preview-sheet .workbook-input { background: #e7f0ff; color: #1f4e78; }
+.workbook-preview-sheet .workbook-formula { background: #f3f6f8; }
+.workbook-preview-sheet .workbook-output { background: #e9f6ef; color: var(--primary-dark); font-weight: 900; }
+.workbook-sheet-tabs { display: flex; overflow-x: auto; gap: 0.2rem; border-top: 1px solid var(--line); background: #f7f8f6; padding: 0.55rem 1.1rem 0; }
+.workbook-sheet-tabs li { flex: 0 0 auto; border: 1px solid var(--line); border-bottom: 0; background: #edf3f1; padding: 0.38rem 0.65rem; color: var(--muted); font-size: 0.72rem; font-weight: 800; list-style: none; }
+.workbook-sheet-tabs .active { background: var(--primary); color: #fff; }
+.dcf-formula-link { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 0.8rem; border: 1px solid var(--line); background: #fff; padding: 0.85rem; }
+.dcf-formula-link:hover { border-color: var(--primary); }
+.dcf-formula-link strong,
+.dcf-formula-link code { display: block; }
+.dcf-formula-link strong { color: var(--ink); }
+.dcf-formula-link code { margin-top: 0.25rem; overflow-wrap: anywhere; color: var(--muted); font-size: 0.74rem; }
+.dcf-download-panel { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
+.dcf-download-panel h2 { margin: 0.3rem 0; color: var(--ink); font-size: 1.55rem; }
+.dcf-download-panel p { margin: 0; color: var(--muted); }
+
 @media (max-width: 760px) {
   .container,
   .article-container {
@@ -557,4 +604,5 @@ a {
   .dcf-stage-nav { grid-template-columns: 1fr; }
   .dcf-stage-link-next { text-align: left; }
   .dcf-workbook-cta { margin-inline: -12px; }
+  .dcf-download-panel { align-items: stretch; flex-direction: column; margin-inline: -12px; }
 }

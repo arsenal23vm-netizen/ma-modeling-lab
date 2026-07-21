@@ -9,15 +9,13 @@ type TopicHubProps = {
   learningSteps: readonly [string, string, string];
 };
 
-const unpublishedHrefs = new Set([
-  "/downloads/dcf-valuation-model",
-]);
+const unpublishedHrefs = new Set<string>();
 
 const futureTopics: Record<ContentEntry["topic"], readonly string[]> = {
   "financial-modeling": ["事業計画の高度化", "資金調達・借入スケジュール", "モデルレビューの実務"],
   valuation: ["PPA（買収価格配分）", "Sources & Uses", "LBO（レバレッジド・バイアウト）"],
   "ma-modeling": ["PPA（買収価格配分）", "Sources & Uses", "LBO（レバレッジド・バイアウト）"],
-  excel: ["DCF評価モデルの使い方", "感応度分析のテンプレート", "M&A案件のレビュー用シート"],
+  excel: ["感応度分析の追加テンプレート", "M&A案件のレビュー用シート", "案件引継ぎ用のモデルガイド"],
 };
 
 const typeLabels: Record<ContentEntry["type"], string> = {
@@ -39,7 +37,9 @@ function getAvailableContent(topic: ContentEntry["topic"], currentHref: string) 
   const seen = new Set<string>();
 
   return contentCatalog
-    .filter((item) => item.topic === topic && item.href !== currentHref && !unpublishedHrefs.has(item.href))
+    .filter((item) => (
+      item.topic === topic || (topic === "excel" && item.href === "/downloads/dcf-valuation-model")
+    ) && item.href !== currentHref && !unpublishedHrefs.has(item.href))
     .filter((item) => {
       if (seen.has(item.href)) return false;
       seen.add(item.href);

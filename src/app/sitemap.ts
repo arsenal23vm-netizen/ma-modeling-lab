@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/journal-lab", priority: 0.9, changeFrequency: "monthly" as const },
     { path: "/quality-standard", priority: 0.85, changeFrequency: "monthly" as const },
     { path: "/downloads", priority: 0.9, changeFrequency: "monthly" as const },
+    { path: "/downloads/dcf-valuation-model", priority: 0.9, changeFrequency: "monthly" as const },
     { path: "/financial-modeling", priority: 0.9, changeFrequency: "monthly" as const },
     { path: "/valuation", priority: 0.9, changeFrequency: "monthly" as const },
     { path: "/ma-modeling", priority: 0.9, changeFrequency: "monthly" as const },
@@ -41,10 +42,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return paths.map((item) => ({
     url: `${base}${item.path}`,
-    lastModified: item.path.startsWith("/valuation/dcf")
+    lastModified: item.path.startsWith("/valuation/dcf") || item.path === "/downloads/dcf-valuation-model"
       ? new Date("2026-07-21T00:00:00+09:00")
-      : item.path === "/comps-peer-selection"
-      ? new Date("2026-07-20T00:00:00+09:00")
+      : item.path === "/comps-peer-selection" ? new Date("2026-07-20T00:00:00+09:00")
       : ["/financial-modeling", "/valuation", "/ma-modeling", "/excel-templates"].includes(item.path)
         ? new Date("2026-07-21T00:00:00+09:00")
         : lastModified,

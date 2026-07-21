@@ -194,7 +194,7 @@ export const contentCatalog: ContentEntry[] = [
   {
     href: "/downloads/dcf-valuation-model",
     title: "DCF評価モデルの使い方",
-    summary: "9シートのDCF Excelワークブックの構造、入力方法、計算チェック、学習順序を解説します。",
+    summary: "標準準拠の9シートDCF Excelワークブックについて、青セル入力、期末割引、主要数式、5×5感応度、Checksを解説します。",
     type: "download", topic: "valuation", level: "実践", readingTime: "15分", keywords: ["DCF", "Excel", "WACC", "FCFF", "ダウンロード"], featured: true,
   },
   {
