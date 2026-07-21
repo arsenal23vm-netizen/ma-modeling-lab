@@ -11,11 +11,11 @@ export function scoreContent(entry: ContentEntry, needle: string) {
     + (normalizeSearchText(entry.summary).includes(needle) ? 10 : 0);
 }
 
-export function searchContent(query: string): ContentEntry[] {
+export function searchContent(query: string, entries: readonly ContentEntry[] = contentCatalog): ContentEntry[] {
   const needle = normalizeSearchText(query);
-  if (!needle) return contentCatalog.filter((item) => item.featured);
+  if (!needle) return entries.filter((item) => item.featured);
 
-  return contentCatalog
+  return entries
     .map((item) => ({ item, score: scoreContent(item, needle) }))
     .filter(({ score }) => score > 0)
     .sort((a, b) => b.score - a.score || a.item.title.localeCompare(b.item.title, "ja"))
