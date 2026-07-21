@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CtaLink } from "@/components/CtaLink";
+import { EditorialDetails } from "@/components/EditorialDetails";
 import {
   ExcelSelectionMatrix,
   PeerRoleMap,
@@ -13,6 +14,7 @@ import {
   selectionCriteria,
   targetProfile,
 } from "@/data/comps-selection";
+import { getEditorialRecord } from "@/data/editorial";
 
 export const metadata: Metadata = {
   title: "Compsの選定方法｜類似上場会社を選ぶ実務フレームワーク",
@@ -78,6 +80,7 @@ function DataTable({ caption, headers, rows }: { caption: string; headers: strin
 }
 
 export default function CompsPeerSelectionPage() {
+  const editorialRecord = getEditorialRecord("/comps-peer-selection");
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -281,6 +284,13 @@ export default function CompsPeerSelectionPage() {
               </details>
             ))}
           </div>
+          <EditorialDetails
+            record={editorialRecord}
+            breadcrumbs={[
+              { name: "ホーム", href: "/" },
+              { name: editorialRecord.title, href: editorialRecord.href },
+            ]}
+          />
         </article>
 
         <aside className="lg:pt-1">

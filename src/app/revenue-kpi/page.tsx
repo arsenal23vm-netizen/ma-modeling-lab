@@ -1,6 +1,6 @@
 import type { Metadata } from "next"; import { ArticleShell } from "@/components/article-shell";
 export const metadata:Metadata={title:"売上をKPIから分解する"}; const sections=[{id:"driver",label:"ドライバー選定"},{id:"patterns",label:"代表パターン"},{id:"cohort",label:"継続収益"},{id:"validation",label:"検証方法"}];
-export default function Page(){return <ArticleShell no="03" title="売上をKPIから分解する" lead="売上成長率を直接入力するだけでは、計画の実現条件が見えません。現場が管理できるKPIまで分解して、因果をモデル化します。" sections={sections}>
+export default function Page(){return <ArticleShell no="03" href="/revenue-kpi" title="売上をKPIから分解する" lead="売上成長率を直接入力するだけでは、計画の実現条件が見えません。現場が管理できるKPIまで分解して、因果をモデル化します。" sections={sections}>
   <h2 id="driver">意思決定可能なドライバーを選ぶ</h2><p>良いドライバーは、実績データが取得でき、担当部署が説明でき、施策との関係が明確です。粒度を上げすぎると更新不能になるため、企業価値に効く数個へ絞ります。</p><div className="formula">Revenue = Volume × Average Selling Price</div>
   <h2 id="patterns">事業モデル別の代表パターン</h2><div className="data-scroll"><table className="data-table"><thead><tr><th>事業</th><th>売上式</th><th>主要検証</th></tr></thead><tbody><tr><td>製造</td><td>生産能力 × 稼働率 × 歩留まり × 単価</td><td>設備能力が上限になるか</td></tr><tr><td>小売</td><td>店舗数 × 既存店売上 + 新店売上</td><td>出店時期と立上り曲線</td></tr><tr><td>SaaS</td><td>期中平均顧客数 × ARPU</td><td>新規獲得、解約、アップセル</td></tr><tr><td>人材</td><td>稼働人数 × 稼働率 × 単価</td><td>採用数と離職率</td></tr></tbody></table></div>
   <h2 id="cohort">継続収益は顧客ブリッジで組む</h2><p>顧客数を期首、獲得、解約、期末に分解すると、売上成長の質が見えます。解約率は期首顧客に適用するのか、平均顧客に適用するのかを明記します。</p><div className="formula">Ending Customers = Beginning Customers + New Customers − Churned Customers<br/>ARR = Ending Customers × Monthly ARPU × 12</div>

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { CTASection } from "@/components/CTASection";
+import { EditorialDetails } from "@/components/EditorialDetails";
 import { StatementOverview } from "@/components/statement-overview";
+import { getEditorialRecord, type ArticleHref } from "@/data/editorial";
 import { bsRows, cfRows, plRows } from "@/data/statements";
 import { lessons } from "@/data/site";
 
@@ -11,12 +13,14 @@ type Section = {
 
 export function ArticleShell({
   no,
+  href,
   title,
   lead,
   sections,
   children,
 }: {
   no: string;
+  href: ArticleHref;
   title: string;
   lead: string;
   sections: Section[];
@@ -26,19 +30,7 @@ export function ArticleShell({
   const lessonIndex = lessons.findIndex((item) => item.no === no);
   const nextLesson = lessonIndex >= 0 ? lessons[lessonIndex + 1] : undefined;
   const relatedLessons = lessons.filter((item) => item.no !== no).slice(0, 3);
-  const publishedDate = "2026-07-12";
-
-  const articleJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: title,
-    description: lead,
-    inLanguage: "ja",
-    dateModified: publishedDate,
-    datePublished: publishedDate,
-    author: { "@type": "Organization", name: "Finance Modeling Lab" },
-    publisher: { "@type": "Organization", name: "Finance Modeling Lab" },
-  };
+  const editorialRecord = getEditorialRecord(href);
 
   return (
     <>
@@ -67,7 +59,7 @@ export function ArticleShell({
             </div>
             <div className="rounded-full border border-[#d8e0e5] bg-white px-3 py-1">
               <dt className="sr-only">更新日</dt>
-              <dd>更新日：2026年7月12日</dd>
+              <dd>更新日：<time dateTime={editorialRecord.modifiedDate}>{editorialRecord.modifiedDate}</time></dd>
             </div>
           </dl>
         </div>
@@ -108,6 +100,13 @@ export function ArticleShell({
               <span className="mt-1 block text-sm text-[#607080]">{nextLesson.summary}</span>
             </Link>
           )}
+          <EditorialDetails
+            record={editorialRecord}
+            breadcrumbs={[
+              { name: "ホーム", href: "/" },
+              { name: editorialRecord.title, href: editorialRecord.href },
+            ]}
+          />
           <CTASection location={`article_bottom_${lesson?.slug ?? no}`} />
         </article>
         <aside className="lg:pt-1">
@@ -138,7 +137,6 @@ export function ArticleShell({
           </div>
         </aside>
       </div>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
     </>
   );
 }

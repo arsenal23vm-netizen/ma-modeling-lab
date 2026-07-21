@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { EditorialDetails } from "@/components/EditorialDetails";
+import { getEditorialRecord } from "@/data/editorial";
 
 export const metadata: Metadata = {
   title: "非上場企業Valuation入門――企業価値から株主価値まで",
@@ -121,6 +123,7 @@ function ExcelFigure({ title, rows }: { title: string; rows: string[][] }) {
 }
 
 export default function PrivateCompanyValuationPage() {
+  const editorialRecord = getEditorialRecord("/private-company-valuation");
   const shareholderValue = caseData.ev - caseData.debt + caseData.cash + caseData.nonOperatingAssets;
   const perShareYen = (shareholderValue * 1_000_000) / caseData.shares;
   const faqJsonLd = {
@@ -300,6 +303,13 @@ export default function PrivateCompanyValuationPage() {
               ))}
             </div>
           </section>
+          <EditorialDetails
+            record={editorialRecord}
+            breadcrumbs={[
+              { name: "ホーム", href: "/" },
+              { name: editorialRecord.title, href: editorialRecord.href },
+            ]}
+          />
         </article>
 
         <aside className="lg:pt-1">

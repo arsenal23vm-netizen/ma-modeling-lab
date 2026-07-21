@@ -1,0 +1,84 @@
+import assert from "node:assert/strict";
+import { renderToStaticMarkup } from "react-dom/server";
+import { EditorialDetails } from "../src/components/EditorialDetails";
+import {
+  EDITORIAL_AUTHOR,
+  editorialRecords,
+  getEditorialRecord,
+} from "../src/data/editorial";
+
+const articleRoutes = [
+  "/model-design",
+  "/assumptions",
+  "/revenue-kpi",
+  "/pl-model",
+  "/bs-model",
+  "/cf-model",
+  "/excel-functions",
+  "/roadmap",
+  "/three-statements",
+  "/private-company-valuation",
+  "/comps-peer-selection",
+] as const;
+
+assert.deepEqual(EDITORIAL_AUTHOR, {
+  name: "Finance Modeling Lab 編集部",
+  url: "/about#editorial-team",
+});
+
+assert.deepEqual(
+  editorialRecords.map((record) => record.href).sort(),
+  [...articleRoutes].sort(),
+  "editorial records must cover every current article route exactly once",
+);
+
+const modifiedDates = new Set<string>();
+
+for (const href of articleRoutes) {
+  const record = getEditorialRecord(href);
+  assert.equal(record.href, href);
+  assert.match(record.publishedDate, /^\d{4}-\d{2}-\d{2}$/);
+  assert.match(record.modifiedDate, /^\d{4}-\d{2}-\d{2}$/);
+  assert.notEqual(
+    record.modifiedDate,
+    record.publishedDate,
+    `${href} must distinguish its modified date from its publication date`,
+  );
+  modifiedDates.add(record.modifiedDate);
+  assert.ok(record.revisionSummary.length >= 10, `${href} needs a substantive revision summary`);
+  assert.ok(record.sources.length > 0, `${href} needs at least one external source`);
+
+  for (const source of record.sources) {
+    assert.ok(source.title.trim());
+    assert.ok(source.publisher.trim());
+    assert.match(source.url, /^https:\/\//);
+    assert.match(source.accessedDate, /^\d{4}-\d{2}-\d{2}$/);
+  }
+
+  const html = renderToStaticMarkup(
+    <EditorialDetails
+      record={record}
+      breadcrumbs={[
+        { name: "ホーム", href: "/" },
+        { name: record.title, href: record.href },
+      ]}
+    />,
+  );
+
+  assert.match(html, /Finance Modeling Lab 編集部/);
+  assert.match(html, /<time[^>]+dateTime=/);
+  assert.match(html, /参考資料/);
+  assert.match(html, /変更履歴/);
+  assert.match(html, /target="_blank"/);
+  assert.match(html, /rel="noopener noreferrer"/);
+  assert.match(html, /"@type":"Article"/);
+  assert.match(html, /"@type":"BreadcrumbList"/);
+  assert.match(html, /"dateModified"/);
+  assert.match(html, /"author":\{"@type":"Organization"/);
+  assert.match(html, /https:\/\/arsenal23vm-netizen\.github\.io\/ma-modeling-lab/);
+}
+
+assert.ok(modifiedDates.size > 1, "modified dates must reflect route-specific revision timing");
+assert.throws(() => getEditorialRecord("/missing"), /editorial record/i);
+
+console.log("Editorial validation passed");
