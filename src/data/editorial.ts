@@ -15,6 +15,11 @@ export const ARTICLE_HREFS = [
   "/three-statements",
   "/private-company-valuation",
   "/comps-peer-selection",
+  "/valuation/dcf/fcff",
+  "/valuation/dcf/wacc",
+  "/valuation/dcf/terminal-value",
+  "/valuation/dcf/sensitivity-analysis",
+  "/valuation/dcf/enterprise-to-equity",
 ] as const;
 
 export type ArticleHref = (typeof ARTICLE_HREFS)[number];
@@ -188,6 +193,51 @@ export const editorialRecords = [
     modifiedDate: "2026-07-21",
     revisionSummary: "比較対象の選定基準と出典・変更履歴の表示を追加しました。",
     sources: [sources.fairValue, sources.edinet],
+  },
+  {
+    href: "/valuation/dcf/fcff",
+    title: "FCFFの計算方法――EBITから5年予測を作る",
+    description: "EBITからNOPAT、減価償却、設備投資、運転資本増加を反映してFCFFを計算します。",
+    publishedDate: "2026-07-21",
+    modifiedDate: "2026-07-21",
+    revisionSummary: "共有ケースの5年予測、符号ルール、Excelセル式、レビュー観点を追加しました。",
+    sources: [sources.fairValue, sources.excelFormulas],
+  },
+  {
+    href: "/valuation/dcf/wacc",
+    title: "WACCの計算方法――資本コストを正しく加重する",
+    description: "株主資本コスト、税引後負債コスト、目標資本構成からWACCを計算します。",
+    publishedDate: "2026-07-21",
+    modifiedDate: "2026-07-21",
+    revisionSummary: "資本構成の100%チェックとWACCが永久成長率を上回るガードを追加しました。",
+    sources: [sources.fairValue, sources.excelFormulas],
+  },
+  {
+    href: "/valuation/dcf/terminal-value",
+    title: "継続価値の計算方法――Terminal Valueを検証する",
+    description: "Gordon Growth法で継続価値を計算し、期末割引と企業価値に占める構成比を確認します。",
+    publishedDate: "2026-07-21",
+    modifiedDate: "2026-07-21",
+    revisionSummary: "期末時点の明示、WACCと永久成長率のガード、価値集中の表示を追加しました。",
+    sources: [sources.fairValue, sources.excelFormulas],
+  },
+  {
+    href: "/valuation/dcf/sensitivity-analysis",
+    title: "DCF感応度分析の作り方――WACCと永久成長率を並べる",
+    description: "WACCと永久成長率の5×5感応度表で企業価値の変動と無効条件を確認します。",
+    publishedDate: "2026-07-21",
+    modifiedDate: "2026-07-21",
+    revisionSummary: "感応度の方向性チェック、無効セルのN/A表示、Excel Data Table式を追加しました。",
+    sources: [sources.fairValue, sources.excelFormulas],
+  },
+  {
+    href: "/valuation/dcf/enterprise-to-equity",
+    title: "EVから株主価値へのブリッジ――現金と負債を調整する",
+    description: "企業価値から現金、負債、負債類似項目、非支配株主持分を調整して株主価値を求めます。",
+    publishedDate: "2026-07-21",
+    modifiedDate: "2026-07-21",
+    revisionSummary: "EV-to-Equity Bridgeの全調整項目、符号、Excelセル式を追加しました。",
+    sources: [sources.fairValue, sources.excelFormulas],
   },
 ] satisfies readonly EditorialRecord[];
 

@@ -10,12 +10,6 @@ type TopicHubProps = {
 };
 
 const unpublishedHrefs = new Set([
-  "/valuation/dcf",
-  "/valuation/dcf/fcff",
-  "/valuation/dcf/wacc",
-  "/valuation/dcf/terminal-value",
-  "/valuation/dcf/sensitivity-analysis",
-  "/valuation/dcf/enterprise-to-equity",
   "/downloads/dcf-valuation-model",
 ]);
 
