@@ -31,7 +31,7 @@ export default function TerminalValuePage() {
 
       <h2 id="excel">Excelセル式</h2>
       <p>B8=FY2030 FCFF、B9=Terminal Growth、B10=WACC、B11=Terminal Valueと置きます。</p>
-      <div className="formula">B11: =B8*(1+B9)/(B10-B9)</div>
+      <div className="formula">B11: =IF(B10&lt;=B9,NA(),B8*(1+B9)/(B10-B9))</div>
       <TerminalValueFigure />
 
       <h2 id="review">よくあるエラーとレビュー</h2>

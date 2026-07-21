@@ -36,6 +36,7 @@ export default function SensitivityAnalysisPage() {
 
       <h2 id="excel">Excelセル式</h2>
       <p>B3=モデルのWACC入力、B4=Terminal Growth入力、B6=Enterprise Value出力とし、感応度表の左上セルへ =$B$6、行入力セルへ$B$4、列入力セルへ$B$3を指定します。</p>
+      <p>Data Tableの左上セルは、WACC ≤ gでNA()を返すガード済みTerminal Valueを組み込んだEnterprise Value出力を参照します。</p>
       <div className="formula">B10: =$B$6 ／ Data Table: =TABLE($B$4,$B$3)</div>
       <SensitivityFigure />
 

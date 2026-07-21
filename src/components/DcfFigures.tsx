@@ -69,7 +69,7 @@ export function TerminalValueFigure() {
   const valuation = calculateDcf(dcfCase);
   const terminalShare = valuation.pvTerminalValue / valuation.enterpriseValue;
   return (
-    <FigureFrame caption="継続価値と企業価値の構成（単位：百万円、各年度末割引）" formula="=B8*(1+B9)/(B10-B9)">
+    <FigureFrame caption="継続価値と企業価値の構成（単位：百万円、各年度末割引）" formula="=IF(B10<=B9,NA(),B8*(1+B9)/(B10-B9))">
       <div className="data-scroll">
         <table className="data-table dcf-sheet min-w-[620px]">
           <caption>Gordon Growth法による期末時点の継続価値と現在価値への割引。</caption>
@@ -88,6 +88,7 @@ export function SensitivityFigure({ matrix = buildSensitivityMatrix(dcfCase) }: 
   const nearestBaseWacc = dcfCase.sensitivity.waccRates.reduce((nearest, rate) =>
     Math.abs(rate - baseWacc) < Math.abs(nearest - baseWacc) ? rate : nearest,
   );
+  const proxyLabel = `基準ケースに最も近いグリッド点: WACC ${percent(nearestBaseWacc)}, Terminal Growth ${percent(dcfCase.terminalGrowthRate)}. Exact base WACC ${percent(baseWacc, 4)}`;
   return (
     <FigureFrame caption="WACC × Terminal Growth 感応度（Enterprise Value、単位：百万円）" formula="=TABLE($B$4,$B$3)">
       <div className="data-scroll">
@@ -96,11 +97,13 @@ export function SensitivityFigure({ matrix = buildSensitivityMatrix(dcfCase) }: 
           <thead><tr><th scope="col">WACC \ Terminal Growth</th>{growthRates.map((growth) => <th scope="col" className="number" key={growth}>{percent(growth)}</th>)}</tr></thead>
           <tbody>{matrix.map((row) => <tr key={row.wacc}><th scope="row">{percent(row.wacc)}</th>{row.cells.map((cell) => {
             const invalid = cell.status === "N/A" || cell.enterpriseValue === null;
-            return <td data-sensitivity-status={invalid ? "invalid" : undefined} className={`number ${row.wacc === nearestBaseWacc && cell.terminalGrowthRate === dcfCase.terminalGrowthRate ? "dcf-output" : ""}`} key={cell.terminalGrowthRate}>{invalid ? "N/A" : money(cell.enterpriseValue!)}</td>;
+            const isBaseProxy = row.wacc === nearestBaseWacc && cell.terminalGrowthRate === dcfCase.terminalGrowthRate;
+            return <td data-sensitivity-status={invalid ? "invalid" : undefined} aria-label={isBaseProxy ? proxyLabel : undefined} title={isBaseProxy ? proxyLabel : undefined} className={`number ${isBaseProxy ? "dcf-output" : ""}`} key={cell.terminalGrowthRate}>{invalid ? "N/A" : money(cell.enterpriseValue!)}</td>;
           })}</tr>)}</tbody>
           <tfoot><tr><th scope="row">入力ガード</th><td colSpan={growthRates.length}>WACC ≤ g のセルは N/A</td></tr></tfoot>
         </table>
       </div>
+      <p className="dcf-figure-note"><span className="dcf-proxy-swatch" aria-hidden="true" />基準ケースに最も近いグリッド点：WACC {percent(nearestBaseWacc)} / Terminal Growth {percent(dcfCase.terminalGrowthRate)}（正確なWACC {percent(baseWacc, 4)}の代理表示）</p>
     </FigureFrame>
   );
 }

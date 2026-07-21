@@ -232,6 +232,10 @@ assert.match(waccMarkup, /WACC &gt; g/);
 const terminalMarkup = renderToStaticMarkup(createElement(TerminalValuePage));
 assert.match(terminalMarkup, /継続価値の構成比/);
 assert.match(terminalMarkup, /期末時点/);
+assert.ok(
+  terminalMarkup.includes("=IF(B10&lt;=B9,NA(),B8*(1+B9)/(B10-B9))"),
+  "Terminal Value lesson must publish the guarded Excel formula",
+);
 const sensitivityMarkup = renderToStaticMarkup(createElement(SensitivityAnalysisPage));
 const sensitivitySource = readFileSync("src/app/valuation/dcf/sensitivity-analysis/page.tsx", "utf8");
 assert.doesNotMatch(sensitivitySource, /WACC 5\.5%|g 0\.5%|gを2\.5%|WACCを7\.5%/, "Sensitivity labels must be rendered from dcfCase");
@@ -240,6 +244,16 @@ for (const rate of ["5.5%", "6.0%", "6.5%", "7.0%", "7.5%", "0.5%", "1.0%", "1.5
 }
 assert.match(sensitivityMarkup, /WACCが上がると企業価値は下が/);
 assert.match(sensitivityMarkup, /永久成長率が上がると企業価値は上が/);
+assert.ok(
+  sensitivityMarkup.includes("Data Tableの左上セルは、WACC ≤ gでNA()を返すガード済みTerminal Valueを組み込んだEnterprise Value出力を参照します。"),
+  "Sensitivity lesson must instruct the Data Table to reference the guarded output",
+);
+assert.match(sensitivityMarkup, /基準ケースに最も近いグリッド点/);
+assert.match(
+  sensitivityMarkup,
+  /aria-label="基準ケースに最も近いグリッド点: WACC 6\.5%, Terminal Growth 1\.5%\. Exact base WACC 6\.5125%"/,
+  "Nearest sensitivity cell must disclose that it proxies the exact base WACC",
+);
 assert.match(sensitivityMarkup, /N\/A/, "Sensitivity lesson must explain the invalid-cell state");
 const invalidSensitivityFigureMarkup = renderToStaticMarkup(createElement(SensitivityFigure, {
   matrix: buildSensitivityMatrix({

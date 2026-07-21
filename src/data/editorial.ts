@@ -86,6 +86,42 @@ const sources = {
     url: "https://www.ifrs.org/projects/completed-projects/2011/fair-value-measurement/",
     accessedDate,
   },
+  freeCashFlowValuation: {
+    title: "Free Cash Flow Valuation",
+    publisher: "CFA Institute",
+    url: "https://www.cfainstitute.org/insights/professional-learning/refresher-readings/2026/free-cash-flow-valuation",
+    accessedDate,
+  },
+  costOfCapital: {
+    title: "Cost of Capital: Advanced Topics",
+    publisher: "CFA Institute",
+    url: "https://www.cfainstitute.org/insights/professional-learning/refresher-readings/2026/cost-capital-advanced-topics",
+    accessedDate,
+  },
+  terminalValue: {
+    title: "Terminal Value",
+    publisher: "NYU Stern School of Business — Aswath Damodaran",
+    url: "https://pages.stern.nyu.edu/~adamodar/pdfiles/country/TerminalValue.pdf",
+    accessedDate,
+  },
+  excelDataTable: {
+    title: "Calculate multiple results by using a data table",
+    publisher: "Microsoft Support",
+    url: "https://support.microsoft.com/en-us/excel/calculate-multiple-results-by-using-a-data-table",
+    accessedDate,
+  },
+  excelNa: {
+    title: "NA function",
+    publisher: "Microsoft Support",
+    url: "https://support.microsoft.com/en-us/excel/functions/na-function",
+    accessedDate,
+  },
+  ifrs13: {
+    title: "IFRS 13 Fair Value Measurement",
+    publisher: "IFRS Foundation",
+    url: "https://www.ifrs.org/issued-standards/list-of-standards/ifrs-13-fair-value-measurement/",
+    accessedDate,
+  },
   edinet: {
     title: "XBRL関連情報について",
     publisher: "金融庁",
@@ -201,7 +237,7 @@ export const editorialRecords = [
     publishedDate: "2026-07-21",
     modifiedDate: "2026-07-21",
     revisionSummary: "共有ケースの5年予測、符号ルール、Excelセル式、レビュー観点を追加しました。",
-    sources: [sources.fairValue, sources.excelFormulas],
+    sources: [sources.freeCashFlowValuation, sources.excelFormulas],
   },
   {
     href: "/valuation/dcf/wacc",
@@ -210,7 +246,7 @@ export const editorialRecords = [
     publishedDate: "2026-07-21",
     modifiedDate: "2026-07-21",
     revisionSummary: "資本構成の100%チェックとWACCが永久成長率を上回るガードを追加しました。",
-    sources: [sources.fairValue, sources.excelFormulas],
+    sources: [sources.costOfCapital, sources.freeCashFlowValuation],
   },
   {
     href: "/valuation/dcf/terminal-value",
@@ -219,7 +255,7 @@ export const editorialRecords = [
     publishedDate: "2026-07-21",
     modifiedDate: "2026-07-21",
     revisionSummary: "期末時点の明示、WACCと永久成長率のガード、価値集中の表示を追加しました。",
-    sources: [sources.fairValue, sources.excelFormulas],
+    sources: [sources.terminalValue, sources.freeCashFlowValuation],
   },
   {
     href: "/valuation/dcf/sensitivity-analysis",
@@ -228,7 +264,7 @@ export const editorialRecords = [
     publishedDate: "2026-07-21",
     modifiedDate: "2026-07-21",
     revisionSummary: "感応度の方向性チェック、無効セルのN/A表示、Excel Data Table式を追加しました。",
-    sources: [sources.fairValue, sources.excelFormulas],
+    sources: [sources.excelDataTable, sources.excelNa],
   },
   {
     href: "/valuation/dcf/enterprise-to-equity",
@@ -237,7 +273,7 @@ export const editorialRecords = [
     publishedDate: "2026-07-21",
     modifiedDate: "2026-07-21",
     revisionSummary: "EV-to-Equity Bridgeの全調整項目、符号、Excelセル式を追加しました。",
-    sources: [sources.fairValue, sources.excelFormulas],
+    sources: [sources.ifrs13, sources.freeCashFlowValuation],
   },
 ] satisfies readonly EditorialRecord[];
 

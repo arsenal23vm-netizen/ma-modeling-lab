@@ -38,6 +38,15 @@ assert.deepEqual(
 );
 
 const modifiedDates = new Set<string>();
+const dcfSourceExpectations = new Map<string, { title: string; hostname: string }>([
+  ["/valuation/dcf/fcff", { title: "Free Cash Flow Valuation", hostname: "www.cfainstitute.org" }],
+  ["/valuation/dcf/wacc", { title: "Cost of Capital: Advanced Topics", hostname: "www.cfainstitute.org" }],
+  ["/valuation/dcf/terminal-value", { title: "Terminal Value", hostname: "pages.stern.nyu.edu" }],
+  ["/valuation/dcf/sensitivity-analysis", { title: "Calculate multiple results by using a data table", hostname: "support.microsoft.com" }],
+  ["/valuation/dcf/enterprise-to-equity", { title: "IFRS 13 Fair Value Measurement", hostname: "www.ifrs.org" }],
+]);
+
+assert.equal(new Set([...dcfSourceExpectations.values()].map((source) => source.title)).size, 5);
 
 for (const href of articleRoutes) {
   const record = getEditorialRecord(href);
@@ -55,6 +64,16 @@ for (const href of articleRoutes) {
     assert.ok(source.publisher.trim());
     assert.match(source.url, /^https:\/\//);
     assert.match(source.accessedDate, /^\d{4}-\d{2}-\d{2}$/);
+  }
+
+  const expectedSource = dcfSourceExpectations.get(href);
+  if (expectedSource) {
+    assert.ok(
+      record.sources.some((source) =>
+        source.title === expectedSource.title && new URL(source.url).hostname === expectedSource.hostname,
+      ),
+      `${href} needs its route-relevant authoritative source`,
+    );
   }
 
   const html = renderToStaticMarkup(
