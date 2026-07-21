@@ -2,20 +2,30 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { lessons, navItems } from "@/data/site";
+import { navItems } from "@/data/site";
+import { searchContent } from "@/lib/content-search";
+
+const contentTypeLabels = {
+  article: "記事",
+  hub: "ハブ",
+  download: "DL",
+  tool: "ツール",
+  reference: "参考",
+} as const;
+
+const topicLabels = {
+  "financial-modeling": "財務モデリング",
+  valuation: "Valuation",
+  "ma-modeling": "M&Aモデリング",
+  excel: "Excel",
+} as const;
 
 export function SiteHeader() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
 
-  const normalizedQuery = query.trim().toLowerCase();
-  const hits = useMemo(() => {
-    if (!normalizedQuery) return lessons;
-    return lessons.filter((lesson) =>
-      `${lesson.title} ${lesson.summary} ${lesson.level}`.toLowerCase().includes(normalizedQuery),
-    );
-  }, [normalizedQuery]);
+  const hits = useMemo(() => searchContent(query), [query]);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -122,19 +132,25 @@ export function SiteHeader() {
             />
             <div className="mt-4 max-h-[58vh] overflow-y-auto border-t border-[#d8e0e5]">
               {hits.length > 0 ? (
-                hits.map((lesson) => (
+                hits.map((item) => (
                   <Link
                     onClick={() => setSearchOpen(false)}
-                    key={lesson.slug}
-                    href={`/${lesson.slug}`}
+                    key={item.href}
+                    href={item.href}
                     className="block border-b border-[#d8e0e5] py-3 hover:bg-[#f7f8f6]"
                   >
-                    <strong>{lesson.title}</strong>
-                    <span className="block text-sm text-[#607080]">{lesson.summary}</span>
+                    <span className="mb-1 flex flex-wrap gap-1.5 text-[11px] font-bold">
+                      <span className="rounded-full bg-[#e7f4f1] px-2 py-0.5 text-[#147d73]">{contentTypeLabels[item.type]}</span>
+                      <span className="rounded-full bg-[#edf1f4] px-2 py-0.5 text-[#536573]">{topicLabels[item.topic]}</span>
+                    </span>
+                    <strong>{item.title}</strong>
+                    <span className="block text-sm text-[#607080]">{item.summary}</span>
                   </Link>
                 ))
               ) : (
-                <p className="py-5 text-sm text-[#607080]">該当する記事が見つかりませんでした。</p>
+                <p className="py-5 text-sm text-[#607080]">
+                  該当するコンテンツが見つかりませんでした。<Link href="/request" className="font-bold text-[#147d73] underline" onClick={() => setSearchOpen(false)}>追加してほしい内容をリクエスト</Link>できます。
+                </p>
               )}
             </div>
           </div>
