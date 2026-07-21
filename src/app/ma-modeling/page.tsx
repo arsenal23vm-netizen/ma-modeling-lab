@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { TopicHub } from "@/components/TopicHub";
 
+const canonical = "https://arsenal23vm-netizen.github.io/ma-modeling-lab/ma-modeling";
+const title = "M&Aモデリング";
+const description = "買収案件の分析、類似会社選定、モデルレビューに必要なM&Aモデリングの学習順序を案内します。";
+
 export const metadata: Metadata = {
-  title: "M&Aモデリング | Finance Modeling Lab",
-  description: "買収案件の分析、類似会社選定、モデルレビューに必要なM&Aモデリングの学習順序を案内します。",
-  alternates: {
-    canonical: "https://arsenal23vm-netizen.github.io/ma-modeling-lab/ma-modeling",
-  },
+  title,
+  description,
+  alternates: { canonical },
+  openGraph: { title, description, url: canonical, type: "website" },
 };
 
 export default function MaModelingPage() {

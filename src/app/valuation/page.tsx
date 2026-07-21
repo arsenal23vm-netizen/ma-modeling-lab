@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { TopicHub } from "@/components/TopicHub";
 
+const canonical = "https://arsenal23vm-netizen.github.io/ma-modeling-lab/valuation";
+const title = "企業価値評価（Valuation）";
+const description = "企業価値から株主価値まで、DCFと類似会社比較法を使ったValuationの考え方と教材を案内します。";
+
 export const metadata: Metadata = {
-  title: "企業価値評価（Valuation） | Finance Modeling Lab",
-  description: "企業価値から株主価値まで、DCFと類似会社比較法を使ったValuationの考え方と教材を案内します。",
-  alternates: {
-    canonical: "https://arsenal23vm-netizen.github.io/ma-modeling-lab/valuation",
-  },
+  title,
+  description,
+  alternates: { canonical },
+  openGraph: { title, description, url: canonical, type: "website" },
 };
 
 export default function ValuationPage() {

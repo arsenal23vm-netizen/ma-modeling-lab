@@ -21,11 +21,15 @@ npm run dev
 http://localhost:3000
 ```
 
-本番ビルド確認:
+GitHub Pages向けの本番ビルド確認（PowerShell）:
 
-```bash
-npm run build
+```powershell
+$env:PAGES_BASE_PATH='/ma-modeling-lab'
+npx.cmd next build --webpack
+npm.cmd run validate:growth-static
 ```
+
+深いWindows worktreeでは、既定のTurbopackビルドが生成ファイルのパス長上限に達するため、Pages向け検証では上記のwebpackコマンドを使います。Next.js設定は変更しません。
 
 ## 主なページ
 
@@ -36,6 +40,7 @@ npm run build
 - `/pl-model` PL設計
 - `/bs-model` BS設計
 - `/cf-model` CF設計
+- `/three-statements` 財務三表の連動
 - `/comps-peer-selection` Comps選定：類似会社の選定・除外判断とレビュー観点
 - `/excel-functions` Excel関数
 - `/books` 推薦書籍
@@ -43,6 +48,45 @@ npm run build
 - `/request` リクエスト
 - `/privacy` プライバシーポリシー
 - `/disclaimer` 免責事項
+
+## オーガニックグロース基盤
+
+次のトピックハブ、DCF講座、Excel教材ランディングページを公開しています。
+
+- `/financial-modeling`
+- `/valuation`
+- `/ma-modeling`
+- `/excel-templates`
+- `/valuation/dcf`
+- `/valuation/dcf/fcff`
+- `/valuation/dcf/wacc`
+- `/valuation/dcf/terminal-value`
+- `/valuation/dcf/sensitivity-analysis`
+- `/valuation/dcf/enterprise-to-equity`
+- `/downloads/dcf-valuation-model`
+
+DCF講座とWorkbookは、`src/data/dcf-series.ts` の共有ケースを単一のデータソースとして使います。記事の著者表記は `Finance Modeling Lab 編集部` に統一しています。
+
+標準準拠の9シートDCF Workbookは、次のコマンドで決定論的に再生成し、構造と数式を検証できます。
+
+```bash
+npm run generate:dcf-workbook
+npm run test:dcf-workbook
+```
+
+オーガニックグロース基盤の全Validatorは次のとおりです。`validate:growth-static` はGitHub PagesのbasePathで静的Exportを作成した後に実行します。
+
+```bash
+npm run validate:dcf-series
+npm run validate:editorial
+npm run validate:catalog
+npm run validate:growth-pages
+npm run validate:dcf-landing
+npm run test:dcf-workbook
+npm run validate:growth-static
+npm run lint -- --max-warnings=0
+npx tsc --noEmit
+```
 
 ## Comps選定ワークシート
 

@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "", priority: 1, changeFrequency: "weekly" as const },
     { path: "/tools", priority: 0.8, changeFrequency: "monthly" as const },
     { path: "/learning-roadmap", priority: 0.9, changeFrequency: "monthly" as const },
+    { path: "/three-statements", priority: 0.85, changeFrequency: "monthly" as const },
     { path: "/journal-lab", priority: 0.9, changeFrequency: "monthly" as const },
     { path: "/quality-standard", priority: 0.85, changeFrequency: "monthly" as const },
     { path: "/downloads", priority: 0.9, changeFrequency: "monthly" as const },
@@ -45,7 +46,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: item.path.startsWith("/valuation/dcf") || item.path === "/downloads/dcf-valuation-model"
       ? new Date("2026-07-21T00:00:00+09:00")
       : item.path === "/comps-peer-selection" ? new Date("2026-07-20T00:00:00+09:00")
-      : ["/financial-modeling", "/valuation", "/ma-modeling", "/excel-templates"].includes(item.path)
+      : ["/financial-modeling", "/valuation", "/ma-modeling", "/excel-templates", "/three-statements"].includes(item.path)
         ? new Date("2026-07-21T00:00:00+09:00")
         : lastModified,
     changeFrequency: item.changeFrequency,

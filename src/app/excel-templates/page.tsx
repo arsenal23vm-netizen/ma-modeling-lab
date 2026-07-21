@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { TopicHub } from "@/components/TopicHub";
 
+const canonical = "https://arsenal23vm-netizen.github.io/ma-modeling-lab/excel-templates";
+const title = "Excel教材・テンプレート";
+const description = "仕訳から財務三表、Comps、モデル品質チェックまで、財務モデリング学習用のExcel教材をまとめています。";
+
 export const metadata: Metadata = {
-  title: "Excel教材・テンプレート | Finance Modeling Lab",
-  description: "仕訳から財務三表、Comps、モデル品質チェックまで、財務モデリング学習用のExcel教材をまとめています。",
-  alternates: {
-    canonical: "https://arsenal23vm-netizen.github.io/ma-modeling-lab/excel-templates",
-  },
+  title,
+  description,
+  alternates: { canonical },
+  openGraph: { title, description, url: canonical, type: "website" },
 };
 
 export default function ExcelTemplatesPage() {

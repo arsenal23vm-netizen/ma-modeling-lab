@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { TopicHub } from "@/components/TopicHub";
 
+const canonical = "https://arsenal23vm-netizen.github.io/ma-modeling-lab/financial-modeling";
+const title = "財務モデリング";
+const description = "財務三表、事業計画、モデル設計を実務で使える順番で学ぶ財務モデリングの案内ページです。";
+
 export const metadata: Metadata = {
-  title: "財務モデリング | Finance Modeling Lab",
-  description: "財務三表、事業計画、モデル設計を実務で使える順番で学ぶ財務モデリングの案内ページです。",
-  alternates: {
-    canonical: "https://arsenal23vm-netizen.github.io/ma-modeling-lab/financial-modeling",
-  },
+  title,
+  description,
+  alternates: { canonical },
+  openGraph: { title, description, url: canonical, type: "website" },
 };
 
 export default function FinancialModelingPage() {
