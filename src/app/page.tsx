@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { CtaLink } from "@/components/CtaLink";
 import { lessons } from "@/data/site";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "https://arsenal23vm-netizen.github.io/ma-modeling-lab/" },
+};
 
 const principles = [
   { title: "入力・計算・出力を分ける", body: "前提と計算ロジックを混ぜず、第三者が追えるモデルへ。" },
@@ -100,6 +105,31 @@ export default function Home() {
               <p className="mt-2 text-sm text-[#607080]">{item.body}</p>
             </div>
           ))}
+        </div>
+      </section>
+      <section className="bg-[#f7f8f6]">
+        <div className="container py-16">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <div className="eyebrow">TOPIC HUBS</div>
+              <h2 className="section-title mt-2">学習テーマから探す</h2>
+            </div>
+            <p className="max-w-lg text-sm text-[#607080]">目的に近いテーマを選び、いま読める解説や教材から学習を始められます。</p>
+          </div>
+          <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {[
+              { href: "/financial-modeling", title: "財務モデリング", body: "三表、事業計画、モデル品質を順に学ぶ。" },
+              { href: "/valuation", title: "Valuation", body: "DCFとCompsで価値評価の根拠を組み立てる。" },
+              { href: "/ma-modeling", title: "M&Aモデル", body: "案件の論点とレビュー観点を整理する。" },
+              { href: "/excel-templates", title: "Excel教材", body: "演習とテンプレートで手を動かして確かめる。" },
+            ].map((item) => (
+              <Link key={item.href} href={item.href} className="border border-[#d8e0e5] bg-white p-5 transition hover:-translate-y-0.5 hover:border-[#147d73] hover:shadow-lg">
+                <h3 className="text-xl font-bold text-[#102235]">{item.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-[#607080]">{item.body}</p>
+                <span className="mt-4 inline-block text-sm font-bold text-[#147d73]">テーマを見る →</span>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
       <section className="bg-[#f7f8f6]">

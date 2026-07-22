@@ -1,6 +1,18 @@
 import type { Metadata } from "next"; import Link from "next/link"; import { ArticleShell } from "@/components/article-shell";
-export const metadata:Metadata={title:"財務三表を連動させる"}; const sections=[{id:"flow",label:"構築順序"},{id:"working",label:"運転資本"},{id:"debt",label:"借入金・支払利息"},{id:"details",label:"専門講座"}];
-export default function Page(){return <ArticleShell no="03" title="財務三表を連動させる" lead="損益計算書、貸借対照表、キャッシュ・フロー計算書を一方向の参照で接続し、事業計画を現金及び預金の増減へ変換します。" sections={sections}>
+const canonical = "https://arsenal23vm-netizen.github.io/ma-modeling-lab/three-statements";
+export const metadata: Metadata = {
+  title: "財務三表を連動させる",
+  description: "損益計算書、貸借対照表、キャッシュ・フロー計算書を一方向の参照で連動させる構築順序とExcel設計を解説します。",
+  alternates: { canonical },
+  openGraph: {
+    title: "財務三表を連動させる",
+    description: "PL、BS、CFを一方向の参照で接続し、現金残高と貸借一致まで検証する財務モデリング講座。",
+    url: canonical,
+    type: "article",
+  },
+};
+const sections=[{id:"flow",label:"構築順序"},{id:"working",label:"運転資本"},{id:"debt",label:"借入金・支払利息"},{id:"details",label:"専門講座"}];
+export default function Page(){return <ArticleShell no="03" href="/three-statements" title="財務三表を連動させる" lead="損益計算書、貸借対照表、キャッシュ・フロー計算書を一方向の参照で接続し、事業計画を現金及び預金の増減へ変換します。" sections={sections}>
 <h2 id="flow">損益計算書から作り、現金を経て貸借対照表を閉じる</h2><ol><li>売上高・費用ドライバーから損益計算書を作る。</li><li>売掛金、棚卸資産、買掛金などの貸借対照表項目を予測する。</li><li>当期純利益からキャッシュ・フロー計算書を作る。</li><li>期末現金及び預金を貸借対照表へ戻し、貸借一致を確認する。</li></ol><div className="formula">期末現金及び預金 = 期首現金及び預金 + 営業活動CF + 投資活動CF + 財務活動CF</div>
 <h2 id="working">運転資本は回転日数でつなぐ</h2><div className="formula">売掛金 = 売上高 × 売掛金回転日数 ÷ 期間日数<br/>棚卸資産 = 売上原価 × 棚卸資産回転日数 ÷ 期間日数<br/>買掛金 = 売上原価 × 買掛金回転日数 ÷ 期間日数</div><p>売掛金・棚卸資産の増加は現金減少、買掛金の増加は現金増加としてキャッシュ・フロー計算書へ反映します。</p>
 <h2 id="debt">借入金返済と支払利息</h2><p>期中平均借入金残高から支払利息を計算し、最低現金を超える余剰額だけを任意返済へ充当します。</p><div className="formula">支払利息 = 期中平均借入金残高 × 適用金利<br/>任意返済額 = MAX(0, 返済前現金 − 最低現金)</div>

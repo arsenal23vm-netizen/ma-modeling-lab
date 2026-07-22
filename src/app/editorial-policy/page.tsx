@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { createPageMetadata } from "@/lib/page-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata("/editorial-policy", {
   title: "編集方針",
   description: "Finance Modeling Labの記事制作、更新、免責、広告・アフィリエイト表記に関する方針。",
-};
+});
 
 export default function EditorialPolicyPage() {
   return (

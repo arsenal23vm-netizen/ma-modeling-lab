@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { createPageMetadata } from "@/lib/page-metadata";
 
-export const metadata: Metadata = { title: "免責事項", description: "Finance Modeling Labの情報利用、専門家確認、正確性、サンプル数値、広告表示に関する免責事項。" };
+export const metadata: Metadata = createPageMetadata("/disclaimer", { title: "免責事項", description: "Finance Modeling Labの情報利用、専門家確認、正確性、サンプル数値、広告表示に関する免責事項。" });
 
 export default function Page() {
   return (

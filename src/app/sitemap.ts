@@ -8,14 +8,26 @@ const lastModified = new Date("2026-07-11T00:00:00+09:00");
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [
-    { path: "", priority: 1, changeFrequency: "weekly" as const },
+    { path: "/", priority: 1, changeFrequency: "weekly" as const },
     { path: "/tools", priority: 0.8, changeFrequency: "monthly" as const },
     { path: "/learning-roadmap", priority: 0.9, changeFrequency: "monthly" as const },
+    { path: "/three-statements", priority: 0.85, changeFrequency: "monthly" as const },
     { path: "/journal-lab", priority: 0.9, changeFrequency: "monthly" as const },
     { path: "/quality-standard", priority: 0.85, changeFrequency: "monthly" as const },
     { path: "/downloads", priority: 0.9, changeFrequency: "monthly" as const },
+    { path: "/downloads/dcf-valuation-model", priority: 0.9, changeFrequency: "monthly" as const },
+    { path: "/financial-modeling", priority: 0.9, changeFrequency: "monthly" as const },
+    { path: "/valuation", priority: 0.9, changeFrequency: "monthly" as const },
+    { path: "/ma-modeling", priority: 0.9, changeFrequency: "monthly" as const },
+    { path: "/excel-templates", priority: 0.9, changeFrequency: "monthly" as const },
     { path: "/private-company-valuation", priority: 0.9, changeFrequency: "monthly" as const },
     { path: "/comps-peer-selection", priority: 0.9, changeFrequency: "monthly" as const },
+    { path: "/valuation/dcf", priority: 0.9, changeFrequency: "monthly" as const },
+    { path: "/valuation/dcf/fcff", priority: 0.85, changeFrequency: "monthly" as const },
+    { path: "/valuation/dcf/wacc", priority: 0.85, changeFrequency: "monthly" as const },
+    { path: "/valuation/dcf/terminal-value", priority: 0.85, changeFrequency: "monthly" as const },
+    { path: "/valuation/dcf/sensitivity-analysis", priority: 0.85, changeFrequency: "monthly" as const },
+    { path: "/valuation/dcf/enterprise-to-equity", priority: 0.85, changeFrequency: "monthly" as const },
     { path: "/books", priority: 0.8, changeFrequency: "monthly" as const },
     { path: "/request", priority: 0.7, changeFrequency: "monthly" as const },
     { path: "/about", priority: 0.6, changeFrequency: "yearly" as const },
@@ -31,7 +43,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return paths.map((item) => ({
     url: `${base}${item.path}`,
-    lastModified: item.path === "/comps-peer-selection" ? new Date("2026-07-20T00:00:00+09:00") : lastModified,
+    lastModified: item.path.startsWith("/valuation/dcf") || item.path === "/downloads/dcf-valuation-model"
+      ? new Date("2026-07-21T00:00:00+09:00")
+      : item.path === "/comps-peer-selection" ? new Date("2026-07-20T00:00:00+09:00")
+      : ["/financial-modeling", "/valuation", "/ma-modeling", "/excel-templates", "/three-statements"].includes(item.path)
+        ? new Date("2026-07-21T00:00:00+09:00")
+        : lastModified,
     changeFrequency: item.changeFrequency,
     priority: item.priority,
   }));

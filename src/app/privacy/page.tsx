@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { createPageMetadata } from "@/lib/page-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata("/privacy", {
   title: "プライバシーポリシー",
   description: "Finance Modeling Labのアクセス解析、Cookie、アフィリエイトリンク、個人情報の取り扱いについて。",
-};
+});
 
 export default function PrivacyPage() {
   return (

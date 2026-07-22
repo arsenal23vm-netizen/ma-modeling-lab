@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { createPageMetadata } from "@/lib/page-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata("/about", {
   title: "Finance Modeling Labについて",
   description: "Finance Modeling Labの目的、対象読者、運営方針について。",
-};
+});
 
 const values = [
   {
@@ -49,6 +50,22 @@ export default function AboutPage() {
             </section>
           ))}
         </div>
+        <section id="editorial-team" className="scroll-mt-24">
+          <h2>編集チーム</h2>
+          <p>
+            <strong>Finance Modeling Lab 編集部</strong>は、実務で再現できる財務モデリング教材を編集するチーム名義です。個人の資格、所属先、案件経験を示す名称ではありません。
+          </p>
+          <p>
+            教材は教育目的であり、個別案件の助言ではありません。編集方針として、数式、会計上のつながり、モデル内部の整合性を公開前に確認し、参照した外部資料、公開日、更新日、変更内容を各記事に表示します。
+          </p>
+          <p>
+            誤りや分かりにくい箇所のご連絡は
+            <Link href="/request" className="font-bold text-[#147d73]">
+              リクエストページ
+            </Link>
+            からお寄せください。内容を確認し、必要な修正は記事の変更履歴に記録します。
+          </p>
+        </section>
         <div className="callout warning">
           <strong>利用上の注意</strong>
           <br />

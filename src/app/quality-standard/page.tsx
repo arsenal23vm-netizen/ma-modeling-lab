@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { DownloadCard } from "@/components/DownloadCard";
 import { downloads, qualityCriteria } from "@/data/lab";
+import { createPageMetadata } from "@/lib/page-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata("/quality-standard", {
   title: "モデル品質基準",
   description: "財務モデルを100点満点で自己レビューするための品質基準と主要チェック項目。",
-};
+});
 
 export default function QualityStandardPage() {
   const total = qualityCriteria.reduce((sum, item) => sum + item.points, 0);

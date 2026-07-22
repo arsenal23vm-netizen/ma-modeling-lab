@@ -48,7 +48,7 @@ export const downloads = [
   { file: "03_PLモデル練習.xlsx", audience: "PLをドライバーから組みたい方", content: "数量×単価、材料費、労務費、製造経費、税金のPL練習", size: "約5KB", updated: "2026-07-12", terms: "教育目的・再配布不可" },
   { file: "04_BS_CF統合練習.xlsx", audience: "BSとCFの連動を練習したい方", content: "売掛金、棚卸資産、買掛金、固定資産、借入金、間接法CF", size: "約6KB", updated: "2026-07-12", terms: "教育目的・再配布不可" },
   { file: "05_完成3表モデル.xlsx", audience: "完成モデルの構造を確認したい方", content: "Inputs、Assumptions、PL、BS、CF、Schedules、Checks、Guide", size: "約7KB", updated: "2026-07-12", terms: "教育目的・再配布不可" },
-  { file: "06_DCF評価モデル.xlsx", audience: "DCFと感応度分析へ進みたい方", content: "FCF、WACC、継続価値、事業価値、株主価値、感応度表", size: "約8KB", updated: "2026-07-12", terms: "教育目的・再配布不可" },
+  { file: "06_DCF評価モデル.xlsx", audience: "DCFと感応度分析へ進みたい方", content: "CoverからChecksまでの9シート、FCFF、WACC、継続価値、EV、株主価値、5×5感応度", size: "約20KB", updated: "2026-07-21", terms: "教育目的・再配布不可" },
   { file: "07_モデル品質チェックリスト.xlsx", audience: "モデルレビューを標準化したい方", content: "100点満点の品質基準、主要チェック、エラー表示例", size: "約4KB", updated: "2026-07-12", terms: "教育目的・再配布不可" },
   { file: "Comps_Selection_Worksheet.xlsx", audience: "類似会社の選定根拠を整理したい方", content: "対象会社プロファイル、候補12社、選定マトリクス、Peer Role、Review Memo、Checks", size: "約21KB", updated: "2026-07-20", terms: "教育目的・再配布不可" },
 ];

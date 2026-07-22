@@ -1,18 +1,9 @@
 export const navItems = [
-  { href: "/learning-roadmap", label: "ロードマップ" },
-  { href: "/journal-lab", label: "仕訳ラボ" },
-  { href: "/quality-standard", label: "品質基準" },
-  { href: "/downloads", label: "DL" },
-  { href: "/private-company-valuation", label: "Valuation" },
-  { href: "/comps-peer-selection", label: "Comps選定" },
-  { href: "/model-design", label: "モデル設計" },
-  { href: "/assumptions", label: "前提条件" },
-  { href: "/pl-model", label: "PL設計" },
-  { href: "/bs-model", label: "BS設計" },
-  { href: "/cf-model", label: "CF設計" },
-  { href: "/excel-functions", label: "Excel関数" },
-  { href: "/books", label: "書籍" },
-  { href: "/tools", label: "ツール" },
+  { href: "/", label: "Home" },
+  { href: "/financial-modeling", label: "財務モデリング" },
+  { href: "/valuation", label: "Valuation" },
+  { href: "/ma-modeling", label: "M&Aモデル" },
+  { href: "/excel-templates", label: "Excel教材" },
 ];
 
 export const lessons = [

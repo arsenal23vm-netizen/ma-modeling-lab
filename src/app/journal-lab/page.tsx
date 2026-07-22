@@ -3,11 +3,12 @@ import { DownloadCard } from "@/components/DownloadCard";
 import { ExcelWorksheetDiagram } from "@/components/ExcelWorksheetDiagram";
 import { JournalEntryCard } from "@/components/JournalEntryCard";
 import { caseCompany, downloads, journalEntries } from "@/data/lab";
+import { createPageMetadata } from "@/lib/page-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata("/journal-lab", {
   title: "会計仕訳ラボ",
   description: "取引、仕訳、PL・BS・CFへの反映、Excel入力場所を同じ順序で確認する会計仕訳ラボ。",
-};
+});
 
 export default function JournalLabPage() {
   return (

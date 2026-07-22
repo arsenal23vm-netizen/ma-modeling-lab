@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CtaLink } from "@/components/CtaLink";
+import { EditorialDetails } from "@/components/EditorialDetails";
 import {
   ExcelSelectionMatrix,
   PeerRoleMap,
@@ -13,12 +14,14 @@ import {
   selectionCriteria,
   targetProfile,
 } from "@/data/comps-selection";
+import { getEditorialRecord } from "@/data/editorial";
+import { createPageMetadata } from "@/lib/page-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata("/comps-peer-selection", {
   title: "Compsの選定方法｜類似上場会社を選ぶ実務フレームワーク",
   description:
     "Comps候補の探し方、事業モデル・規模・成長率・利益率による比較、Core Peerと除外企業の整理、Excel選定マトリクスまで解説します。",
-};
+});
 
 const toc = [
   ["why-peer-selection", "Compsの意味とComparableの違い"],
@@ -78,6 +81,7 @@ function DataTable({ caption, headers, rows }: { caption: string; headers: strin
 }
 
 export default function CompsPeerSelectionPage() {
+  const editorialRecord = getEditorialRecord("/comps-peer-selection");
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -281,6 +285,13 @@ export default function CompsPeerSelectionPage() {
               </details>
             ))}
           </div>
+          <EditorialDetails
+            record={editorialRecord}
+            breadcrumbs={[
+              { name: "ホーム", href: "/" },
+              { name: editorialRecord.title, href: editorialRecord.href },
+            ]}
+          />
         </article>
 
         <aside className="lg:pt-1">

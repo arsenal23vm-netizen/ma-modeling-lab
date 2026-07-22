@@ -1,35 +1,82 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
-import { lessons, navItems } from "@/data/site";
+import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
+import { navItems } from "@/data/site";
+import { searchContent } from "@/lib/content-search";
+
+const contentTypeLabels = {
+  article: "記事",
+  hub: "ハブ",
+  download: "DL",
+  tool: "ツール",
+  reference: "参考",
+} as const;
+
+const topicLabels = {
+  "financial-modeling": "財務モデリング",
+  valuation: "Valuation",
+  "ma-modeling": "M&Aモデリング",
+  excel: "Excel",
+} as const;
 
 export function SiteHeader() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const searchOpenerRef = useRef<HTMLButtonElement>(null);
+  const searchDialogRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const wasSearchOpen = useRef(false);
 
-  const normalizedQuery = query.trim().toLowerCase();
-  const hits = useMemo(() => {
-    if (!normalizedQuery) return lessons;
-    return lessons.filter((lesson) =>
-      `${lesson.title} ${lesson.summary} ${lesson.level}`.toLowerCase().includes(normalizedQuery),
-    );
-  }, [normalizedQuery]);
+  const hits = useMemo(() => searchContent(query), [query]);
+  const closeSearch = useCallback(() => setSearchOpen(false), []);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
-        setSearchOpen(false);
+        closeSearch();
         setMenuOpen(false);
       }
     }
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [closeSearch]);
+
+  useEffect(() => {
+    if (searchOpen) {
+      const frame = window.requestAnimationFrame(() => searchInputRef.current?.focus());
+      wasSearchOpen.current = true;
+      return () => window.cancelAnimationFrame(frame);
+    }
+
+    if (wasSearchOpen.current) {
+      searchOpenerRef.current?.focus();
+      wasSearchOpen.current = false;
+    }
+  }, [searchOpen]);
 
   const closeNavigation = () => setMenuOpen(false);
+  const trapSearchFocus = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== "Tab") return;
+
+    const focusableElements = Array.from(event.currentTarget.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    ));
+    const first = focusableElements[0];
+    const last = focusableElements.at(-1);
+
+    if (!first || !last) {
+      event.preventDefault();
+    } else if (event.shiftKey && (document.activeElement === first || !event.currentTarget.contains(document.activeElement))) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && (document.activeElement === last || !event.currentTarget.contains(document.activeElement))) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
 
   return (
     <>
@@ -57,6 +104,7 @@ export function SiteHeader() {
           <button
             type="button"
             aria-label="サイト内検索を開く"
+            ref={searchOpenerRef}
             className="rounded-full border border-[#d8e0e5] px-3 py-2 text-sm font-bold hover:border-[#147d73]"
             onClick={() => setSearchOpen(true)}
           >
@@ -93,14 +141,16 @@ export function SiteHeader() {
         <div
           className="fixed inset-0 z-50 bg-[#102235]/65 p-4"
           role="presentation"
-          onClick={() => setSearchOpen(false)}
+          onClick={closeSearch}
         >
           <div
+            ref={searchDialogRef}
             role="dialog"
             aria-modal="true"
             aria-labelledby="site-search-title"
             className="mx-auto mt-16 max-w-2xl bg-white p-5 shadow-2xl md:p-6"
             onClick={(event) => event.stopPropagation()}
+            onKeyDown={trapSearchFocus}
           >
             <div className="mb-4 flex items-center justify-between gap-3">
               <div>
@@ -109,12 +159,14 @@ export function SiteHeader() {
                 </h2>
                 <p className="text-xs text-[#607080]">勘定科目、Excel関数、財務三表などで検索できます。</p>
               </div>
-              <button type="button" className="text-sm font-bold text-[#147d73]" onClick={() => setSearchOpen(false)}>
+              <button type="button" className="text-sm font-bold text-[#147d73]" onClick={closeSearch}>
                 閉じる
               </button>
             </div>
+            <label htmlFor="site-search-query" className="sr-only">サイト内を検索</label>
             <input
-              autoFocus
+              id="site-search-query"
+              ref={searchInputRef}
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="例：売上高、運転資本、シナリオ"
@@ -122,19 +174,25 @@ export function SiteHeader() {
             />
             <div className="mt-4 max-h-[58vh] overflow-y-auto border-t border-[#d8e0e5]">
               {hits.length > 0 ? (
-                hits.map((lesson) => (
+                hits.map((item) => (
                   <Link
-                    onClick={() => setSearchOpen(false)}
-                    key={lesson.slug}
-                    href={`/${lesson.slug}`}
+                    onClick={closeSearch}
+                    key={item.href}
+                    href={item.href}
                     className="block border-b border-[#d8e0e5] py-3 hover:bg-[#f7f8f6]"
                   >
-                    <strong>{lesson.title}</strong>
-                    <span className="block text-sm text-[#607080]">{lesson.summary}</span>
+                    <span className="mb-1 flex flex-wrap gap-1.5 text-[11px] font-bold">
+                      <span className="rounded-full bg-[#e7f4f1] px-2 py-0.5 text-[#147d73]">{contentTypeLabels[item.type]}</span>
+                      <span className="rounded-full bg-[#edf1f4] px-2 py-0.5 text-[#536573]">{topicLabels[item.topic]}</span>
+                    </span>
+                    <strong>{item.title}</strong>
+                    <span className="block text-sm text-[#607080]">{item.summary}</span>
                   </Link>
                 ))
               ) : (
-                <p className="py-5 text-sm text-[#607080]">該当する記事が見つかりませんでした。</p>
+                <p className="py-5 text-sm text-[#607080]">
+                  該当するコンテンツが見つかりませんでした。<Link href="/request" className="font-bold text-[#147d73] underline" onClick={closeSearch}>追加してほしい内容をリクエスト</Link>できます。
+                </p>
               )}
             </div>
           </div>
