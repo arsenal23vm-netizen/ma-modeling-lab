@@ -5,9 +5,13 @@ import JSZip from "jszip";
 import { candidatePeers, selectionCriteria } from "../src/data/comps-selection";
 import { evaluatePeerRoleControls, peerRoleControls, type PeerRoleControlRow } from "../src/data/comps-selection-controls";
 
-const workbookPath = "public/downloads/Comps_Selection_Worksheet.xlsx";
-const sheetNames = ["Guide", "Target Profile", "Long List", "Selection Matrix", "Peer Roles", "Review Memo", "Checks"];
+const workbookPath = "public/downloads/類似会社選定ワークシート.xlsx";
+const sheetNames = ["使い方", "対象会社の事業特性", "比較候補会社一覧", "比較会社選定表", "比較上の位置づけ", "検討記録", "チェック"];
 const colors = { navy: "FF102235", teal: "FF147D73", input: "FFE7F0FF" };
+const roleLabels = {
+  core_peer: "主要比較会社", secondary_peer: "補完比較会社", aspirational_peer: "目標比較会社",
+  negative_peer: "非比較会社", excluded_close_peer: "類似するが除外した会社", not_clean_comp: "純粋比較会社ではない会社",
+} as const;
 
 function assertFrozenAndPrintable(sheet: ExcelJS.Worksheet, autoFilter: string) {
   assert.equal(sheet.views[0]?.state, "frozen", `${sheet.name} freezes panes`);
@@ -36,13 +40,13 @@ async function main() {
 
   assert.deepEqual(workbook.worksheets.map((sheet) => sheet.name), sheetNames);
 
-  const guide = workbook.getWorksheet("Guide");
-  const target = workbook.getWorksheet("Target Profile");
-  const longList = workbook.getWorksheet("Long List");
-  const matrix = workbook.getWorksheet("Selection Matrix");
-  const peerRoles = workbook.getWorksheet("Peer Roles");
-  const reviewMemo = workbook.getWorksheet("Review Memo");
-  const checks = workbook.getWorksheet("Checks");
+  const guide = workbook.getWorksheet("使い方");
+  const target = workbook.getWorksheet("対象会社の事業特性");
+  const longList = workbook.getWorksheet("比較候補会社一覧");
+  const matrix = workbook.getWorksheet("比較会社選定表");
+  const peerRoles = workbook.getWorksheet("比較上の位置づけ");
+  const reviewMemo = workbook.getWorksheet("検討記録");
+  const checks = workbook.getWorksheet("チェック");
   assert.ok(guide && target && longList && matrix && peerRoles && reviewMemo && checks, "all required sheets exist");
 
   assert.equal(patternFillColor(guide.getCell("A1")), colors.navy, "Guide title uses navy fill");
@@ -67,7 +71,7 @@ async function main() {
   candidatePeers.forEach((peer, index) => {
     const row = index + 4;
     selectionCriteria.forEach((criterion, scoreIndex) => {
-      const expected = peer.dataGaps.includes(criterion.id) ? "N/A" : peer.scores[criterion.id];
+      const expected = peer.dataGaps.includes(criterion.id) ? "該当なし" : peer.scores[criterion.id];
       assert.equal(matrix.getCell(row, scoreIndex + 4).value, expected, `${peer.id} ${criterion.id} score or data gap matches Task 1 data`);
     });
     assert.equal(matrix.getCell(row, 16).formula, `SUM(D${row}:O${row})`, `${peer.id} total-score formula is present`);
@@ -85,7 +89,7 @@ async function main() {
     assert.equal(matrix.getCell(row, 17).value, peer.criticalMismatch, `${peer.id} criticalMismatch source flag is in Q`);
     assert.equal(matrix.getCell(row, 18).value, peer.dataGaps.join(", "), `${peer.id} data gaps are in R`);
     assert.equal(matrix.getCell(row, 19).value, peer.coreEligibilityBlocked, `${peer.id} Core eligibility block is in S`);
-    assert.equal(matrix.getCell(row, 20).value, peer.role, `${peer.id} source role is in T`);
+    assert.equal(matrix.getCell(row, 20).value, roleLabels[peer.role], `${peer.id} の元データ上の位置づけがT列にある`);
   });
   assert.equal(matrix.getCell(3, 21).value, "重大基準の低スコア", "score-derived warning is separate from source criticalMismatch");
   const criticalIds = selectionCriteria.filter((criterion) => criterion.critical).map((criterion) => criterion.id).join(", ");
@@ -94,15 +98,15 @@ async function main() {
   candidatePeers.forEach((peer, index) => {
     const validation = peerRoles.getCell(index + 5, 3).dataValidation;
     assert.equal(validation.type, "list", `${peer.id} Role cell uses list validation`);
-    assert.match(validation.formulae?.[0] ?? "", /core_peer/, `${peer.id} Role validation includes core_peer`);
+    assert.match(validation.formulae?.[0] ?? "", /主要比較会社/, `${peer.id} の位置づけ選択肢に主要比較会社を含む`);
   });
 
   ["COUNTIF", "TEXTJOIN", "TEXTJOIN", "TEXTJOIN", "COUNTIF"].forEach((formulaToken, index) => {
     assert.match(reviewMemo.getCell(index + 5, 2).formula ?? "", new RegExp(formulaToken), `Review Memo row ${index + 5} has ${formulaToken}`);
   });
   assert.equal(peerRoles.getCell(closeRow + 1, 6).value, "一部未確認", "close peer carries a nonblank 未確認 status into Review Memo");
-  assert.equal(reviewMemo.getCell("B9").formula, 'COUNTIF(\'Peer Roles\'!$F$5:$F$16,"*未確認*")', "Review Memo counts both 未確認 and 一部未確認 statuses");
-  assert.match(String(reviewMemo.getCell("B10").value), /Core Peer/, "Review Memo has a conclusion");
+  assert.equal(reviewMemo.getCell("B9").formula, 'COUNTIF(\'比較上の位置づけ\'!$F$5:$F$16,"*未確認*")', "検討記録が未確認と一部未確認を集計する");
+  assert.match(String(reviewMemo.getCell("B10").value), /主要比較会社/, "検討記録に結論がある");
 
   const expectedChecks = [...peerRoleControls.map((control) => control.label), "外部リンク"];
   expectedChecks.forEach((label, index) => {
@@ -125,8 +129,8 @@ async function main() {
   }, "clean workbook passes the same controls used to generate Checks formulas");
   peerRoles.getCell(5, 4).value = "";
   peerRoles.getCell(6, 1).value = peerRoles.getCell(5, 1).value;
-  peerRoles.getCell(closeRow + 1, 3).value = "core_peer";
-  peerRoles.getCell(serviceRow + 1, 3).value = "core_peer";
+  peerRoles.getCell(closeRow + 1, 3).value = "主要比較会社";
+  peerRoles.getCell(serviceRow + 1, 3).value = "主要比較会社";
   assert.deepEqual(evaluatePeerRoleControls(workbookControlRows()), {
     missingRoles: 0, missingReasons: 1, duplicateIds: 2, coreCritical: 1,
     coreDataGap: 1, coreBlocked: 2, corePeers: 8, candidateCount: 12,

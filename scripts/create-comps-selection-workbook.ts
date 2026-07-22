@@ -2,17 +2,17 @@ import ExcelJS from "exceljs";
 import { candidatePeers, selectionCriteria, targetProfile } from "../src/data/comps-selection";
 import { peerRoleControls } from "../src/data/comps-selection-controls";
 
-const outputPath = "public/downloads/Comps_Selection_Worksheet.xlsx";
+const outputPath = "public/downloads/類似会社選定ワークシート.xlsx";
 const colors = { navy: "102235", teal: "147D73", input: "E7F0FF", link: "E9F6EF", error: "FDECEC", line: "D8E0E5" };
-const roleOptions = '"core_peer,secondary_peer,aspirational_peer,negative_peer,excluded_close_peer,not_clean_comp"';
+const roleOptions = '"主要比較会社,補完比較会社,目標比較会社,非比較会社,類似するが除外した会社,純粋比較会社ではない会社"';
 
 const roleLabels: Record<(typeof candidatePeers)[number]["role"], string> = {
-  core_peer: "Core Peer",
-  secondary_peer: "Secondary Peer",
-  aspirational_peer: "Aspirational Peer",
-  negative_peer: "Negative Peer",
-  excluded_close_peer: "Excluded Close Peer",
-  not_clean_comp: "Not Clean Comp",
+  core_peer: "主要比較会社",
+  secondary_peer: "補完比較会社",
+  aspirational_peer: "目標比較会社",
+  negative_peer: "非比較会社",
+  excluded_close_peer: "類似するが除外した会社",
+  not_clean_comp: "純粋比較会社ではない会社",
 };
 
 function styleTitle(sheet: ExcelJS.Worksheet, title: string, subtitle: string, lastColumn: number) {
@@ -89,25 +89,25 @@ function columnLetter(column: number) {
 }
 
 function addGuide(workbook: ExcelJS.Workbook) {
-  const sheet = workbook.addWorksheet("Guide");
-  styleTitle(sheet, "Comps Selection Worksheet", "類似上場会社の選定根拠を、一貫した手順で記録する教育用ワークブックです。", 4);
+  const sheet = workbook.addWorksheet("使い方");
+  styleTitle(sheet, "類似会社選定ワークシート", "類似上場会社の選定根拠を、一貫した手順で記録する教育用ワークブックです。", 4);
   sheet.getRow(4).values = ["手順", "作業", "確認すること", "出力"];
   styleHeader(sheet.getRow(4));
   const steps = [
-    ["1", "Target Profileを確認", "対象会社の規模、収益性、製品・サービス構成を把握する", "比較可能性の前提"],
-    ["2", "Long Listを確認", "候補の情報源と基準日を記録し、母集団を広げる", "候補12社"],
-    ["3", "Selection Matrixを採点", "12の評価軸を0〜3点で採点し、重大基準の不一致を確認する", "総合スコア"],
-    ["4", "Peer Rolesを分類", "各候補をRoleとして分類し、根拠と追加調査事項を残す", "Core Peer候補"],
-    ["5", "Review MemoとChecksを確認", "Role別の一覧、除外理由、未入力項目、データ欠損をレビューする", "レビュー記録"],
+    ["1", "対象会社の事業特性を確認", "対象会社の規模、収益性、製品・サービス構成を把握する", "比較可能性の前提"],
+    ["2", "比較候補会社一覧を確認", "候補の情報源と基準日を記録し、母集団を広げる", "候補12社"],
+    ["3", "比較会社選定表を採点", "12の評価軸を0〜3点で採点し、重大基準の不一致を確認する", "総合スコア"],
+    ["4", "比較上の位置づけを分類", "各候補を比較上の位置づけに分類し、根拠と追加調査事項を残す", "主要比較会社候補"],
+    ["5", "検討記録とチェックを確認", "位置づけ別の一覧、除外理由、未入力項目、データ欠損をレビューする", "レビュー記録"],
   ];
   steps.forEach((step, index) => {
     sheet.getRow(index + 5).values = step;
     sheet.getRow(index + 5).height = 44;
   });
   styleDataRange(sheet, 5, 9, 4);
-  sheet.getCell("A11").value = "Roleの定義";
+  sheet.getCell("A11").value = "比較上の位置づけの定義";
   sheet.getCell("A11").font = { name: "Yu Gothic", bold: true, color: { argb: `FF${colors.navy}` } };
-  const definitions = Object.entries(roleLabels).map(([role, label]) => [role, label]);
+  const definitions = Object.values(roleLabels).map((label) => [label, `${label}として扱う根拠を記録します`]);
   definitions.forEach((definition, index) => { sheet.getRow(index + 12).values = definition; });
   styleDataRange(sheet, 12, 17, 2);
   setWidths(sheet, [15, 31, 53, 24]);
@@ -116,8 +116,8 @@ function addGuide(workbook: ExcelJS.Workbook) {
 }
 
 function addTargetProfile(workbook: ExcelJS.Workbook) {
-  const sheet = workbook.addWorksheet("Target Profile");
-  styleTitle(sheet, "Target Profile", "比較対象の基準となる対象会社のプロファイル。青色セルは確認・更新対象です。", 3);
+  const sheet = workbook.addWorksheet("対象会社の事業特性");
+  styleTitle(sheet, "対象会社の事業特性", "比較対象の基準となる対象会社のプロファイル。青色セルは確認・更新対象です。", 3);
   sheet.getRow(3).values = ["項目", "対象会社", "比較時の見方"];
   styleHeader(sheet.getRow(3));
   const rows: [string, string | number, string][] = [
@@ -146,13 +146,13 @@ function addTargetProfile(workbook: ExcelJS.Workbook) {
 }
 
 function addLongList(workbook: ExcelJS.Workbook) {
-  const sheet = workbook.addWorksheet("Long List");
-  styleTitle(sheet, "Long List", "候補企業の母集団。情報源と基準日を明記し、除外前の観察を残します。", 11);
+  const sheet = workbook.addWorksheet("比較候補会社一覧");
+  styleTitle(sheet, "比較候補会社一覧", "候補企業の母集団。情報源と基準日を明記し、除外前の観察を残します。", 11);
   sheet.getRow(3).values = ["ID", "候補企業", "事業内容", "地域", "売上高（百万円）", "成長率", "EBITDAマージン", "サービス比率", "情報源", "基準日", "一次コメント"];
   styleHeader(sheet.getRow(3));
   candidatePeers.forEach((peer, index) => {
     const row = index + 4;
-    sheet.getRow(row).values = [peer.id, peer.name, peer.business, peer.geography, peer.revenue, peer.growth / 100, peer.ebitdaMargin === null ? "N/A" : peer.ebitdaMargin / 100, peer.serviceMix / 100, "教育用ケースデータ", new Date(2026, 6, 20), peer.rationale];
+    sheet.getRow(row).values = [peer.id, peer.name, peer.business, peer.geography, peer.revenue, peer.growth / 100, peer.ebitdaMargin === null ? "該当なし" : peer.ebitdaMargin / 100, peer.serviceMix / 100, "教育用ケースデータ", new Date(2026, 6, 20), peer.rationale];
     sheet.getCell(row, 6).numFmt = "0.0%";
     if (peer.ebitdaMargin !== null) sheet.getCell(row, 7).numFmt = "0.0%";
     sheet.getCell(row, 8).numFmt = "0.0%";
@@ -166,9 +166,9 @@ function addLongList(workbook: ExcelJS.Workbook) {
 }
 
 function addSelectionMatrix(workbook: ExcelJS.Workbook) {
-  const sheet = workbook.addWorksheet("Selection Matrix");
-  styleTitle(sheet, "Selection Matrix", "0〜3点で採点。重大基準の不一致、データ欠損、Core適格性ブロックを分けて記録します。", 22);
-  sheet.getRow(3).values = ["ID", "候補企業", "Role", ...selectionCriteria.map((criterion) => criterion.label), "総合スコア", "重大基準の不一致", "データ欠損", "Core適格性ブロック", "Role（Source）", "重大基準の低スコア", "コメント"];
+  const sheet = workbook.addWorksheet("比較会社選定表");
+  styleTitle(sheet, "比較会社選定表", "0〜3点で採点。重大基準の不一致、データ欠損、主要適格性ブロックを分けて記録します。", 22);
+  sheet.getRow(3).values = ["ID", "候補企業", "比較上の位置づけ", ...selectionCriteria.map((criterion) => criterion.label), "総合スコア", "重大基準の不一致", "データ欠損", "主要比較会社への採用不可", "位置づけ（元データ）", "重大基準の低スコア", "コメント"];
   styleHeader(sheet.getRow(3));
   const criticalCriteria = selectionCriteria.filter((criterion) => criterion.critical);
   candidatePeers.forEach((peer, index) => {
@@ -178,7 +178,7 @@ function addSelectionMatrix(workbook: ExcelJS.Workbook) {
       const scoreColumn = columnLetter(selectionCriteria.indexOf(criterion) + 4);
       return `COUNTIF(${scoreColumn}${row}:${scoreColumn}${row},"<2")`;
     }).join("+");
-    sheet.getRow(row).values = [peer.id, peer.name, peer.role, ...selectionCriteria.map((criterion) => peer.dataGaps.includes(criterion.id) ? "N/A" : peer.scores[criterion.id]), { formula: `SUM(D${row}:O${row})` }, peer.criticalMismatch, peer.dataGaps.join(", "), peer.coreEligibilityBlocked, peer.role, { formula: criticalScoreFormula }, peer.rationale];
+    sheet.getRow(row).values = [peer.id, peer.name, roleLabels[peer.role], ...selectionCriteria.map((criterion) => peer.dataGaps.includes(criterion.id) ? "該当なし" : peer.scores[criterion.id]), { formula: `SUM(D${row}:O${row})` }, peer.criticalMismatch, peer.dataGaps.join(", "), peer.coreEligibilityBlocked, roleLabels[peer.role], { formula: criticalScoreFormula }, peer.rationale];
     sheet.getCell(row, 16).numFmt = "0";
     sheet.getCell(row, 21).numFmt = "0";
     sheet.getCell(row, 21).note = `重大基準（データ定義）: ${criticalCriteria.map((criterion) => criterion.id).join(", ")} / 低スコア数: ${criticalFailures}`;
@@ -198,14 +198,14 @@ function addSelectionMatrix(workbook: ExcelJS.Workbook) {
 }
 
 function addPeerRoles(workbook: ExcelJS.Workbook) {
-  const sheet = workbook.addWorksheet("Peer Roles");
-  styleTitle(sheet, "Peer Roles", "Roleと根拠に加え、重大不一致、データ欠損、Core適格性ブロックを独立して確認します。", 9);
-  sheet.getRow(4).values = ["ID", "候補企業", "Role", "採用・除外の根拠", "追加調査事項", "データ利用可否", "重大基準の不一致", "データ欠損", "Core適格性ブロック"];
+  const sheet = workbook.addWorksheet("比較上の位置づけ");
+  styleTitle(sheet, "比較上の位置づけ", "位置づけと根拠に加え、重大不一致、データ欠損、主要比較会社への採用可否を独立して確認します。", 9);
+  sheet.getRow(4).values = ["ID", "候補企業", "比較上の位置づけ", "採用・除外の根拠", "追加調査事項", "データ利用可否", "重大基準の不一致", "データ欠損", "主要比較会社への採用不可"];
   styleHeader(sheet.getRow(4));
   candidatePeers.forEach((peer, index) => {
     const row = index + 5;
-    sheet.getRow(row).values = [peer.id, peer.name, peer.role, peer.rationale, peer.dataGaps.length === 0 ? "なし" : `${peer.dataGaps.join(", ")}の確認`, peer.dataGaps.length === 0 ? "利用可" : "一部未確認", peer.criticalMismatch, peer.dataGaps.join(", "), peer.coreEligibilityBlocked];
-    sheet.getCell(row, 3).dataValidation = { type: "list", allowBlank: false, formulae: [roleOptions], showErrorMessage: true, errorStyle: "stop", errorTitle: "Roleを選択してください", error: "プルダウンのRoleから選択してください。" };
+    sheet.getRow(row).values = [peer.id, peer.name, roleLabels[peer.role], peer.rationale, peer.dataGaps.length === 0 ? "なし" : `${peer.dataGaps.join(", ")}の確認`, peer.dataGaps.length === 0 ? "利用可" : "一部未確認", peer.criticalMismatch, peer.dataGaps.join(", "), peer.coreEligibilityBlocked];
+    sheet.getCell(row, 3).dataValidation = { type: "list", allowBlank: false, formulae: [roleOptions], showErrorMessage: true, errorStyle: "stop", errorTitle: "位置づけを選択してください", error: "プルダウンから比較上の位置づけを選択してください。" };
     sheet.getCell(row, 3).fill = { type: "pattern", pattern: "solid", fgColor: { argb: `FF${colors.input}` } };
     sheet.getRow(row).height = 70;
   });
@@ -216,17 +216,17 @@ function addPeerRoles(workbook: ExcelJS.Workbook) {
 }
 
 function addReviewMemo(workbook: ExcelJS.Workbook) {
-  const sheet = workbook.addWorksheet("Review Memo");
-  styleTitle(sheet, "Review Memo", "Role別の候補一覧と、採用レンジ・除外理由をレビュー用に要約します。", 4);
+  const sheet = workbook.addWorksheet("検討記録");
+  styleTitle(sheet, "検討記録", "位置づけ別の候補一覧と、採用レンジ・除外理由をレビュー用に要約します。", 4);
   sheet.getRow(4).values = ["レビュー項目", "結果", "確認事項", "メモ"];
   styleHeader(sheet.getRow(4));
   const rows: (string | { formula: string })[][] = [
-    ["Core Peer数", { formula: 'COUNTIF(\'Peer Roles\'!$C$5:$C$16,"core_peer")' }, "中心レンジとして十分な数か", ""],
-    ["Core Peer候補", { formula: 'TEXTJOIN(", ",TRUE,IF(\'Peer Roles\'!$C$5:$C$16="core_peer",\'Peer Roles\'!$B$5:$B$16,""))' }, "名称とRoleを確認", ""],
-    ["Secondary Peer候補", { formula: 'TEXTJOIN(", ",TRUE,IF(\'Peer Roles\'!$C$5:$C$16="secondary_peer",\'Peer Roles\'!$B$5:$B$16,""))' }, "補助的に参照する範囲", ""],
-    ["除外・非Clean Comp", { formula: 'TEXTJOIN(", ",TRUE,IF((\'Peer Roles\'!$C$5:$C$16="excluded_close_peer")+(\'Peer Roles\'!$C$5:$C$16="not_clean_comp"),\'Peer Roles\'!$B$5:$B$16,""))' }, "除外理由を説明可能にする", ""],
-    ["データ未確認数", { formula: 'COUNTIF(\'Peer Roles\'!$F$5:$F$16,"*未確認*")' }, "必要な追加確認を実施", ""],
-    ["レビュー結論", "Core Peerを中心にレンジを検討。重大基準の不一致とデータ未確認を再確認する。", "最終採用レンジを別途記録", ""],
+    ["主要比較会社数", { formula: 'COUNTIF(\'比較上の位置づけ\'!$C$5:$C$16,"主要比較会社")' }, "中心レンジとして十分な数か", ""],
+    ["主要比較会社候補", { formula: 'TEXTJOIN(", ",TRUE,IF(\'比較上の位置づけ\'!$C$5:$C$16="主要比較会社",\'比較上の位置づけ\'!$B$5:$B$16,""))' }, "名称と位置づけを確認", ""],
+    ["補完比較会社候補", { formula: 'TEXTJOIN(", ",TRUE,IF(\'比較上の位置づけ\'!$C$5:$C$16="補完比較会社",\'比較上の位置づけ\'!$B$5:$B$16,""))' }, "補助的に参照する範囲", ""],
+    ["除外・非純粋比較会社", { formula: 'TEXTJOIN(", ",TRUE,IF((\'比較上の位置づけ\'!$C$5:$C$16="類似するが除外した会社")+(\'比較上の位置づけ\'!$C$5:$C$16="純粋比較会社ではない会社"),\'比較上の位置づけ\'!$B$5:$B$16,""))' }, "除外理由を説明可能にする", ""],
+    ["データ未確認数", { formula: 'COUNTIF(\'比較上の位置づけ\'!$F$5:$F$16,"*未確認*")' }, "必要な追加確認を実施", ""],
+    ["レビュー結論", "主要比較会社を中心にレンジを検討。重大基準の不一致とデータ未確認を再確認する。", "最終採用レンジを別途記録", ""],
   ];
   rows.forEach((row, index) => { sheet.getRow(index + 5).values = row; sheet.getRow(index + 5).height = 50; });
   styleDataRange(sheet, 5, 10, 4);
@@ -237,8 +237,8 @@ function addReviewMemo(workbook: ExcelJS.Workbook) {
 }
 
 function addChecks(workbook: ExcelJS.Workbook) {
-  const sheet = workbook.addWorksheet("Checks");
-  styleTitle(sheet, "Checks", "入力漏れ、データ欠損、Core Peer数、候補数を数式で確認します。", 3);
+  const sheet = workbook.addWorksheet("チェック");
+  styleTitle(sheet, "チェック", "入力漏れ、データ欠損、主要比較会社数、候補数を数式で確認します。", 3);
   sheet.getRow(3).values = ["チェック", "結果", "判定基準"];
   styleHeader(sheet.getRow(3));
   const rows: (string | { formula: string })[][] = [
@@ -274,7 +274,7 @@ async function main() {
   addChecks(workbook);
 
   await workbook.xlsx.writeFile(outputPath);
-  console.log(`Comps selection workbook generated: ${outputPath}`);
+  console.log(`類似会社選定ワークブックを生成しました: ${outputPath}`);
 }
 
 void main();

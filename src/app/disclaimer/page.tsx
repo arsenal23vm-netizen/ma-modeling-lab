@@ -7,7 +7,7 @@ export const metadata: Metadata = createPageMetadata("/disclaimer", { title: "�
 export default function Page() {
   return (
     <div className="container max-w-4xl py-14">
-      <div className="eyebrow">LEGAL & EDITORIAL POLICY</div>
+      <div className="eyebrow">利用条件と編集方針</div>
       <h1 className="mt-2 text-4xl font-bold tracking-[-.04em] text-[#102235]">免責事項</h1>
       <div className="article-copy mt-8">
         <h2>情報の目的</h2>

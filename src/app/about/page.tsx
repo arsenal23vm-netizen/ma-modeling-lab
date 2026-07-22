@@ -25,7 +25,7 @@ const values = [
 export default function AboutPage() {
   return (
     <div className="container max-w-4xl py-14">
-      <div className="eyebrow">ABOUT FINANCE MODELING LAB</div>
+      <div className="eyebrow">Finance Modeling Labについて</div>
       <h1 className="mt-3 text-4xl font-bold tracking-[-.04em] text-[#102235] md:text-5xl">Finance Modeling Labについて</h1>
       <p className="mt-5 max-w-3xl text-lg text-[#607080]">
         Finance Modeling Labは、非上場企業M&A、財務モデリング、Excel設計、会計論点を、実務で手を動かせる粒度まで整理する学習メディアです。
@@ -37,7 +37,7 @@ export default function AboutPage() {
         </p>
         <h2>対象読者</h2>
         <ul>
-          <li>M&A、FAS、投資、経営企画、事業承継支援に関わる実務者</li>
+          <li>M&A、財務助言、投資、経営企画、事業承継支援に関わる実務者</li>
           <li>財務三表モデルやDCFモデルをExcelで作れるようになりたい学習者</li>
           <li>自己流のExcelモデルを、他人がレビューできる構造へ改善したい方</li>
         </ul>

@@ -1,19 +1,19 @@
 import type { CandidatePeer, PeerRole, SelectionCriterion, TargetProfile } from "@/data/comps-selection";
 
 const roleDetails: Record<PeerRole, { label: string; note: string }> = {
-  core_peer: { label: "中核（Core）", note: "バリュエーションの中心レンジ" },
-  secondary_peer: { label: "補助（Secondary）", note: "補助的な比較対象" },
-  aspirational_peer: { label: "将来像（Aspirational）", note: "改善余地の参考" },
-  negative_peer: { label: "不採用例（Negative）", note: "除外判断の比較対象" },
-  excluded_close_peer: { label: "近接除外", note: "情報不足の近似企業" },
-  not_clean_comp: { label: "比較限定", note: "事業構成が異なる参考企業" },
+  core_peer: { label: "主要比較会社", note: "Valuationの中心レンジ" },
+  secondary_peer: { label: "補完比較会社", note: "差異を注記して補助的に参照" },
+  aspirational_peer: { label: "目標比較会社", note: "改善後の事業像を検討する参考" },
+  negative_peer: { label: "非比較会社", note: "除外判断の一貫性を確認する対象" },
+  excluded_close_peer: { label: "類似するが除外", note: "比較に必要な情報が不足" },
+  not_clean_comp: { label: "参考会社", note: "事業構成が異なるため参考に限定" },
 };
 
 const funnelSteps = [
   ["業種候補", 30, "業界・事業領域から抽出"],
   ["事業モデル", 18, "事業モデルと顧客市場を確認"],
   ["財務比較", 12, "規模・成長性・収益性を比較"],
-  ["Core", 6, "評価に採用する中核企業"],
+  ["主要比較会社", 6, "評価レンジの中心に採用"],
 ] as const;
 
 const formatNumber = (value: number) => new Intl.NumberFormat("ja-JP").format(value);
@@ -56,8 +56,8 @@ export function TargetComparisonCards({ target, peers }: { target: TargetProfile
           <p>{target.business}</p>
           <dl>
             <div><dt>売上高</dt><dd>{formatNumber(target.revenue)} {target.unit}</dd></div>
-            <div><dt>EBITDA margin</dt><dd>{target.ebitdaMargin.toFixed(1)}%</dd></div>
-            <div><dt>成長率</dt><dd>N/A</dd></div>
+            <div><dt>EBITDAマージン</dt><dd>{target.ebitdaMargin.toFixed(1)}%</dd></div>
+            <div><dt>成長率</dt><dd>該当なし</dd></div>
             <div><dt>メンテナンス・サービス比率</dt><dd>{target.serviceSales}%</dd></div>
           </dl>
         </article>
@@ -66,12 +66,12 @@ export function TargetComparisonCards({ target, peers }: { target: TargetProfile
           if (!peer) return null;
           return (
             <article className={`target-card role-${role}`} key={role}>
-              <p className="comparison-kicker">{roleDetails[role].label} peer</p>
+              <p className="comparison-kicker">{roleDetails[role].label}</p>
               <h4>{peer.name}</h4>
               <p>{peer.business}</p>
               <dl>
                 <div><dt>売上高</dt><dd>{formatNumber(peer.revenue)} {target.unit}</dd></div>
-                <div><dt>EBITDA margin</dt><dd>{peer.ebitdaMargin === null ? "N/A" : `${peer.ebitdaMargin.toFixed(1)}%`}</dd></div>
+                <div><dt>EBITDAマージン</dt><dd>{peer.ebitdaMargin === null ? "該当なし" : `${peer.ebitdaMargin.toFixed(1)}%`}</dd></div>
                 <div><dt>成長率</dt><dd>{peer.growth}%</dd></div>
                 <div><dt>メンテナンス・サービス比率</dt><dd>{peer.serviceMix}%</dd></div>
               </dl>
@@ -88,7 +88,7 @@ export function PeerRoleMap({ peers }: { peers: CandidatePeer[] }) {
 
   return (
     <section className="peer-role-map" aria-labelledby="peer-role-map-title">
-      <h3 id="peer-role-map-title">Peer role map</h3>
+      <h3 id="peer-role-map-title">比較上の位置づけ</h3>
       <p>各社の役割と、評価レンジでの扱いを明示します。</p>
       <div className="peer-role-list">
         {roleOrder.map((role) => {
@@ -119,7 +119,7 @@ export function ExcelSelectionMatrix({ peers, criteria }: { peers: CandidatePeer
   return (
     <figure className="selection-matrix" aria-labelledby="selection-matrix-caption" aria-describedby={descriptionId}>
       <figcaption id="selection-matrix-caption">比較対象選定マトリクス</figcaption>
-      <p id={descriptionId}>スコアは 0 点（不適合）から 3 点（高い適合性）です。Close peer は情報不足のため N/A を表示します。</p>
+      <p id={descriptionId}>スコアは0点（不適合）から3点（高い適合性）です。比較に必要な情報が不足する会社は「該当なし」を表示し、平均点の分母から除外します。</p>
       <div className="sheet-tabs" aria-label="ワークシートタブ">
         <span>候補一覧</span><span className="active">選定スコア</span><span>注記</span>
       </div>
@@ -155,7 +155,7 @@ export function ExcelSelectionMatrix({ peers, criteria }: { peers: CandidatePeer
                 {criteria.map((criterion) => {
                   const unavailable = peer.dataGaps.includes(criterion.id);
                   const score = peer.scores[criterion.id];
-                  return <td className={`number ${unavailable ? "score-na" : `score-${score}`}`} key={criterion.id}>{unavailable ? "N/A" : score}</td>;
+                  return <td className={`number ${unavailable ? "score-na" : `score-${score}`}`} key={criterion.id}>{unavailable ? "該当なし" : score}</td>;
                 })}
                 <td className="number average-score">{scoreAverage(peer).toFixed(1)}</td>
               </tr>

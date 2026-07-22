@@ -6,7 +6,7 @@ import JSZip from "jszip";
 import { buildSensitivityMatrix, calculateDcf, calculateEquityBridge, calculateFcff, calculateWacc, dcfCase } from "../src/data/dcf-series";
 
 const workbookPath = "public/downloads/06_DCF評価モデル.xlsx";
-const expectedSheets = ["Cover", "Inputs", "Assumptions", "PL", "BS", "CF", "Schedules", "DCF", "Checks"];
+const expectedSheets = ["表紙", "入力", "前提", "PL", "BS", "CF", "計算明細", "DCF", "チェック"];
 const inputFill = "FFE7F0FF";
 const formulaFill = "FFF3F6F8";
 const outputFill = "FFE9F6EF";
@@ -31,8 +31,8 @@ for (const [name, entry] of Object.entries(deterministicZip.files)) {
   assert.equal(entry.date.toISOString(), "2000-01-01T00:00:00.000Z", `${name} must use the fixed ZIP timestamp`);
 }
 const generatedCoreXml = await deterministicZip.file("docProps/core.xml")!.async("string");
-assert.match(generatedCoreXml, /<dcterms:created[^>]*>2026-07-20T15:00:00Z<\/dcterms:created>/u);
-assert.match(generatedCoreXml, /<dcterms:modified[^>]*>2026-07-20T15:00:00Z<\/dcterms:modified>/u);
+assert.match(generatedCoreXml, /<dcterms:created[^>]*>2026-07-21T15:00:00Z<\/dcterms:created>/u);
+assert.match(generatedCoreXml, /<dcterms:modified[^>]*>2026-07-21T15:00:00Z<\/dcterms:modified>/u);
 const generatedWorkbook = new ExcelJS.Workbook();
 await generatedWorkbook.xlsx.load(Uint8Array.from(generatedBuffers[0]).buffer);
 assert.deepEqual(generatedWorkbook.worksheets.map((worksheet) => worksheet.name), expectedSheets, "deterministic buffer must remain ExcelJS-readable");
@@ -66,15 +66,15 @@ const fillAt = (sheetName: string, address: string) => {
   return color;
 };
 
-const cover = sheet("Cover");
-assert.equal(cover.getCell("B5").value, "Calculation integrity");
-assert.equal(formulaAt("Cover", "C5").formula, "Checks!B10");
-assert.equal(formulaAt("Cover", "C5").result, "OK");
-assert.equal(cover.getCell("B6").value, "Decision readiness");
-assert.equal(formulaAt("Cover", "C6").formula, "Checks!B11");
-assert.equal(formulaAt("Cover", "C6").result, "Educational sample / source review required");
+const cover = sheet("表紙");
+assert.equal(cover.getCell("B5").value, "計算整合性");
+assert.equal(formulaAt("表紙", "C5").formula, "チェック!B10");
+assert.equal(formulaAt("表紙", "C5").result, "適合");
+assert.equal(cover.getCell("B6").value, "意思決定への利用可否");
+assert.equal(formulaAt("表紙", "C6").formula, "チェック!B11");
+assert.equal(formulaAt("表紙", "C6").result, "教育用サンプル・出所確認が必要");
 
-const inputs = sheet("Inputs");
+const inputs = sheet("入力");
 dcfCase.forecasts.forEach((forecast, index) => {
   const column = String.fromCharCode("B".charCodeAt(0) + index);
   const expected = [forecast.revenue, forecast.ebit, forecast.taxRate, forecast.depreciation, forecast.capex, forecast.increaseInNwc];
@@ -94,37 +94,37 @@ const scalarInputs: Record<string, number> = {
   B24: dcfCase.bridge.debtLikeItems,
   B25: dcfCase.bridge.nonControllingInterests,
 };
-for (const [address, value] of Object.entries(scalarInputs)) assert.equal(inputs.getCell(address).value, value, `Inputs!${address}`);
-for (const address of ["B5", "F10", ...Object.keys(scalarInputs)]) assert.equal(fillAt("Inputs", address), inputFill, `Inputs!${address} must be styled as an editable input`);
+for (const [address, value] of Object.entries(scalarInputs)) assert.equal(inputs.getCell(address).value, value, `入力!${address}`);
+for (const address of ["B5", "F10", ...Object.keys(scalarInputs)]) assert.equal(fillAt("入力", address), inputFill, `入力!${address} must be styled as an editable input`);
 
 const expectedWacc = calculateWacc(dcfCase.wacc);
 const assumptionsFormulas: Record<string, RegExp> = {
-  B8: /^Inputs!B14\+Inputs!B16\*Inputs!B15$/,
-  B9: /^Inputs!B17\*\(1-Inputs!B18\)$/,
-  B10: /^Inputs!B19\+Inputs!B20$/,
-  B11: /^Inputs!B19\*B8\+Inputs!B20\*B9$/,
-  B12: /^Inputs!B21$/,
+  B8: /^入力!B14\+入力!B16\*入力!B15$/,
+  B9: /^入力!B17\*\(1-入力!B18\)$/,
+  B10: /^入力!B19\+入力!B20$/,
+  B11: /^入力!B19\*B8\+入力!B20\*B9$/,
+  B12: /^入力!B21$/,
 };
-for (const [address, dependency] of Object.entries(assumptionsFormulas)) assert.match(formulaAt("Assumptions", address).formula, dependency, `Assumptions!${address} dependency`);
-assertClose(formulaAt("Assumptions", "B11").result, expectedWacc, "WACC cached result");
-assert.equal(sheet("Assumptions").getCell("B5").value, "Period-end convention");
-assert.equal(sheet("Assumptions").getCell("C5").value, "Each forecast year-end / 1–5 periods");
+for (const [address, dependency] of Object.entries(assumptionsFormulas)) assert.match(formulaAt("前提", address).formula, dependency, `前提!${address} dependency`);
+assertClose(formulaAt("前提", "B11").result, expectedWacc, "WACC cached result");
+assert.equal(sheet("前提").getCell("B5").value, "期末割引");
+assert.equal(sheet("前提").getCell("C5").value, "各予測年度末を基準とする1～5期間");
 
 dcfCase.forecasts.forEach((forecast, index) => {
   const column = String.fromCharCode("B".charCodeAt(0) + index);
   assert.match(formulaAt("CF", `${column}11`).formula, new RegExp(`^${column}5\\*\\(1-${column}6\\)\\+${column}8-${column}9-${column}10$`));
   assertClose(formulaAt("CF", `${column}11`).result, calculateFcff(forecast), `CF!${column}11 FCFF`);
-  assert.match(formulaAt("Schedules", `${column}10`).formula, new RegExp(String.raw`^1/\(1\+Assumptions!\$B\$11\)\^${column}9$`));
+  assert.match(formulaAt("計算明細", `${column}10`).formula, new RegExp(String.raw`^1/\(1\+前提!\$B\$11\)\^${column}9$`));
   assert.match(formulaAt("DCF", `${column}5`).formula, new RegExp(`^CF!${column}11$`));
-  assert.match(formulaAt("DCF", `${column}6`).formula, new RegExp(`^Schedules!${column}10$`));
+  assert.match(formulaAt("DCF", `${column}6`).formula, new RegExp(`^計算明細!${column}10$`));
   assert.match(formulaAt("DCF", `${column}7`).formula, new RegExp(`^${column}5\\*${column}6$`));
 });
 
 const valuation = calculateDcf(dcfCase);
 const bridge = calculateEquityBridge(valuation.enterpriseValue, dcfCase.bridge);
 assert.equal(formulaAt("DCF", "B10").formula, "SUM(B7:F7)");
-assert.equal(formulaAt("DCF", "B11").formula, "F5*(1+Assumptions!$B$12)");
-assert.equal(formulaAt("DCF", "B12").formula, "IF(Assumptions!$B$11<=Assumptions!$B$12,NA(),B11/(Assumptions!$B$11-Assumptions!$B$12))");
+assert.equal(formulaAt("DCF", "B11").formula, "F5*(1+前提!$B$12)");
+assert.equal(formulaAt("DCF", "B12").formula, "IF(前提!$B$11<=前提!$B$12,NA(),B11/(前提!$B$11-前提!$B$12))");
 assert.equal(formulaAt("DCF", "B13").formula, "B12*F6");
 assert.equal(formulaAt("DCF", "B14").formula, "B10+B13");
 assert.equal(formulaAt("DCF", "B20").formula, "B14+B16-B17-B18-B19");
@@ -156,21 +156,21 @@ for (let rowIndex = 0; rowIndex < 5; rowIndex += 1) {
 for (const row of cachedMatrix) for (let index = 1; index < row.length; index += 1) assert.ok(row[index] > row[index - 1], "enterprise value must rise with terminal growth");
 for (let column = 0; column < 5; column += 1) for (let row = 1; row < 5; row += 1) assert.ok(cachedMatrix[row][column] < cachedMatrix[row - 1][column], "enterprise value must fall as WACC rises");
 
-sheet("Checks");
-assert.equal(formulaAt("Checks", "B5").formula, "Inputs!B19+Inputs!B20");
-assert.equal(formulaAt("Checks", "B6").formula, "Assumptions!B11>Assumptions!B12");
-assert.equal(formulaAt("Checks", "B7").formula, "DCF!B20-(DCF!B14+DCF!B16-DCF!B17-DCF!B18-DCF!B19)");
-assert.match(formulaAt("Checks", "B8").formula, /^SUMPRODUCT\(--ISERROR\(/, "formula-error count must be formula-driven");
-assert.match(formulaAt("Checks", "B8").formula, /PL!B5:F9/u);
-assert.match(formulaAt("Checks", "B8").formula, /BS!B5:F12/u);
+sheet("チェック");
+assert.equal(formulaAt("チェック", "B5").formula, "入力!B19+入力!B20");
+assert.equal(formulaAt("チェック", "B6").formula, "前提!B11>前提!B12");
+assert.equal(formulaAt("チェック", "B7").formula, "DCF!B20-(DCF!B14+DCF!B16-DCF!B17-DCF!B18-DCF!B19)");
+assert.match(formulaAt("チェック", "B8").formula, /^SUMPRODUCT\(--ISERROR\(/, "formula-error count must be formula-driven");
+assert.match(formulaAt("チェック", "B8").formula, /PL!B5:F9/u);
+assert.match(formulaAt("チェック", "B8").formula, /BS!B5:F12/u);
 for (const address of ["C5", "C6", "C7", "C8"]) {
-  assert.match(formulaAt("Checks", address).formula, /^IF\(/);
-  assert.equal(formulaAt("Checks", address).result, "OK");
+  assert.match(formulaAt("チェック", address).formula, /^IF\(/);
+  assert.equal(formulaAt("チェック", address).result, "適合");
 }
-assert.equal(formulaAt("Checks", "B10").formula, 'IF(COUNTIF(C5:C8,"<>OK")=0,"OK","ERROR")');
-assert.equal(formulaAt("Checks", "B10").result, "OK");
-assert.equal(formulaAt("Checks", "B11").formula, '"Educational sample / source review required"');
-assert.equal(formulaAt("Checks", "B11").result, "Educational sample / source review required");
+assert.equal(formulaAt("チェック", "B10").formula, 'IF(COUNTIF(C5:C8,"<>適合")=0,"適合","要確認")');
+assert.equal(formulaAt("チェック", "B10").result, "適合");
+assert.equal(formulaAt("チェック", "B11").formula, '"教育用サンプル・出所確認が必要"');
+assert.equal(formulaAt("チェック", "B11").result, "教育用サンプル・出所確認が必要");
 
 for (const worksheet of workbook.worksheets) {
   assert.ok(worksheet.views.some((view) => view.state === "frozen" && (view.ySplit ?? 0) >= 1), `${worksheet.name} must freeze its header rows`);

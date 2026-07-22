@@ -106,7 +106,7 @@ export default function Page() {
     <>
       <section className="border-b border-[#d8e0e5] bg-[#f7f8f6]">
         <div className="container py-14">
-          <div className="eyebrow">FINANCE MODELING BOOKSHELF</div>
+          <div className="eyebrow">財務モデリング参考書</div>
           <h1 className="mt-3 text-4xl font-bold tracking-[-.04em] text-[#102235] md:text-5xl">財務モデリングを深める本</h1>
           <p className="mt-5 max-w-3xl text-lg text-[#607080]">
             Excelの型を身につけ、数字の意味を理解し、案件で判断できるようになる。現在のレベルと次に伸ばしたい力から選べる7冊です。
@@ -125,7 +125,7 @@ export default function Page() {
         <div className="mb-10 mt-8 grid border-y border-[#d8e0e5] bg-white md:grid-cols-4">
           {["全体像をつかむ", "Excelの型を固める", "価値評価へ進む", "案件調査へ広げる"].map((step, index) => (
             <div key={step} className="border-[#d8e0e5] p-5 md:border-l first:md:border-l-0">
-              <span className="eyebrow">STEP {index + 1}</span>
+              <span className="eyebrow">手順 {index + 1}</span>
               <strong className="mt-1 block text-[#102235]">{step}</strong>
             </div>
           ))}

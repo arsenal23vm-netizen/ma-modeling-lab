@@ -12,7 +12,7 @@ export const metadata: Metadata = createPageMetadata("/learning-roadmap", {
 export default function LearningRoadmapPage() {
   return (
     <div className="container py-14">
-      <div className="eyebrow">PRACTICAL LEARNING ROADMAP</div>
+      <div className="eyebrow">実務学習ロードマップ</div>
       <h1 className="mt-3 text-4xl font-bold tracking-[-.04em] text-[#102235] md:text-5xl">学習ロードマップ</h1>
       <p className="mt-5 max-w-3xl text-lg text-[#607080]">
         {caseCompany.name}を共通ケースとして、会計、仕訳、Excel設計、財務三表、DCF、品質レビューまでを8段階で進めます。進捗保存は行わず、すべて静的に読める構成です。
@@ -38,7 +38,7 @@ export default function LearningRoadmapPage() {
         ))}
       </section>
       <section className="mt-12">
-        <div className="eyebrow">STARTER DOWNLOAD</div>
+        <div className="eyebrow">最初の練習ファイル</div>
         <h2 className="section-title mt-2">最初に使うファイル</h2>
         <div className="mt-6"><DownloadCard item={downloads[0]} /></div>
       </section>

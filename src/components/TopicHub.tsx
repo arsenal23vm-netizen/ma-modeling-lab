@@ -13,8 +13,8 @@ const unpublishedHrefs = new Set<string>();
 
 const futureTopics: Record<ContentEntry["topic"], readonly string[]> = {
   "financial-modeling": ["事業計画の高度化", "資金調達・借入スケジュール", "モデルレビューの実務"],
-  valuation: ["PPA（買収価格配分）", "Sources & Uses", "LBO（レバレッジド・バイアウト）"],
-  "ma-modeling": ["PPA（買収価格配分）", "Sources & Uses", "LBO（レバレッジド・バイアウト）"],
+  valuation: ["PPA（買収価格配分）", "資金使途と調達", "LBO（レバレッジド・バイアウト）"],
+  "ma-modeling": ["PPA（買収価格配分）", "資金使途と調達", "LBO（レバレッジド・バイアウト）"],
   excel: ["感応度分析の追加テンプレート", "M&A案件のレビュー用シート", "案件引継ぎ用のモデルガイド"],
 };
 
@@ -65,7 +65,7 @@ export function TopicHub({ topic, eyebrow, title, lead, learningSteps }: TopicHu
       <section className="border-b border-[#d8e0e5] bg-[#f7f8f6]">
         <div className="container grid gap-8 py-12 lg:grid-cols-[.7fr_1.3fr]">
           <div>
-            <div className="eyebrow">FOR WHO</div>
+            <div className="eyebrow">対象読者</div>
             <h2 className="section-title mt-2">こんな方のためのテーマです</h2>
           </div>
           <p className="max-w-3xl text-[1.02rem] leading-8 text-[#607080]">{audienceCopy[topic]}</p>
@@ -74,13 +74,13 @@ export function TopicHub({ topic, eyebrow, title, lead, learningSteps }: TopicHu
 
       <section className="container py-16">
         <div>
-          <div className="eyebrow">LEARNING ORDER</div>
+          <div className="eyebrow">学習順序</div>
           <h2 className="section-title mt-2">3ステップで進める</h2>
         </div>
         <ol className="mt-8 grid gap-4 md:grid-cols-3">
           {learningSteps.map((step, index) => (
             <li key={step} className="border border-[#d8e0e5] bg-white p-5">
-              <span className="font-mono text-sm font-bold text-[#147d73]">STEP {String(index + 1).padStart(2, "0")}</span>
+              <span className="font-mono text-sm font-bold text-[#147d73]">手順 {String(index + 1).padStart(2, "0")}</span>
               <p className="mt-3 font-bold leading-7 text-[#102235]">{step}</p>
             </li>
           ))}
@@ -91,7 +91,7 @@ export function TopicHub({ topic, eyebrow, title, lead, learningSteps }: TopicHu
         <div className="container py-16">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <div className="eyebrow">AVAILABLE NOW</div>
+              <div className="eyebrow">公開中</div>
               <h2 className="section-title mt-2">現在利用できるコンテンツ</h2>
             </div>
             <p className="max-w-lg text-sm text-[#607080]">注目コンテンツを先頭に、同じリンクを重複させずに掲載しています。</p>
@@ -111,7 +111,7 @@ export function TopicHub({ topic, eyebrow, title, lead, learningSteps }: TopicHu
 
       <section className="container py-16">
         <div className="max-w-4xl border-l-4 border-[#217346] bg-[#f7f8f6] p-6 md:p-8">
-          <div className="eyebrow">COMING NEXT</div>
+          <div className="eyebrow">今後追加予定</div>
           <h2 className="mt-2 text-2xl font-bold tracking-[-.04em] text-[#102235]">今後扱うテーマ</h2>
           <p className="mt-3 text-sm leading-6 text-[#607080]">公開前のテーマはリンクにせず、学習の見通しとしてのみ掲載しています。</p>
           <ul className="mt-5 grid gap-2 text-sm font-semibold text-[#102235] md:grid-cols-3">

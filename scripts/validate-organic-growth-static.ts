@@ -22,7 +22,7 @@ const siteOrigin = "https://arsenal23vm-netizen.github.io";
 const pagesBasePath = "/ma-modeling-lab";
 const deploymentBase = `${siteOrigin}${pagesBasePath}`;
 const outRoot = path.resolve("out");
-const expectedLastModified = new Date("2026-07-21T00:00:00+09:00").getTime();
+const expectedLastModified = new Date("2026-07-22T00:00:00+09:00").getTime();
 
 const routes: Array<{
   route: string;
@@ -248,7 +248,7 @@ for (const item of routes) {
   assert.equal(sitemapEntry.changeFrequency, "monthly", `${item.route} sitemap frequency must be monthly`);
   assert.equal(sitemapEntry.priority, item.priority, `${item.route} sitemap priority is incorrect`);
   assert.ok(sitemapEntry.lastModified instanceof Date, `${item.route} sitemap lastModified must be a Date`);
-  assert.equal(sitemapEntry.lastModified.getTime(), expectedLastModified, `${item.route} sitemap lastModified must be 2026-07-21`);
+  assert.equal(sitemapEntry.lastModified.getTime(), expectedLastModified, `${item.route} sitemap lastModified must be 2026-07-22`);
   assert.ok(generatedSitemap.includes(`<loc>${expectedCanonical}</loc>`), `Generated sitemap must include ${item.route}`);
 
   assert.equal(contentCatalog.filter((entry) => entry.href === item.route).length, 1, `Catalog must contain ${item.route} exactly once`);

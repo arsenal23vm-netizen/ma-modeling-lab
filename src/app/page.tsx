@@ -19,7 +19,7 @@ export default function Home() {
       <section className="border-b border-[#d8e0e5] bg-white">
         <div className="container grid min-h-[590px] items-center gap-12 py-16 lg:grid-cols-[1.05fr_.95fr]">
           <div>
-            <div className="eyebrow">FROM THEORY TO DEAL-READY MODEL</div>
+            <div className="eyebrow">理論から実務モデルへ</div>
             <h1 className="mt-4 text-4xl font-bold leading-[1.16] tracking-[-.05em] text-[#102235] md:text-6xl">
               読むだけで終わらない。
               <br />
@@ -111,7 +111,7 @@ export default function Home() {
         <div className="container py-16">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <div className="eyebrow">TOPIC HUBS</div>
+              <div className="eyebrow">分野別ガイド</div>
               <h2 className="section-title mt-2">学習テーマから探す</h2>
             </div>
             <p className="max-w-lg text-sm text-[#607080]">目的に近いテーマを選び、いま読める解説や教材から学習を始められます。</p>
@@ -119,7 +119,7 @@ export default function Home() {
           <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {[
               { href: "/financial-modeling", title: "財務モデリング", body: "三表、事業計画、モデル品質を順に学ぶ。" },
-              { href: "/valuation", title: "Valuation", body: "DCFとCompsで価値評価の根拠を組み立てる。" },
+              { href: "/valuation", title: "Valuation", body: "DCFと類似会社比較で価値評価の根拠を組み立てる。" },
               { href: "/ma-modeling", title: "M&Aモデル", body: "案件の論点とレビュー観点を整理する。" },
               { href: "/excel-templates", title: "Excel教材", body: "演習とテンプレートで手を動かして確かめる。" },
             ].map((item) => (
@@ -135,7 +135,7 @@ export default function Home() {
       <section className="bg-[#f7f8f6]">
         <div className="container grid gap-10 py-16 lg:grid-cols-[.7fr_1.3fr]">
           <div>
-            <div className="eyebrow">WHY WE BUILT THIS</div>
+            <div className="eyebrow">このサイトを作った理由</div>
             <h2 className="section-title mt-2">「結局、セルをどうつなぐのか」が見つからなかった。</h2>
           </div>
           <div className="space-y-5 text-[1.02rem]">
@@ -145,7 +145,7 @@ export default function Home() {
               <strong>Excelでどう接続するか</strong>まで詳しく解説したものは多くありません。
             </p>
             <p>
-              Finance Modeling Labは、理論、会計処理、Excel実装を一つにつなげる実務メディアです。初学者にも読める順番を保ちながら、M&AやFASの現場でレビューされる粒度を目指します。
+              Finance Modeling Labは、理論、会計処理、Excel実装を一つにつなげる実務メディアです。初学者にも読める順番を保ちながら、M&Aや財務アドバイザリーの現場でレビューされる粒度を目指します。
             </p>
             <p className="border-l-4 border-[#217346] pl-5 font-semibold text-[#102235]">
               その不便を次の担当者に残さないために、勘定科目からセル参照までを一つにつないだFinance Modeling Labを作りました。
@@ -156,7 +156,7 @@ export default function Home() {
       <section className="border-y border-[#d8e0e5] bg-white">
         <div className="container grid gap-8 py-12 lg:grid-cols-[.75fr_1.25fr]">
           <div>
-            <div className="eyebrow">TRUST & EDITORIAL</div>
+            <div className="eyebrow">運営・編集方針</div>
             <h2 className="mt-2 text-3xl font-bold tracking-[-.04em] text-[#102235]">実務メディアとして、誇張せずに積み上げる。</h2>
             <p className="mt-3 text-sm text-[#607080]">教育目的、サンプルデータ、専門家確認が必要な領域を明示しながら、財務モデリングの学習に使える情報へ整えています。</p>
           </div>
@@ -194,7 +194,7 @@ export default function Home() {
       <section className="container py-16">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <div className="eyebrow">CURRICULUM</div>
+            <div className="eyebrow">学習カリキュラム</div>
             <h2 className="section-title mt-2">実務モデルを順番に完成させる</h2>
           </div>
           <p className="max-w-lg text-sm text-[#607080]">前提条件から計算、財務三表、アウトプットへ、一方向に参照を流す順序で学びます。</p>
@@ -217,7 +217,7 @@ export default function Home() {
       <section className="bg-[#102235] text-white">
         <div className="container grid gap-8 py-14 md:grid-cols-[1fr_auto] md:items-center">
           <div>
-            <div className="text-xs font-bold tracking-[.15em] text-[#77c7bc]">BUILD THIS LAB TOGETHER</div>
+            <div className="text-xs font-bold tracking-[.15em] text-[#77c7bc]">一緒に教材を改善する</div>
             <h2 className="mt-2 text-3xl font-bold">次にほしい解説や機能を教えてください。</h2>
             <p className="mt-3 max-w-2xl text-white/65">扱ってほしい勘定科目、Excelテンプレート、モデル機能などを自由にリクエストできます。</p>
           </div>

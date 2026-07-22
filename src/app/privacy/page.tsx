@@ -9,7 +9,7 @@ export const metadata: Metadata = createPageMetadata("/privacy", {
 export default function PrivacyPage() {
   return (
     <div className="container max-w-3xl py-14">
-      <div className="eyebrow">PRIVACY POLICY</div>
+      <div className="eyebrow">プライバシーポリシー</div>
       <h1 className="mt-3 text-4xl font-bold">プライバシーポリシー</h1>
       <div className="prose mt-8 space-y-8">
         <section>

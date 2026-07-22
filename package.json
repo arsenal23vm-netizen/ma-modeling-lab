@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
     "validate:dcf-series": "tsx scripts/validate-dcf-series.ts",
@@ -16,8 +16,11 @@
     "generate:dcf-workbook": "tsx scripts/create-dcf-workbook.ts",
     "test:dcf-workbook": "tsx scripts/test-dcf-workbook.ts",
     "validate:comps-case": "tsx scripts/validate-comps-case.ts",
+    "validate:language": "tsx scripts/validate-practical-japanese.ts",
     "generate:comps-workbook": "tsx scripts/create-comps-selection-workbook.ts",
-    "test:comps-workbook": "tsx scripts/test-comps-selection-workbook.ts"
+    "test:comps-workbook": "tsx scripts/test-comps-selection-workbook.ts",
+    "generate:learning-workbooks": "tsx scripts/create-learning-workbooks.ts",
+    "test:learning-workbooks": "tsx scripts/test-learning-workbooks.ts"
   },
   "dependencies": {
     "next": "16.2.10",

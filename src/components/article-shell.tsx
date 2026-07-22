@@ -43,7 +43,7 @@ export function ArticleShell({
             <span aria-hidden="true"> / </span>
             <span>{title}</span>
           </nav>
-          <div className="eyebrow">LESSON {no} / FINANCIAL MODELING</div>
+          <div className="eyebrow">レッスン {no} / 財務モデリング</div>
           <h1 className="mt-3 max-w-4xl text-3xl font-bold leading-tight tracking-[-.04em] text-[#102235] md:text-5xl">
             {title}
           </h1>
@@ -95,7 +95,7 @@ export function ArticleShell({
           </div>
           {nextLesson && (
             <Link href={`/${nextLesson.slug}`} className="mt-8 block border border-[#d8e0e5] bg-white p-5 shadow-sm hover:border-[#147d73]">
-              <span className="eyebrow">NEXT LESSON</span>
+              <span className="eyebrow">次のレッスン</span>
               <strong className="mt-2 block text-xl text-[#102235]">{nextLesson.title}</strong>
               <span className="mt-1 block text-sm text-[#607080]">{nextLesson.summary}</span>
             </Link>

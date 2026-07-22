@@ -44,10 +44,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return paths.map((item) => ({
     url: `${base}${item.path}`,
     lastModified: item.path.startsWith("/valuation/dcf") || item.path === "/downloads/dcf-valuation-model"
-      ? new Date("2026-07-21T00:00:00+09:00")
-      : item.path === "/comps-peer-selection" ? new Date("2026-07-20T00:00:00+09:00")
+      ? new Date("2026-07-22T00:00:00+09:00")
+      : item.path === "/comps-peer-selection" ? new Date("2026-07-22T00:00:00+09:00")
       : ["/financial-modeling", "/valuation", "/ma-modeling", "/excel-templates", "/three-statements"].includes(item.path)
-        ? new Date("2026-07-21T00:00:00+09:00")
+        ? new Date("2026-07-22T00:00:00+09:00")
         : lastModified,
     changeFrequency: item.changeFrequency,
     priority: item.priority,

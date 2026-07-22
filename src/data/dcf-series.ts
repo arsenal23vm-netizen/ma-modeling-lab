@@ -125,11 +125,11 @@ export const buildSensitivityMatrix = (caseData: DcfCase): SensitivityRow[] =>
 
 export const dcfCase: DcfCase = {
   forecasts: [
-    { year: "FY2026", revenue: 1100, ebit: 120, taxRate: 0.3, depreciation: 30, capex: 30, increaseInNwc: 7.2 },
-    { year: "FY2027", revenue: 1200, ebit: 140, taxRate: 0.3, depreciation: 32, capex: 32, increaseInNwc: 6.9 },
-    { year: "FY2028", revenue: 1320, ebit: 160, taxRate: 0.3, depreciation: 34, capex: 34, increaseInNwc: 7.9 },
-    { year: "FY2029", revenue: 1452, ebit: 180, taxRate: 0.3, depreciation: 36, capex: 36, increaseInNwc: 9.5 },
-    { year: "FY2030", revenue: 1597.2, ebit: 200, taxRate: 0.3, depreciation: 38, capex: 38, increaseInNwc: 7.7 },
+    { year: "2026年度", revenue: 1100, ebit: 120, taxRate: 0.3, depreciation: 30, capex: 30, increaseInNwc: 7.2 },
+    { year: "2027年度", revenue: 1200, ebit: 140, taxRate: 0.3, depreciation: 32, capex: 32, increaseInNwc: 6.9 },
+    { year: "2028年度", revenue: 1320, ebit: 160, taxRate: 0.3, depreciation: 34, capex: 34, increaseInNwc: 7.9 },
+    { year: "2029年度", revenue: 1452, ebit: 180, taxRate: 0.3, depreciation: 36, capex: 36, increaseInNwc: 9.5 },
+    { year: "2030年度", revenue: 1597.2, ebit: 200, taxRate: 0.3, depreciation: 38, capex: 38, increaseInNwc: 7.7 },
   ],
   wacc: {
     riskFreeRate: 0.015,

@@ -10,7 +10,7 @@ export const metadata: Metadata = createPageMetadata("/editorial-policy", {
 export default function EditorialPolicyPage() {
   return (
     <div className="container max-w-4xl py-14">
-      <div className="eyebrow">EDITORIAL POLICY</div>
+      <div className="eyebrow">編集方針</div>
       <h1 className="mt-3 text-4xl font-bold tracking-[-.04em] text-[#102235] md:text-5xl">編集方針</h1>
       <p className="mt-5 max-w-3xl text-lg text-[#607080]">
         Finance Modeling Labは、財務モデリングとM&A実務の学習に役立つ情報を、再現性・検証可能性・読みやすさを重視して編集します。

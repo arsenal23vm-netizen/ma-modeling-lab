@@ -26,7 +26,7 @@ function FigureFrame({
   return (
     <figure className="dcf-figure">
       <figcaption>{caption}</figcaption>
-      <div className="sheet-tabs" aria-hidden="true"><span className="active">DCF</span><span>Checks</span></div>
+      <div className="sheet-tabs" aria-hidden="true"><span className="active">DCF</span><span>チェック</span></div>
       <div className="formula-bar"><span>fx</span><code>{formula}</code></div>
       {children}
     </figure>
@@ -35,11 +35,11 @@ function FigureFrame({
 
 export function FcffFigure() {
   return (
-    <FigureFrame caption="FCFF予測（単位：百万円、FY2026–FY2030）" formula="=B8*(1-B9)+B10-B11-B12">
+    <FigureFrame caption="FCFF予測（単位：百万円、2026年度–2030年度）" formula="=B8*(1-B9)+B10-B11-B12">
       <div className="data-scroll">
         <table className="data-table dcf-sheet min-w-[860px]">
           <caption>サンプル部品株式会社のFCFF計算表。すべて百万円単位。</caption>
-          <thead><tr><th scope="col">年度末</th><th scope="col" className="number">EBIT（百万円）</th><th scope="col" className="number">税率（%）</th><th scope="col" className="number">D&amp;A（百万円）</th><th scope="col" className="number">Capex（百万円）</th><th scope="col" className="number">NWC増加（百万円）</th><th scope="col" className="number">FCFF（百万円）</th></tr></thead>
+          <thead><tr><th scope="col">年度末</th><th scope="col" className="number">EBIT（百万円）</th><th scope="col" className="number">税率（%）</th><th scope="col" className="number">減価償却費（百万円）</th><th scope="col" className="number">設備投資（百万円）</th><th scope="col" className="number">運転資本増加（百万円）</th><th scope="col" className="number">FCFF（百万円）</th></tr></thead>
           <tbody>{dcfCase.forecasts.map((row) => <tr key={row.year}><th scope="row">{row.year}</th><td className="number">{money(row.ebit)}</td><td className="number">{percent(row.taxRate)}</td><td className="number">{money(row.depreciation)}</td><td className="number">({money(row.capex)})</td><td className="number">({money(row.increaseInNwc)})</td><td className="number dcf-output">{money(calculateFcff(row))}</td></tr>)}</tbody>
         </table>
       </div>
@@ -72,9 +72,9 @@ export function TerminalValueFigure() {
     <FigureFrame caption="継続価値と企業価値の構成（単位：百万円、各年度末割引）" formula="=IF(B10<=B9,NA(),B8*(1+B9)/(B10-B9))">
       <div className="data-scroll">
         <table className="data-table dcf-sheet min-w-[620px]">
-          <caption>Gordon Growth法による期末時点の継続価値と現在価値への割引。</caption>
+          <caption>永久成長法による期末時点の継続価値と現在価値への割引。</caption>
           <thead><tr><th scope="col">計算項目</th><th scope="col" className="number">金額（百万円）</th><th scope="col" className="number">企業価値構成比（%）</th></tr></thead>
-          <tbody><tr><th scope="row">明示予測期間のFCFF現在価値</th><td className="number">{money(valuation.pvExplicitFcff)}</td><td className="number">{percent(valuation.pvExplicitFcff / valuation.enterpriseValue)}</td></tr><tr><th scope="row">継続価値（FY2030期末時点）</th><td className="number">{money(valuation.terminalValue)}</td><td className="number">割引前</td></tr><tr><th scope="row">継続価値の現在価値</th><td className="number">{money(valuation.pvTerminalValue)}</td><td className="number dcf-output">{percent(terminalShare)}</td></tr></tbody>
+          <tbody><tr><th scope="row">明示予測期間のFCFF現在価値</th><td className="number">{money(valuation.pvExplicitFcff)}</td><td className="number">{percent(valuation.pvExplicitFcff / valuation.enterpriseValue)}</td></tr><tr><th scope="row">継続価値（2030年度末時点）</th><td className="number">{money(valuation.terminalValue)}</td><td className="number">割引前</td></tr><tr><th scope="row">継続価値の現在価値</th><td className="number">{money(valuation.pvTerminalValue)}</td><td className="number dcf-output">{percent(terminalShare)}</td></tr></tbody>
           <tfoot><tr><th scope="row">Enterprise Value</th><td className="number dcf-output">{money(valuation.enterpriseValue)}</td><td className="number">100.0%</td></tr></tfoot>
         </table>
       </div>
@@ -88,25 +88,25 @@ export function SensitivityFigure({ matrix = buildSensitivityMatrix(dcfCase) }: 
   const nearestBaseWacc = dcfCase.sensitivity.waccRates.reduce((nearest, rate) =>
     Math.abs(rate - baseWacc) < Math.abs(nearest - baseWacc) ? rate : nearest,
   );
-  const proxyExplanation = `基準ケースに最も近いグリッド点: WACC ${percent(nearestBaseWacc)}, Terminal Growth ${percent(dcfCase.terminalGrowthRate)}. Exact base WACC ${percent(baseWacc, 4)}`;
+  const proxyExplanation = `Baseに最も近い組合せ：WACC ${percent(nearestBaseWacc)}、永久成長率 ${percent(dcfCase.terminalGrowthRate)}。BaseのWACCは${percent(baseWacc, 4)}です。`;
   return (
-    <FigureFrame caption="WACC × Terminal Growth 感応度（Enterprise Value、単位：百万円）" formula="=TABLE($B$4,$B$3)">
+    <FigureFrame caption="WACC × 永久成長率 感応度（Enterprise Value、単位：百万円）" formula="=TABLE($B$4,$B$3)">
       <div className="data-scroll">
         <table className="data-table dcf-sheet sensitivity-sheet min-w-[720px]">
-          <caption>WACCを行、永久成長率を列に置いた企業価値の感応度表。</caption>
-          <thead><tr><th scope="col">WACC \ Terminal Growth</th>{growthRates.map((growth) => <th scope="col" className="number" key={growth}>{percent(growth)}</th>)}</tr></thead>
+          <caption>WACCを行、永久成長率を列に置いたEnterprise Valueの感応度表。</caption>
+          <thead><tr><th scope="col">WACC \ 永久成長率</th>{growthRates.map((growth) => <th scope="col" className="number" key={growth}>{percent(growth)}</th>)}</tr></thead>
           <tbody>{matrix.map((row) => <tr key={row.wacc}><th scope="row">{percent(row.wacc)}</th>{row.cells.map((cell) => {
-            const invalid = cell.status === "N/A" || cell.enterpriseValue === null;
+            const invalid = cell.enterpriseValue === null;
             const isBaseProxy = row.wacc === nearestBaseWacc && cell.terminalGrowthRate === dcfCase.terminalGrowthRate;
             const accessibleProxyLabel = isBaseProxy && cell.enterpriseValue !== null
               ? `Enterprise Value ${money(cell.enterpriseValue)} 百万円。${proxyExplanation}`
               : undefined;
-            return <td data-sensitivity-status={invalid ? "invalid" : undefined} aria-label={accessibleProxyLabel} title={isBaseProxy ? proxyExplanation : undefined} className={`number ${isBaseProxy ? "dcf-output" : ""}`} key={cell.terminalGrowthRate}>{invalid ? "N/A" : money(cell.enterpriseValue!)}</td>;
+            return <td data-sensitivity-status={invalid ? "invalid" : undefined} aria-label={accessibleProxyLabel} title={isBaseProxy ? proxyExplanation : undefined} className={`number ${isBaseProxy ? "dcf-output" : ""}`} key={cell.terminalGrowthRate}>{invalid ? "該当なし" : money(cell.enterpriseValue!)}</td>;
           })}</tr>)}</tbody>
-          <tfoot><tr><th scope="row">入力ガード</th><td colSpan={growthRates.length}>WACC ≤ g のセルは N/A</td></tr></tfoot>
+          <tfoot><tr><th scope="row">入力条件</th><td colSpan={growthRates.length}>WACC ≤ g のセルは「該当なし」</td></tr></tfoot>
         </table>
       </div>
-      <p className="dcf-figure-note"><span className="dcf-proxy-swatch" aria-hidden="true" />基準ケースに最も近いグリッド点：WACC {percent(nearestBaseWacc)} / Terminal Growth {percent(dcfCase.terminalGrowthRate)}（正確なWACC {percent(baseWacc, 4)}の代理表示）</p>
+      <p className="dcf-figure-note"><span className="dcf-proxy-swatch" aria-hidden="true" />基準ケースに最も近いグリッド点：WACC {percent(nearestBaseWacc)} / 永久成長率 {percent(dcfCase.terminalGrowthRate)}（正確なWACC {percent(baseWacc, 4)}の代理表示）</p>
     </FigureFrame>
   );
 }
@@ -116,13 +116,13 @@ export function EnterpriseToEquityFigure() {
   const bridge = calculateEquityBridge(valuation.enterpriseValue, dcfCase.bridge);
   const rows = [
     ["Enterprise Value", valuation.enterpriseValue, "+"],
-    ["Cash", bridge.cash, "+"],
-    ["Debt", bridge.debt, "−"],
-    ["Debt-like Items", bridge.debtLikeItems, "−"],
-    ["Non-controlling Interests", bridge.nonControllingInterests, "−"],
+    ["現金及び現金同等物", bridge.cash, "+"],
+    ["有利子負債", bridge.debt, "−"],
+    ["有利子負債類似項目", bridge.debtLikeItems, "−"],
+    ["非支配持分", bridge.nonControllingInterests, "−"],
   ] as const;
   return (
-    <FigureFrame caption="EV-to-Equity Bridge（単位：百万円）" formula="=B8+B9-B10-B11-B12">
+    <FigureFrame caption="Enterprise ValueからEquity Valueへの調整（単位：百万円）" formula="=B8+B9-B10-B11-B12">
       <div className="data-scroll">
         <table className="data-table dcf-sheet min-w-[620px]">
           <caption>企業価値から現金、負債、負債類似項目、非支配株主持分を調整する株主価値ブリッジ。</caption>

@@ -13,7 +13,7 @@ export const metadata: Metadata = createPageMetadata("/journal-lab", {
 export default function JournalLabPage() {
   return (
     <div className="container py-14">
-      <div className="eyebrow">ACCOUNTING JOURNAL LAB</div>
+      <div className="eyebrow">会計仕訳演習</div>
       <h1 className="mt-3 text-4xl font-bold tracking-[-.04em] text-[#102235] md:text-5xl">会計仕訳ラボ</h1>
       <p className="mt-5 max-w-3xl text-lg text-[#607080]">
         {caseCompany.name}の取引を使い、取引内容、仕訳、PL・BS・CFへの反映、Excelの入力・参照先、モデル上の注意点を同じ順序で確認します。単位は{caseCompany.unit}、{caseCompany.yearEnd}です。

@@ -8,7 +8,7 @@ const cells: Cell[] = [
   { address: "H8", label: "販売数量", kind: "input" },
   { address: "H9", label: "平均単価", kind: "input" },
   { address: "H10", label: "=H8*H9", kind: "formula" },
-  { address: "H12", label: "=Assumptions!H20", kind: "link" },
+  { address: "H12", label: "=前提!H20", kind: "link" },
   { address: "H30", label: "BS一致 OK", kind: "check" },
   { address: "H31", label: "CF差額 0", kind: "check" },
 ];
@@ -28,17 +28,17 @@ export function ExcelWorksheetDiagram() {
         Excelワークシート図解：色とラベルでセル種別を区別
       </figcaption>
       <div className="border-b border-[#d8e0e5] bg-white px-4 py-3 font-mono text-sm text-[#334456]">
-        数式バー： <span className="text-[#217346]">=Assumptions!H20</span>
+        数式バー： <span className="text-[#217346]">=前提!H20</span>
       </div>
       <div className="data-scroll border-0">
         <table className="data-table min-w-[760px]" aria-describedby="excel-diagram-legend">
           <thead>
             <tr>
               <th>行</th>
-              <th>G / FY2025実績</th>
-              <th>H / FY2026予測</th>
-              <th>I / FY2027予測</th>
-              <th>J / FY2028予測</th>
+              <th>G / 2025年度実績</th>
+              <th>H / 2026年度予測</th>
+              <th>I / 2027年度予測</th>
+              <th>J / 2028年度予測</th>
             </tr>
           </thead>
           <tbody>
@@ -66,10 +66,10 @@ export function ExcelWorksheetDiagram() {
         <span className="cell-check px-2 py-1">チェック：OK/差額表示</span>
       </div>
       <div className="flex gap-2 border-t border-[#d8e0e5] bg-[#f7f8f6] px-4 py-3 text-xs">
-        <span className="rounded-t border border-[#d8e0e5] bg-white px-3 py-1">Inputs</span>
+        <span className="rounded-t border border-[#d8e0e5] bg-white px-3 py-1">入力</span>
         <span className="rounded-t border border-[#d8e0e5] bg-white px-3 py-1">PL</span>
         <span className="rounded-t border border-[#d8e0e5] bg-white px-3 py-1">BS</span>
-        <span className="rounded-t border border-[#d8e0e5] bg-white px-3 py-1">Checks</span>
+        <span className="rounded-t border border-[#d8e0e5] bg-white px-3 py-1">チェック</span>
       </div>
     </figure>
   );

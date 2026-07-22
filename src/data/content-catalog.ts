@@ -19,8 +19,8 @@ export const contentCatalog: ContentEntry[] = [
   },
   {
     href: "/valuation",
-    title: "企業価値評価",
-    summary: "DCFと類似会社比較を使った企業価値評価を学ぶためのハブです。",
+    title: "Valuation",
+    summary: "DCFと類似会社比較を使ったValuationを学ぶための案内ページです。",
     type: "hub", topic: "valuation", level: "基礎から実務", readingTime: "案内", keywords: ["valuation", "企業価値", "DCF", "comps"], featured: true,
   },
   {
@@ -92,14 +92,14 @@ export const contentCatalog: ContentEntry[] = [
   {
     href: "/private-company-valuation",
     title: "非上場企業Valuation入門――企業価値から株主価値まで",
-    summary: "非上場企業の企業価値評価、EBITDAの正常化、EVから株主価値へのブリッジを解説します。",
+    summary: "非上場企業のValuation、EBITDAの正常化、Enterprise ValueからEquity Valueへの調整を解説します。",
     type: "article", topic: "valuation", level: "基礎", readingTime: "20分", keywords: ["Valuation", "企業価値", "株主価値", "EBITDA", "非上場企業"], featured: true,
   },
   {
     href: "/comps-peer-selection",
-    title: "類似会社比較法：Peer選定とComps分析",
-    summary: "類似会社の選定根拠を整理し、Comps分析で企業価値を比較する方法を解説します。",
-    type: "article", topic: "valuation", level: "実践", readingTime: "22分", keywords: ["Comps", "類似会社", "Peer", "マルチプル", "EV/EBITDA"], featured: true,
+    title: "類似会社比較法：比較会社の選定とマルチプル分析",
+    summary: "類似会社の選定根拠を整理し、マルチプルでEnterprise Valueを比較する方法を解説します。",
+    type: "article", topic: "valuation", level: "実践", readingTime: "22分", keywords: ["類似会社比較", "主要比較会社", "Core Peer", "Comps", "Peer", "マルチプル", "EV/EBITDA"], featured: true,
   },
   {
     href: "/valuation/dcf",
@@ -110,7 +110,7 @@ export const contentCatalog: ContentEntry[] = [
   {
     href: "/valuation/dcf/fcff",
     title: "FCFFの計算方法",
-    summary: "EBITからNOPAT、減価償却、設備投資、運転資本増減を反映してFCFFを計算します。",
+    summary: "EBITから税引後営業利益、減価償却、設備投資、運転資本増減を反映してFCFFを計算します。",
     type: "article", topic: "valuation", level: "実践", readingTime: "12分", keywords: ["FCFF", "フリーキャッシュフロー", "NOPAT", "Capex", "運転資本"], featured: false,
   },
   {
@@ -121,8 +121,8 @@ export const contentCatalog: ContentEntry[] = [
   },
   {
     href: "/valuation/dcf/terminal-value",
-    title: "継続価値（Terminal Value）の計算方法",
-    summary: "Gordon Growth法とExit Multiple法を比較し、継続価値の前提を検証します。",
+    title: "継続価値の計算方法",
+    summary: "永久成長法と出口マルチプル法を比較し、継続価値の前提を検証します。",
     type: "article", topic: "valuation", level: "実践", readingTime: "12分", keywords: ["Terminal Value", "継続価値", "永久成長率", "Gordon Growth", "Exit Multiple"], featured: false,
   },
   {
@@ -133,14 +133,14 @@ export const contentCatalog: ContentEntry[] = [
   },
   {
     href: "/valuation/dcf/enterprise-to-equity",
-    title: "EVから株主価値へのブリッジ",
+    title: "Enterprise ValueからEquity Valueへの調整",
     summary: "企業価値から現金、負債、負債類似項目、非支配株主持分を調整して株主価値を導きます。",
     type: "article", topic: "valuation", level: "実践", readingTime: "12分", keywords: ["EV", "株主価値", "Enterprise Value", "Equity Value", "Net Debt"], featured: false,
   },
   {
     href: "/downloads",
     title: "ダウンロードセンター",
-    summary: "仕訳、前提条件、PL、BS・CF、三表、DCF、品質チェック、CompsのExcel演習を配布します。",
+    summary: "仕訳、前提条件、PL、BS・CF、財務三表、DCF、品質チェック、類似会社比較のExcel演習を配布します。",
     type: "hub", topic: "excel", level: "基礎から実務", readingTime: "案内", keywords: ["ダウンロード", "Excel", "テンプレート", "ワークブック"], featured: true,
   },
   {
@@ -170,7 +170,7 @@ export const contentCatalog: ContentEntry[] = [
   {
     href: "/downloads/05_完成3表モデル.xlsx",
     title: "完成3表モデル Excelワークブック",
-    summary: "Inputs、Assumptions、PL、BS、CF、Schedules、Checksを備えた完成モデルです。",
+    summary: "入力、前提、PL、BS、CF、計算明細、チェックを備えた完成モデルです。",
     type: "download", topic: "excel", level: "実践", readingTime: "Excel", keywords: ["財務三表", "PL", "BS", "CF", "Checks"], featured: true,
   },
   {
@@ -186,15 +186,15 @@ export const contentCatalog: ContentEntry[] = [
     type: "download", topic: "excel", level: "実務", readingTime: "Excel", keywords: ["品質", "レビュー", "チェックリスト", "Excel"], featured: false,
   },
   {
-    href: "/downloads/Comps_Selection_Worksheet.xlsx",
-    title: "Comps選定 Excelワークブック",
-    summary: "対象会社プロファイル、候補会社、選定マトリクス、Review Memo、Checksを収録しています。",
+    href: "/downloads/類似会社選定ワークシート.xlsx",
+    title: "類似会社選定 Excelワークブック",
+    summary: "対象会社の事業特性、比較候補会社一覧、比較会社選定表、検討記録、チェックを収録しています。",
     type: "download", topic: "valuation", level: "実践", readingTime: "Excel", keywords: ["Comps", "類似会社", "Peer", "Excel", "選定"], featured: false,
   },
   {
     href: "/downloads/dcf-valuation-model",
     title: "DCF評価モデルの使い方",
-    summary: "標準準拠の9シートDCF Excelワークブックについて、青セル入力、期末割引、主要数式、5×5感応度、Checksを解説します。",
+    summary: "標準準拠の9シートDCF Excelワークブックについて、青セル入力、期末割引、主要数式、5×5感応度、チェックを解説します。",
     type: "download", topic: "valuation", level: "実践", readingTime: "15分", keywords: ["DCF", "Excel", "WACC", "FCFF", "ダウンロード"], featured: true,
   },
   {

@@ -67,7 +67,7 @@ export function DcfLessonShell({
             <span aria-hidden="true"> / </span>
             <span>{title}</span>
           </nav>
-          <div className="eyebrow">DCF SERIES {number} / 05</div>
+          <div className="eyebrow">DCFシリーズ {number} / 05</div>
           <h1 className="mt-3 max-w-5xl text-3xl font-bold leading-tight tracking-[-.04em] text-[#102235] md:text-5xl">
             {title}
           </h1>
@@ -100,9 +100,9 @@ export function DcfLessonShell({
           </div>
 
           <section className="dcf-workbook-cta" aria-labelledby={`workbook-${number}`}>
-            <div className="eyebrow">DCF WORKBOOK</div>
+            <div className="eyebrow">DCF Excel教材</div>
             <h2 id={`workbook-${number}`} className="mt-2">同じ数値をExcelで再現する</h2>
-            <p>9シート構成の教育用ワークブックで、入力セル、計算セル、Checksを確認できます。</p>
+            <p>9シート構成の教育用ワークブックで、入力セル、計算セル、チェックを確認できます。</p>
             <Link href="/downloads/dcf-valuation-model" className="button green mt-5">
               DCF評価モデルの使い方を見る
             </Link>
@@ -110,11 +110,11 @@ export function DcfLessonShell({
 
           <nav className="dcf-stage-nav" aria-label="DCFシリーズの前後記事">
             <Link href={previous.href} className="dcf-stage-link">
-              <span className="eyebrow">PREVIOUS</span>
+              <span className="eyebrow">前のレッスン</span>
               <strong>{previous.label}</strong>
             </Link>
             <Link href={next.href} className="dcf-stage-link dcf-stage-link-next">
-              <span className="eyebrow">NEXT</span>
+              <span className="eyebrow">次のレッスン</span>
               <strong>{next.label}</strong>
             </Link>
           </nav>
@@ -123,7 +123,7 @@ export function DcfLessonShell({
             record={editorialRecord}
             breadcrumbs={[
               { name: "ホーム", href: "/" },
-              { name: "企業価値評価", href: "/valuation" },
+              { name: "Valuation", href: "/valuation" },
               { name: "DCF評価", href: "/valuation/dcf" },
               { name: editorialRecord.title, href: editorialRecord.href },
             ]}

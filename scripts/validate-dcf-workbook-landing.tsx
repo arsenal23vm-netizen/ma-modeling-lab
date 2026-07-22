@@ -15,8 +15,8 @@ assert.ok(existsSync("public/downloads/06_DCF評価モデル.xlsx"), "generated 
 const html = renderToStaticMarkup(<Page />);
 const directLinks = [...html.matchAll(/href="([^"]+)"/g)].map((match) => match[1]).filter((href) => href === workbookHref);
 assert.ok(directLinks.length >= 2, "landing page must include at least two exact direct-download links");
-for (const heading of ["対象読者", "シート構成", "入力方法", "主要数式", "Checks", "利用上の注意"]) assert.ok(html.includes(heading), `missing section: ${heading}`);
-for (const sheet of ["Cover", "Inputs", "Assumptions", "PL", "BS", "CF", "Schedules", "DCF", "Checks"]) assert.ok(html.includes(sheet), `missing sheet role: ${sheet}`);
+for (const heading of ["対象読者", "シート構成", "入力方法", "主要数式", "チェック", "利用上の注意"]) assert.ok(html.includes(heading), `missing section: ${heading}`);
+for (const sheet of ["表紙", "入力", "前提", "PL", "BS", "CF", "計算明細", "DCF", "チェック"]) assert.ok(html.includes(sheet), `missing sheet role: ${sheet}`);
 assert.match(html, /<caption[^>]*>[^<]*DCF[^<]*ワークシート[^<]*プレビュー[^<]*<\/caption>/u, "worksheet preview must have an accessible caption");
 assert.match(html, /aria-label="数式バー"/u);
 assert.match(html, /scope="col"/u);
@@ -44,7 +44,7 @@ const downloadCardSource = readFileSync("src/components/DownloadCard.tsx", "utf8
 assert.match(downloadCardSource, /<Link href=\{detailsHref\}/u, "details link must apply the deployment base path");
 const previewSource = readFileSync("src/components/DcfWorkbookPreview.tsx", "utf8");
 assert.doesNotMatch(previewSource, /role="tablist"|role="tab"/u, "static sheet labels must not expose interactive tab semantics");
-assert.match(previewSource, /Inputs!B19:B21/u, "preview must identify the editable WACC assumptions on the Inputs sheet");
+assert.match(previewSource, /入力!B19:B21/u, "preview must identify the editable WACC assumptions on the input sheet");
 assert.match(previewSource, /DCF!B25:G25/u, "preview must identify DCF row 25 as the sensitivity header row");
 assert.match(html, /<th[^>]*scope="col"[^>]*>WACC \/ g<\/th>/u, "DCF row 25 must render WACC / g as a sensitivity column header");
 assert.doesNotMatch(html, /<tr><th[^>]*>25<\/th><th[^>]*>WACC \/ g<\/th><td class="workbook-input/u, "DCF row 25 must not present base WACC or g as editable input cells");

@@ -48,7 +48,7 @@ const hubs = [
 ] as const;
 
 const expectedNavigation = [
-  '{ href: "/", label: "Home" }',
+  '{ href: "/", label: "ホーム" }',
   '{ href: "/financial-modeling", label: "財務モデリング" }',
   '{ href: "/valuation", label: "Valuation" }',
   '{ href: "/ma-modeling", label: "M&Aモデル" }',
@@ -83,8 +83,8 @@ for (const hub of hubs) {
   assert.equal(hub.metadata.alternates?.canonical, `${deploymentBase}/${hub.route}`, `${hub.route} needs its deployment canonical`);
   assert.ok(home.includes(`/${hub.route}`), `Home must link to /${hub.route}`);
 
-  assert.equal((markup.match(/STEP \d\d/g) ?? []).length, 3, `${hub.route} must render exactly three learning steps`);
-  assert.deepEqual(markup.match(/STEP \d\d/g), ["STEP 01", "STEP 02", "STEP 03"]);
+  assert.equal((markup.match(/手順 \d\d/g) ?? []).length, 3, `${hub.route} must render exactly three learning steps`);
+  assert.deepEqual(markup.match(/手順 \d\d/g), ["手順 01", "手順 02", "手順 03"]);
   assert.match(markup, /こんな方のためのテーマです/);
   assert.match(markup, /現在利用できるコンテンツ/);
   assert.match(markup, /今後扱うテーマ/);
@@ -126,7 +126,7 @@ const dcfLessonRoutes = [
     href: dcfLessonHrefs[0],
     page: FcffPage,
     metadata: fcffMetadata,
-    formula: "FCFF = EBIT × (1 − Tax Rate) + D&amp;A − Capex − Increase in NWC",
+    formula: "FCFF = EBIT × (1 − 税率) + 減価償却費 − 設備投資 − 運転資本増加",
     numericMarker: calculateFcff(dcfCase.forecasts[0]).toFixed(1),
     previous: "/valuation/dcf",
     next: dcfLessonHrefs[1],
@@ -136,7 +136,7 @@ const dcfLessonRoutes = [
     href: dcfLessonHrefs[1],
     page: WaccPage,
     metadata: waccMetadata,
-    formula: "WACC = E / (D + E) × Cost of Equity + D / (D + E) × After-tax Cost of Debt",
+    formula: "WACC = 株主資本構成比 × 株主資本コスト + 負債構成比 × 税引後負債コスト",
     numericMarker: `${(calculateWacc(dcfCase.wacc) * 100).toFixed(2)}%`,
     previous: dcfLessonHrefs[0],
     next: dcfLessonHrefs[2],
@@ -146,7 +146,7 @@ const dcfLessonRoutes = [
     href: dcfLessonHrefs[2],
     page: TerminalValuePage,
     metadata: terminalValueMetadata,
-    formula: "Terminal Value = FCFF(n+1) / (WACC − g)",
+    formula: "継続価値 = FCFF(n+1) / (WACC − g)",
     numericMarker: calculateDcf(dcfCase).terminalValue.toFixed(1),
     previous: dcfLessonHrefs[1],
     next: dcfLessonHrefs[3],
@@ -156,7 +156,7 @@ const dcfLessonRoutes = [
     href: dcfLessonHrefs[3],
     page: SensitivityAnalysisPage,
     metadata: sensitivityAnalysisMetadata,
-    formula: "WACC × Terminal Growth",
+    formula: "WACC × 永久成長率",
     numericMarker: calculateDcf(dcfCase).enterpriseValue.toFixed(1),
     previous: dcfLessonHrefs[2],
     next: dcfLessonHrefs[4],
@@ -166,7 +166,7 @@ const dcfLessonRoutes = [
     href: dcfLessonHrefs[4],
     page: EnterpriseToEquityPage,
     metadata: enterpriseToEquityMetadata,
-    formula: "Equity Value = Enterprise Value + Cash − Debt − Debt-like Items − Non-controlling Interests",
+    formula: "Equity Value = Enterprise Value + 現金及び現金同等物 − 有利子負債 − 有利子負債類似項目 − 非支配持分",
     numericMarker: calculateEquityBridge(calculateDcf(dcfCase).enterpriseValue, dcfCase.bridge).equityValue.toFixed(1),
     previous: dcfLessonHrefs[3],
     next: "/valuation/dcf",
@@ -242,10 +242,10 @@ assert.doesNotMatch(sensitivitySource, /WACC 5\.5%|g 0\.5%|gを2\.5%|WACCを7\.5
 for (const rate of ["5.5%", "6.0%", "6.5%", "7.0%", "7.5%", "0.5%", "1.0%", "1.5%", "2.0%", "2.5%"] ) {
   assert.ok(sensitivityMarkup.includes(rate), `Sensitivity table is missing ${rate}`);
 }
-assert.match(sensitivityMarkup, /WACCが上がると企業価値は下が/);
-assert.match(sensitivityMarkup, /永久成長率が上がると企業価値は上が/);
+assert.match(sensitivityMarkup, /WACCが上がるとEnterprise Valueは下が/);
+assert.match(sensitivityMarkup, /永久成長率が上がるとEnterprise Valueは上が/);
 assert.ok(
-  sensitivityMarkup.includes("Data Tableの左上セルは、WACC ≤ gでNA()を返すガード済みTerminal Valueを組み込んだEnterprise Value出力を参照します。"),
+  sensitivityMarkup.includes("データテーブルの左上セルは、WACC ≤ gでNA()を返す計算条件を組み込んだEnterprise Value出力を参照します。"),
   "Sensitivity lesson must instruct the Data Table to reference the guarded output",
 );
 assert.match(sensitivityMarkup, /基準ケースに最も近いグリッド点/);
@@ -257,12 +257,12 @@ const nearestGridCell = buildSensitivityMatrix(dcfCase)
   .find((row) => row.wacc === nearestGridWacc)?.cells
   .find((cell) => cell.terminalGrowthRate === dcfCase.terminalGrowthRate);
 assert.ok(nearestGridCell?.enterpriseValue !== null && nearestGridCell?.enterpriseValue !== undefined);
-const nearestGridAccessibleName = `Enterprise Value ${nearestGridCell.enterpriseValue.toLocaleString("ja-JP", { minimumFractionDigits: 1, maximumFractionDigits: 1 })} 百万円。基準ケースに最も近いグリッド点: WACC ${(nearestGridWacc * 100).toFixed(1)}%, Terminal Growth ${(dcfCase.terminalGrowthRate * 100).toFixed(1)}%. Exact base WACC ${(exactBaseWacc * 100).toFixed(4)}%`;
+const nearestGridAccessibleName = `Enterprise Value ${nearestGridCell.enterpriseValue.toLocaleString("ja-JP", { minimumFractionDigits: 1, maximumFractionDigits: 1 })} 百万円。Baseに最も近い組合せ：WACC ${(nearestGridWacc * 100).toFixed(1)}%、永久成長率 ${(dcfCase.terminalGrowthRate * 100).toFixed(1)}%。BaseのWACCは${(exactBaseWacc * 100).toFixed(4)}%です。`;
 assert.ok(
   sensitivityMarkup.includes(`aria-label="${nearestGridAccessibleName}"`),
   "Nearest sensitivity cell accessible name must include its value, unit, and proxy explanation",
 );
-assert.match(sensitivityMarkup, /N\/A/, "Sensitivity lesson must explain the invalid-cell state");
+assert.match(sensitivityMarkup, /該当なし/, "Sensitivity lesson must explain the invalid-cell state");
 const invalidSensitivityFigureMarkup = renderToStaticMarkup(createElement(SensitivityFigure, {
   matrix: buildSensitivityMatrix({
     ...dcfCase,
@@ -271,11 +271,11 @@ const invalidSensitivityFigureMarkup = renderToStaticMarkup(createElement(Sensit
 }));
 assert.match(
   invalidSensitivityFigureMarkup,
-  /<td[^>]+data-sensitivity-status="invalid"[^>]*>N\/A<\/td>/,
+  /<td[^>]+data-sensitivity-status="invalid"[^>]*>該当なし<\/td>/,
   "SensitivityFigure must render an invalid matrix cell as N/A",
 );
 const bridgeMarkup = renderToStaticMarkup(createElement(EnterpriseToEquityPage));
-for (const label of ["Cash", "Debt", "Debt-like Items", "Non-controlling Interests"] ) {
+for (const label of ["現金及び現金同等物", "有利子負債", "有利子負債類似項目", "非支配持分"] ) {
   assert.ok(bridgeMarkup.includes(label), `EV-to-equity bridge is missing ${label}`);
 }
 

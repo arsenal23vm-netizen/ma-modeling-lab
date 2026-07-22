@@ -7,7 +7,7 @@ import { createPageMetadata } from "@/lib/page-metadata";
 export const metadata: Metadata = createPageMetadata("/private-company-valuation", {
   title: "非上場企業Valuation入門――企業価値から株主価値まで",
   description:
-    "非上場企業評価におけるEVと株主価値、EBITDA正常化、EV/EBITDAマルチプル法、DCF法、ネットデット調整、Excelモデル構成を実務者向けに解説。",
+    "非上場企業ValuationにおけるEnterprise ValueとEquity Value、EBITDA正常化、EV/EBITDAマルチプル法、DCF法、ネット有利子負債調整、Excelモデル構成を実務者向けに解説。",
 });
 
 const caseData = {
@@ -28,15 +28,15 @@ const caseData = {
 };
 
 const methods = [
-  ["類似上場会社比較法", "対象会社に類似する上場会社", "市場で観察されるマルチプルを使える", "非上場企業との規模・成長性・流動性差が残る", "上場会社の財務数値、株価、EV、EBITDA等", "対象会社に比較可能な上場会社がある場合"],
+  ["類似上場会社比較法", "対象会社に類似する上場会社", "市場で観察されるマルチプルを使える", "非上場企業との規模・成長性・流動性差が残る", "上場会社の財務数値、株価、Enterprise Value、EBITDA等", "対象会社に比較可能な上場会社がある場合"],
   ["類似取引比較法", "過去のM&A取引", "実際の取引価格を参照できる", "取引条件、支配権、シナジー、時点差の影響を分解しにくい", "取引価格、対象会社財務、取引背景", "同業・近接業種の取引事例がある場合"],
-  ["DCF法", "対象会社の将来FCF", "対象会社固有の事業計画を反映しやすい", "事業計画、WACC、継続価値への依存が大きい", "事業計画、税率、投資、運転資本、割引率", "中期計画の説明力があり、将来CFを作れる場合"],
+  ["DCF法", "対象会社の将来FCFF", "対象会社固有の事業計画を反映しやすい", "事業計画、WACC、継続価値への依存が大きい", "事業計画、税率、投資、運転資本、割引率", "中期計画の説明力があり、将来キャッシュフローを作れる場合"],
   ["修正純資産法", "貸借対照表の資産・負債", "資産性の強い会社で説明しやすい", "将来収益力や無形価値を反映しにくい", "時価評価した資産・負債、簿外債務", "不動産保有会社、清算価値が重要な場合"],
   ["配当還元法", "将来配当", "少数株式の保有価値に近い考え方", "M&Aの支配権取引や成長投資の価値を表しにくい", "配当方針、配当可能利益、割引率", "少数株式、同族会社株式の一部評価など"],
 ];
 
 const adjustmentRows = [
-  ["報告EBITDA", "165", "FY2025の報告値"],
+  ["報告EBITDA", "165", "2025年3月期の報告値"],
   ["過大なオーナー報酬", "+8", "市場水準との差額を正常化"],
   ["一過性のM&A検討費用", "+4", "継続的な事業運営費用ではないものとして調整"],
   ["一時的な工場移転費用", "+3", "将来反復しない前提で加算"],
@@ -44,7 +44,7 @@ const adjustmentRows = [
 ];
 
 const mistakes = [
-  "EVと株主価値を混同し、ネットデット調整を忘れる",
+  "Enterprise ValueとEquity Valueを混同し、ネット有利子負債調整を忘れる",
   "EBITDA調整を事業計画側にも入れて二重計上する",
   "現預金と有利子負債の符号を逆にする",
   "非事業用資産の加算を漏らす",
@@ -59,10 +59,10 @@ const mistakes = [
 ];
 
 const faqs = [
-  ["EVと株主価値は何が違いますか？", "EVは事業そのものの価値を表し、株主価値はEVから有利子負債、現預金、非事業用資産、その他調整項目を反映した株主に帰属する価値です。"],
+  ["Enterprise ValueとEquity Valueは何が違いますか？", "Enterprise Valueは事業そのものの価値を表し、Equity ValueはEnterprise Valueから有利子負債、現金及び現金同等物、非事業用資産、その他調整項目を反映した普通株主に帰属する価値です。"],
   ["非上場企業ではEV/EBITDAとDCFのどちらを使うべきですか？", "どちらか一つだけで決めるのではなく、会社の事業計画の説明力、類似会社や取引事例の有無、収益の安定性を踏まえて併用することが多いです。"],
   ["EBITDA正常化では何を調整しますか？", "非反復的な費用、オーナー企業特有の報酬・私的費用、買手には発生しない費用などを検討します。ただし証憑と将来計画との整合が必要です。"],
-  ["非事業用資産はなぜ株主価値に加算しますか？", "EVが通常は事業価値を表すため、事業運営に不要な資産を別途株主に帰属する価値として加算する考え方です。"],
+  ["非事業用資産はなぜEquity Valueに加算しますか？", "Enterprise Valueが通常は事業価値を表すため、事業運営に不要な資産を別途普通株主に帰属する価値として加算する考え方です。"],
   ["評価結果をレンジで示すのはなぜですか？", "マルチプル、WACC、成長率、正常化調整、ネットデットなどの前提が変わると価値が変動するため、一点ではなく合理的な範囲で示す方が実務的です。"],
 ];
 
@@ -88,7 +88,7 @@ function ExcelFigure({ title, rows }: { title: string; rows: string[][] }) {
     <figure className="my-8 overflow-hidden border border-[#d8e0e5] bg-white">
       <figcaption className="border-b border-[#d8e0e5] bg-[#f7f8f6] px-4 py-3 text-sm font-bold text-[#102235]">{title}</figcaption>
       <div className="border-b border-[#d8e0e5] px-4 py-3 font-mono text-sm">
-        数式バー：<span className="text-[#217346]"> =Valuation_Summary!H12</span>
+        数式バー：<span className="text-[#217346]"> =Valuation結果!H12</span>
       </div>
       <div className="data-scroll border-0">
         <table className="data-table min-w-[760px]">
@@ -100,7 +100,7 @@ function ExcelFigure({ title, rows }: { title: string; rows: string[][] }) {
               <tr key={row.join("-")}>
                 <td className="font-mono text-[#607080]">{index + 1}</td>
                 {row.map((cell, cellIndex) => {
-                  const className = cell.includes("入力") ? "cell-input" : cell.includes("参照") ? "cell-link" : cell.includes("ERROR") ? "cell-error" : cell.includes("OK") ? "cell-check" : "cell-formula";
+                  const className = cell.includes("入力") ? "cell-input" : cell.includes("参照") ? "cell-link" : cell.includes("エラー") ? "cell-error" : cell.includes("適合") ? "cell-check" : "cell-formula";
                   return <td key={`${cell}-${cellIndex}`} className={className}>{cell}</td>;
                 })}
               </tr>
@@ -115,7 +115,7 @@ function ExcelFigure({ title, rows }: { title: string; rows: string[][] }) {
         <span className="cell-error px-2 py-1">赤：チェックエラー</span>
       </div>
       <div className="flex gap-2 overflow-x-auto border-t border-[#d8e0e5] bg-[#f7f8f6] px-4 py-3 text-xs">
-        {["Guide", "Inputs", "Historical", "Adjustments", "Multiples", "DCF", "Valuation Summary", "Checks"].map((sheet) => (
+        {["使い方", "入力", "実績", "正常化調整", "マルチプル法", "DCF", "Valuation結果", "チェック"].map((sheet) => (
           <span key={sheet} className="shrink-0 rounded-t border border-[#d8e0e5] bg-white px-3 py-1">{sheet}</span>
         ))}
       </div>
@@ -146,13 +146,13 @@ export default function PrivateCompanyValuationPage() {
             <span aria-hidden="true"> / </span>
             <span>非上場企業Valuation入門</span>
           </nav>
-          <div className="eyebrow">PRIVATE COMPANY VALUATION</div>
+          <div className="eyebrow">非上場企業Valuation</div>
           <h1 className="mt-3 max-w-5xl text-4xl font-bold tracking-[-.04em] text-[#102235] md:text-5xl">非上場企業Valuation入門――企業価値から株主価値まで</h1>
           <p className="mt-5 max-w-3xl text-lg text-[#607080]">
-            EV、株主価値、EBITDA正常化、ネットデット、非事業用資産、評価レンジ、Excelモデル構成を、{caseData.company}の架空事例で実務順に整理します。
+            Enterprise Value、Equity Value、EBITDA正常化、ネット有利子負債、非事業用資産、評価レンジ、Excelモデル構成を、{caseData.company}の架空事例で実務順に整理します。
           </p>
           <dl className="mt-6 grid gap-3 text-sm text-[#607080] md:grid-cols-4">
-            <div className="border border-[#d8e0e5] bg-white p-3"><dt className="font-bold text-[#102235]">対象</dt><dd>M&A/FAS/投資/経営企画</dd></div>
+            <div className="border border-[#d8e0e5] bg-white p-3"><dt className="font-bold text-[#102235]">対象</dt><dd>M&amp;A・財務アドバイザリー・投資・経営企画</dd></div>
             <div className="border border-[#d8e0e5] bg-white p-3"><dt className="font-bold text-[#102235]">難易度</dt><dd>実務入門〜中級</dd></div>
             <div className="border border-[#d8e0e5] bg-white p-3"><dt className="font-bold text-[#102235]">目安時間</dt><dd>25〜35分</dd></div>
             <div className="border border-[#d8e0e5] bg-white p-3"><dt className="font-bold text-[#102235]">単位</dt><dd>{caseData.unit}</dd></div>
@@ -169,11 +169,11 @@ export default function PrivateCompanyValuationPage() {
 
           <h2 id="what-is-valuation">1. Valuationとは何か</h2>
           <p>
-            Valuationは「会社はいくらか」を一つの数字で当てる作業ではありません。価格、企業価値、株主価値、会計上の純資産はそれぞれ異なる概念です。価格は交渉で決まる取引条件、EVは事業全体の価値、株主価値は株主に帰属する価値、会計上の純資産は帳簿上の資産と負債の差額です。
+            Valuationは「会社はいくらか」を一つの数字で当てる作業ではありません。価格、Enterprise Value、Equity Value、会計上の純資産はそれぞれ異なる概念です。価格は交渉で決まる取引条件、Enterprise Valueは事業全体の価値、Equity Valueは普通株主に帰属する価値、会計上の純資産は帳簿上の資産と負債の差額です。
           </p>
-          <div className="formula">企業価値（EV） − 有利子負債 ＋ 現預金 ＋ 非事業用資産 − 株主価値調整項目 ＝ 株主価値</div>
+          <div className="formula">Equity Value = Enterprise Value − 有利子負債 ＋ 現金及び現金同等物 ＋ 非事業用資産 − その他の株主価値調整項目</div>
           <p>
-            M&Aでよく使うEV/EBITDAマルチプル法は、まずEVを求めます。その後、ネットデットや非事業用資産などを調整して株主価値にブリッジします。
+            M&Aでよく使うEV/EBITDAマルチプル法は、まずEnterprise Valueを求めます。その後、ネット有利子負債や非事業用資産などを調整してEquity Valueへつなげます。
           </p>
 
           <h2 id="purpose-date">2. 評価目的と基準日</h2>
@@ -197,7 +197,7 @@ export default function PrivateCompanyValuationPage() {
 
           <h2 id="ebitda-normalization">5. EBITDAの正常化</h2>
           <p>
-            {caseData.company}のFY2025報告EBITDAは{caseData.reportedEbitda}百万円です。ここでは、過大なオーナー報酬、一過性のM&A検討費用、一時的な工場移転費用を調整し、正常化後EBITDAを{caseData.normalizedEbitda}百万円とします。
+            {caseData.company}の2025年3月期報告EBITDAは{caseData.reportedEbitda}百万円です。ここでは、過大なオーナー報酬、一過性のM&A検討費用、一時的な工場移転費用を調整し、正常化後EBITDAを{caseData.normalizedEbitda}百万円とします。
           </p>
           <DataTable headers={["項目", "金額", "説明"]} rows={adjustmentRows} />
           <h3>調整可否の判定軸</h3>
@@ -209,60 +209,60 @@ export default function PrivateCompanyValuationPage() {
             <li>将来の事業計画と整合するか</li>
           </ul>
           <ExcelFigure title="Excel風図解：EBITDA正常化ブリッジ" rows={[
-            ["A1 入力: 報告EBITDA", "B1 165", "C1 参照: Historical", "D1 OK"],
-            ["A2 入力: Owner comp adj.", "B2 +8", "C2 証憑メモ", "D2 OK"],
-            ["A3 入力: M&A cost adj.", "B3 +4", "C3 非反復", "D3 OK"],
-            ["A4 入力: Relocation adj.", "B4 +3", "C4 非反復", "D4 OK"],
-            ["A5 正常化後EBITDA", "B5 =SUM(B1:B4)", "C5 参照: Summary", "D5 OK"],
+            ["A1 入力: 報告EBITDA", "B1 165", "C1 参照: 実績", "D1 適合"],
+            ["A2 入力: 役員報酬調整", "B2 +8", "C2 証憑メモ", "D2 適合"],
+            ["A3 入力: M&A検討費用調整", "B3 +4", "C3 非反復", "D3 適合"],
+            ["A4 入力: 移転費用調整", "B4 +3", "C4 非反復", "D4 適合"],
+            ["A5 正常化後EBITDA", "B5 =SUM(B1:B4)", "C5 参照: Valuation結果", "D5 適合"],
           ]} />
 
-          <h2 id="ev-to-equity">6. EVから株主価値へのブリッジ</h2>
+          <h2 id="ev-to-equity">6. Enterprise ValueからEquity Valueへの調整</h2>
           <p>
-            EVを{caseData.ev.toLocaleString()}百万円と仮定します。有利子負債{caseData.debt}百万円を控除し、現預金{caseData.cash}百万円と非事業用資産{caseData.nonOperatingAssets}百万円を加算すると、株主価値は{shareholderValue.toLocaleString()}百万円です。
+            Enterprise Valueを{caseData.ev.toLocaleString()}百万円と仮定します。有利子負債{caseData.debt}百万円を控除し、現金及び現金同等物{caseData.cash}百万円と非事業用資産{caseData.nonOperatingAssets}百万円を加算すると、Equity Valueは{shareholderValue.toLocaleString()}百万円です。
           </p>
           <div className="formula">
-            株主価値 = 1,080 − 330 + 80 + 30 = 860百万円<br />
+            Equity Value = 1,080 − 330 + 80 + 30 = 860百万円<br />
             1株当たり価値 = 860百万円 × 1,000,000円 ÷ 10,000株 = {perShareYen.toLocaleString()}円
           </div>
           <p>
             単位は百万円です。株式数は「株」単位のため、1株当たり価値を計算するときは百万円を円に変換します。この単位変換を忘れると、1株当たり価値が100万倍ずれます。
           </p>
-          <ExcelFigure title="Excel風図解：EVから株主価値へのブリッジ" rows={[
-            ["A1 入力: EV", "B1 1,080", "C1 参照: Multiples/DCF", "D1 OK"],
-            ["A2 入力: Debt", "B2 -330", "C2 Historical BS", "D2 OK"],
-            ["A3 入力: Cash", "B3 +80", "C3 Historical BS", "D3 OK"],
-            ["A4 入力: Non-operating assets", "B4 +30", "C4 DD memo", "D4 OK"],
-            ["A5 Equity value", "B5 =SUM(B1:B4)", "C5 860", "D5 OK"],
+          <ExcelFigure title="Excel風図解：Enterprise ValueからEquity Valueへの調整" rows={[
+            ["A1 入力: Enterprise Value", "B1 1,080", "C1 参照: マルチプル法/DCF", "D1 適合"],
+            ["A2 入力: 有利子負債", "B2 -330", "C2 実績 BS", "D2 適合"],
+            ["A3 入力: 現金及び現金同等物", "B3 +80", "C3 実績 BS", "D3 適合"],
+            ["A4 入力: 非事業用資産", "B4 +30", "C4 調査メモ", "D4 適合"],
+            ["A5 Equity Value", "B5 =SUM(B1:B4)", "C5 860", "D5 適合"],
           ]} />
 
           <h2 id="excel-structure">7. Excelモデルの全体構成</h2>
           <DataTable headers={["シート", "役割", "主な内容"]} rows={[
-            ["Guide", "利用方法と前提", "評価目的、基準日、単位、セル色ルール、免責"],
-            ["Inputs", "主要入力", "評価基準日、株式数、現預金、有利子負債、非事業用資産"],
-            ["Historical", "実績財務", "FY2025売上高、報告EBITDA、BS主要項目"],
-            ["Adjustments", "正常化調整", "EBITDA調整、証憑、反復性、買手発生有無"],
-            ["Business Plan", "事業計画", "売上、利益、投資、運転資本、税金"],
-            ["Multiples", "マルチプル法", "EV/EBITDAレンジ、採用マルチプル、EV"],
+            ["使い方", "利用方法と前提", "評価目的、基準日、単位、セル色ルール、免責"],
+            ["入力", "主要入力", "評価基準日、株式数、現預金、有利子負債、非事業用資産"],
+            ["実績", "実績財務", "2025年3月期売上高、報告EBITDA、BS主要項目"],
+            ["正常化調整", "正常化調整", "EBITDA調整、証憑、反復性、買手発生有無"],
+            ["事業計画", "事業計画", "売上、利益、投資、運転資本、税金"],
+            ["マルチプル法", "マルチプル法", "EV/EBITDAレンジ、採用マルチプル、Enterprise Value"],
             ["DCF", "DCF法", "FCF、WACC、継続価値、感応度"],
-            ["Valuation Summary", "評価結果", "EVレンジ、株主価値レンジ、1株当たり価値"],
-            ["Checks", "検証", "符号、単位、ネットデット、株式数、レンジ整合"],
+            ["Valuation結果", "評価結果", "Enterprise Valueレンジ、Equity Valueレンジ、1株当たり価値"],
+            ["チェック", "検証", "符号、単位、ネットデット、株式数、レンジ整合"],
           ]} />
           <p>入力セルは青、同一シート数式は黒、他シート参照は緑、チェックエラーは赤で統一します。色だけに依存せず、凡例とセル種別ラベルも併用します。</p>
 
           <h2 id="excel-figures">8. Excelワークシート風図解</h2>
           <ExcelFigure title="Excel風図解：評価手法別の株主価値レンジ" rows={[
-            ["A1 Method", "B1 Low", "C1 Mid", "D1 High"],
+            ["A1 評価手法", "B1 下限", "C1 中央値", "D1 上限"],
             ["A2 EV/EBITDA", "B2 760", "C2 860", "D2 940"],
             ["A3 DCF", "B3 790", "C3 880", "D3 990"],
             ["A4 修正純資産", "B4 620", "C4 680", "D4 720"],
-            ["A5 Conclusion", "B5 760", "C5 860", "D5 940"],
+            ["A5 結論", "B5 760", "C5 860", "D5 940"],
           ]} />
-          <ExcelFigure title="Excel風図解：Valuation Summaryシート" rows={[
-            ["A1 入力: Valuation date", "B1 FY2025/3", "C1 Guide参照", "D1 OK"],
-            ["A2 Normalized EBITDA", "B2 180", "C2 Adjustments参照", "D2 OK"],
-            ["A3 EV", "B3 1,080", "C3 Multiples参照", "D3 OK"],
-            ["A4 Net debt", "B4 -250", "C4 Inputs参照", "D4 OK"],
-            ["A5 Equity value", "B5 860", "C5 =B3+B4+B6", "D5 OK"],
+          <ExcelFigure title="Excel風図解：Valuation結果シート" rows={[
+            ["A1 入力: 評価基準日", "B1 2025年3月期", "C1 使い方参照", "D1 適合"],
+            ["A2 正常化後EBITDA", "B2 180", "C2 正常化調整参照", "D2 適合"],
+            ["A3 Enterprise Value", "B3 1,080", "C3 マルチプル法参照", "D3 適合"],
+            ["A4 ネット有利子負債", "B4 -250", "C4 入力参照", "D4 適合"],
+            ["A5 Equity Value", "B5 860", "C5 =B3+B4+B6", "D5 適合"],
           ]} />
 
           <h2 id="multiple-dcf">9. 評価結果の読み方</h2>
@@ -276,7 +276,7 @@ export default function PrivateCompanyValuationPage() {
           <h2 id="common-mistakes">10. よくある誤り</h2>
           <ol>{mistakes.map((mistake) => <li key={mistake}>{mistake}</li>)}</ol>
 
-          <h2 id="faq">FAQ</h2>
+          <h2 id="faq">よくある質問</h2>
           <div className="grid gap-4">
             {faqs.map(([question, answer]) => (
               <section key={question} className="border border-[#d8e0e5] bg-white p-5">
@@ -287,7 +287,7 @@ export default function PrivateCompanyValuationPage() {
           </div>
 
           <section className="mt-10">
-            <div className="eyebrow">NEXT READS</div>
+            <div className="eyebrow">次に読む</div>
             <h2 className="mt-2 text-2xl font-bold text-[#102235]">次に学ぶページ</h2>
             <div className="mt-5 grid gap-4 md:grid-cols-2">
               {[
@@ -323,7 +323,7 @@ export default function PrivateCompanyValuationPage() {
                 ["methods", "主な評価手法"],
                 ["private-company-issues", "非上場企業特有の論点"],
                 ["ebitda-normalization", "EBITDA正常化"],
-                ["ev-to-equity", "EVから株主価値"],
+                ["ev-to-equity", "Enterprise ValueからEquity Value"],
                 ["excel-structure", "Excel構成"],
                 ["common-mistakes", "よくある誤り"],
                 ["faq", "FAQ"],

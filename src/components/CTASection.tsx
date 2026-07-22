@@ -13,7 +13,7 @@ export function CTASection({
 }: CTASectionProps) {
   return (
     <section className="mt-10 border border-[#d8e0e5] bg-[#102235] p-6 text-white md:p-8">
-      <div className="text-xs font-bold tracking-[.15em] text-[#77c7bc]">PRACTICAL NEXT STEP</div>
+      <div className="text-xs font-bold tracking-[.15em] text-[#77c7bc]">次の実践</div>
       <h2 className="mt-2 text-2xl font-bold tracking-[-.03em]">{title}</h2>
       <p className="mt-3 max-w-2xl text-sm text-white/70">{body}</p>
       <div className="mt-6 flex flex-wrap gap-3">

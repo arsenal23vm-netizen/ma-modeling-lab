@@ -13,7 +13,7 @@ export default function QualityStandardPage() {
   const total = qualityCriteria.reduce((sum, item) => sum + item.points, 0);
   return (
     <div className="container py-14">
-      <div className="eyebrow">MODEL QUALITY STANDARD</div>
+      <div className="eyebrow">モデル品質基準</div>
       <h1 className="mt-3 text-4xl font-bold tracking-[-.04em] text-[#102235] md:text-5xl">モデル品質基準</h1>
       <p className="mt-5 max-w-3xl text-lg text-[#607080]">レビュー可能な財務モデルに必要な構造、前提、数式、三表連動、チェック、引継ぎやすさを100点満点で評価します。</p>
       <div className="mt-8 data-scroll">

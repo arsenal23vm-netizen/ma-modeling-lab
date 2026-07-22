@@ -1,5 +1,5 @@
 export const navItems = [
-  { href: "/", label: "Home" },
+  { href: "/", label: "ホーム" },
   { href: "/financial-modeling", label: "財務モデリング" },
   { href: "/valuation", label: "Valuation" },
   { href: "/ma-modeling", label: "M&Aモデル" },

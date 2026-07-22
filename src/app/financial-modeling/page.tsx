@@ -13,5 +13,5 @@ export const metadata: Metadata = {
 };
 
 export default function FinancialModelingPage() {
-  return <TopicHub topic="financial-modeling" eyebrow="FINANCIAL MODELING" title="財務モデリングを、構造から組み立てる" lead="入力・計算・出力を分け、財務三表が一貫して連動するモデルへ。基礎から品質レビューまでを、実務で再利用できる順番で学びます。" learningSteps={["モデル設計と前提条件の置き場所を理解する", "売上ドライバーと財務三表をつなげる", "チェックとレビューでモデルの品質を確かめる"]} />;
+  return <TopicHub topic="financial-modeling" eyebrow="財務モデリング" title="財務モデリングを、構造から組み立てる" lead="入力・計算・出力を分け、財務三表が一貫して連動するモデルへ。基礎から品質レビューまでを、実務で再利用できる順番で学びます。" learningSteps={["モデル設計と前提条件の置き場所を理解する", "売上ドライバーと財務三表をつなげる", "チェックとレビューでモデルの品質を確かめる"]} />;
 }

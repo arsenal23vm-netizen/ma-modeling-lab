@@ -82,7 +82,7 @@ export function SiteHeader() {
     <>
       <div className="bg-[#102235] text-xs text-white">
         <div className="container flex items-center justify-between gap-4 py-2">
-          <span className="font-semibold tracking-[.12em]">PRIVATE COMPANY M&A / FINANCIAL MODELING</span>
+          <span className="font-semibold tracking-[.12em]">非上場企業M&A・財務モデリング</span>
           <Link href="/disclaimer" className="shrink-0 text-white/70 hover:text-white">
             免責事項
           </Link>
