@@ -3,7 +3,7 @@ import { DcfCommonErrors, DcfLessonShell, DcfReviewCheck } from "@/components/Dc
 import { SensitivityFigure } from "@/components/DcfFigures";
 import { buildSensitivityMatrix, calculateDcf, dcfCase } from "@/data/dcf-series";
 
-const canonical = "https://arsenal23vm-netizen.github.io/financial-modeling-lab/valuation/dcf/sensitivity-analysis";
+const canonical = "https://data-lab-23.github.io/financial-modeling-lab/valuation/dcf/sensitivity-analysis";
 export const metadata: Metadata = {
   title: "DCF感応度分析の作り方｜WACC×永久成長率をExcelで検証",
   description: "WACCを行、永久成長率を列にしたDCF感応度表を作り、企業価値の方向性とWACCがg以下の無効セルを確認します。",

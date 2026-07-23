@@ -96,7 +96,7 @@ for (const href of articleRoutes) {
   assert.match(html, /"@type":"BreadcrumbList"/);
   assert.match(html, /"dateModified"/);
   assert.match(html, /"author":\{"@type":"Organization"/);
-  assert.match(html, /https:\/\/arsenal23vm-netizen\.github\.io\/financial-modeling-lab/);
+  assert.match(html, /https:\/\/data-lab-23\.github\.io\/financial-modeling-lab/);
 }
 
 assert.deepEqual([...modifiedDates], ["2026-07-22"], "all reviewed articles must carry the current revision date");

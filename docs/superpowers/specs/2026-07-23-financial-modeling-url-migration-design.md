@@ -3,7 +3,7 @@
 ## 目的
 
 Finance Modeling Lab の GitHub Pages URL を、内容が直感的に伝わる
-`https://arsenal23vm-netizen.github.io/financial-modeling-lab/` に変更する。
+`https://data-lab-23.github.io/financial-modeling-lab/` に変更する。
 既存の検索流入、外部リンク、ブックマークを失わないよう、旧 URL から新 URL
 へ自動転送する。
 
@@ -20,8 +20,9 @@ Finance Modeling Lab の GitHub Pages URL を、内容が直感的に伝わる
 
 ## URL と名称
 
-- 新リポジトリ: `arsenal23vm-netizen/financial-modeling-lab`
-- 新サイト: `https://arsenal23vm-netizen.github.io/financial-modeling-lab/`
+- 新ユーザー名: `data-lab-23`
+- 新リポジトリ: `data-lab-23/financial-modeling-lab`
+- 新サイト: `https://data-lab-23.github.io/financial-modeling-lab/`
 - 旧サイト: `https://arsenal23vm-netizen.github.io/ma-modeling-lab/`
 - npm package 名: `financial-modeling-lab`
 - サイト表示名「Finance Modeling Lab 編集部」は変更しない。
@@ -42,7 +43,10 @@ Finance Modeling Lab の GitHub Pages URL を、内容が直感的に伝わる
 
 ## 旧 URL 転送サイト
 
-旧リポジトリは次の静的ファイルだけを保持する。
+ユーザー名変更後、GitHub Pages は旧ユーザー名のドメインを自動転送しない。
+このため、旧ユーザー名を別アカウントまたはOrganizationとして再取得しない限り、
+旧サイトからの転送は作成できない。現行アカウント内で作成できる旧リポジトリ名の
+転送サイトは次の静的ファイルだけを保持する。
 
 - `index.html`: 新 URL への転送、canonical、案内文、通常リンク
 - `404.html`: 旧 URL 配下の深いリンクから新サイトの同一パスへ転送

@@ -17,7 +17,7 @@ import sitemap from "../src/app/sitemap";
 import { contentCatalog, type ContentEntry } from "../src/data/content-catalog";
 import { buildSensitivityMatrix, calculateDcf, calculateEquityBridge, calculateFcff, calculateWacc, dcfCase } from "../src/data/dcf-series";
 
-const deploymentBase = "https://arsenal23vm-netizen.github.io/financial-modeling-lab";
+const deploymentBase = "https://data-lab-23.github.io/financial-modeling-lab";
 const unpublishedHrefs = new Set<string>();
 
 const hubs = [

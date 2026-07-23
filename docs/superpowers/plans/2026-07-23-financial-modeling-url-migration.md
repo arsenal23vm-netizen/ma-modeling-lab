@@ -10,7 +10,7 @@
 
 ## Global Constraints
 
-- 新サイト URL は `https://arsenal23vm-netizen.github.io/financial-modeling-lab/` とする。
+- 新サイト URL は `https://data-lab-23.github.io/financial-modeling-lab/` とする。
 - 旧サイト URL は `https://arsenal23vm-netizen.github.io/ma-modeling-lab/` とする。
 - サイト表示名「Finance Modeling Lab 編集部」は変更しない。
 - 旧 URL のパス、クエリ、ハッシュを可能な限り新 URL へ引き継ぐ。
@@ -70,7 +70,7 @@ Run:
 
 本体サイトと検証スクリプトの
 `https://arsenal23vm-netizen.github.io/ma-modeling-lab` を
-`https://arsenal23vm-netizen.github.io/financial-modeling-lab` に更新する。
+`https://data-lab-23.github.io/financial-modeling-lab` に更新する。
 workflow の `/ma-modeling-lab` を `/financial-modeling-lab` に更新し、
 package 名を `financial-modeling-lab` にする。
 
@@ -101,7 +101,7 @@ Expected: 全コマンド exit 0。
 - [ ] **Step 4: Run the production build**
 
 Run:
-`$env:PAGES_BASE_PATH='/financial-modeling-lab'; $env:NEXT_PUBLIC_BASE_PATH='/financial-modeling-lab'; $env:NEXT_PUBLIC_SITE_URL='https://arsenal23vm-netizen.github.io/financial-modeling-lab'; npm.cmd run build`
+`$env:PAGES_BASE_PATH='/financial-modeling-lab'; $env:NEXT_PUBLIC_BASE_PATH='/financial-modeling-lab'; $env:NEXT_PUBLIC_SITE_URL='https://data-lab-23.github.io/financial-modeling-lab'; npm.cmd run build`
 
 Expected: exit 0、静的ページ生成完了。
 
@@ -119,7 +119,7 @@ Run:
 
 **Interfaces:**
 - Consumes: Task 2 の検証済みコミット
-- Produces: `arsenal23vm-netizen/financial-modeling-lab`
+- Produces: `data-lab-23/financial-modeling-lab`
 
 - [ ] **Step 1: Rename the GitHub repository**
 
@@ -129,7 +129,7 @@ GitHub API または認証済み GitHub CLI で `ma-modeling-lab` を
 - [ ] **Step 2: Update the local remote**
 
 Run:
-`git remote set-url origin https://github.com/arsenal23vm-netizen/financial-modeling-lab.git`
+`git remote set-url origin https://github.com/data-lab-23/financial-modeling-lab.git`
 
 Expected: `git remote -v` が新 URL を表示する。
 
@@ -149,7 +149,7 @@ Expected: build と deploy が success。
 ### Task 4: 旧 URL 転送サイト
 
 **Files:**
-- Create external repository: `arsenal23vm-netizen/ma-modeling-lab`
+- Create external repository: `data-lab-23/ma-modeling-lab`
 - Create in redirect repository: `index.html`
 - Create in redirect repository: `404.html`
 - Create in redirect repository: `.nojekyll`

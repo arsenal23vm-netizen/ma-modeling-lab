@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://arsenal23vm-netizen.github.io/financial-modeling-lab/"),
+  metadataBase: new URL("https://data-lab-23.github.io/financial-modeling-lab/"),
   title: { default: "Finance Modeling Lab", template: "%s | Finance Modeling Lab" },
   description: "非上場企業のM&A財務モデリングを、設計思想からExcel実装まで体系的に学ぶ実務メディア。",
   keywords: ["M&A", "財務モデリング", "Excel", "企業価値評価", "財務三表"],
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     siteName: "Finance Modeling Lab",
     title: "Finance Modeling Lab",
     description: "非上場企業のM&A財務モデリングを、設計思想からExcel実装まで体系的に学ぶ実務メディア。",
-    url: "https://arsenal23vm-netizen.github.io/financial-modeling-lab/",
+    url: "https://data-lab-23.github.io/financial-modeling-lab/",
   },
   robots: {
     index: true,

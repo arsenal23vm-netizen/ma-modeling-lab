@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { TopicHub } from "@/components/TopicHub";
 
-const canonical = "https://arsenal23vm-netizen.github.io/financial-modeling-lab/financial-modeling";
+const canonical = "https://data-lab-23.github.io/financial-modeling-lab/financial-modeling";
 const title = "財務モデリング";
 const description = "財務三表、事業計画、モデル設計を実務で使える順番で学ぶ財務モデリングの案内ページです。";
 

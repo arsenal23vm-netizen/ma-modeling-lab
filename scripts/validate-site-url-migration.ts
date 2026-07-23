@@ -4,7 +4,9 @@ import path from "node:path";
 
 const newSlug = "financial-modeling-lab";
 const oldSlug = "ma-modeling-lab";
-const newSiteUrl = `https://arsenal23vm-netizen.github.io/${newSlug}`;
+const newOwner = "data-lab-23";
+const oldOwner = "arsenal23vm-netizen";
+const newSiteUrl = `https://${newOwner}.github.io/${newSlug}`;
 const roots = [".github", "src", "scripts"];
 const standaloneFiles = [".env.example", "package.json", "package-lock.json", "README.md"];
 const ignoredFiles = new Set(["scripts/validate-site-url-migration.ts"]);
@@ -47,12 +49,13 @@ async function main() {
   for (const file of files) {
     const source = await readFile(file, "utf8");
     if (source.includes(oldSlug)) violations.push(file);
+    if (source.includes(oldOwner)) violations.push(file);
   }
 
   assert.deepEqual(
     violations,
     [],
-    `old repository slug remains in production files:\n${violations.join("\n")}`,
+    `old repository slug or owner remains in production files:\n${[...new Set(violations)].join("\n")}`,
   );
 
   console.log("Site URL migration validation passed.");

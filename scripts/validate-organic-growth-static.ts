@@ -18,7 +18,7 @@ import { metadata as threeStatementsMetadata } from "../src/app/three-statements
 import sitemap from "../src/app/sitemap";
 import { contentCatalog } from "../src/data/content-catalog";
 
-const siteOrigin = "https://arsenal23vm-netizen.github.io";
+const siteOrigin = "https://data-lab-23.github.io";
 const pagesBasePath = "/financial-modeling-lab";
 const deploymentBase = `${siteOrigin}${pagesBasePath}`;
 const outRoot = path.resolve("out");

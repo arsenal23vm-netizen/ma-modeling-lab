@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-const deploymentBase = "https://arsenal23vm-netizen.github.io/financial-modeling-lab";
+const deploymentBase = "https://data-lab-23.github.io/financial-modeling-lab";
 
 export function createPageMetadata(route: `/${string}`, metadata: Metadata): Metadata {
   if (typeof metadata.title !== "string" || typeof metadata.description !== "string") {

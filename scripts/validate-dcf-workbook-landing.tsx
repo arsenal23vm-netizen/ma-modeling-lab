@@ -26,7 +26,7 @@ for (const legend of ["青セル：入力", "計算セル：数式", "出力セ�
 for (const href of ["/valuation/dcf/fcff", "/valuation/dcf/wacc", "/valuation/dcf/terminal-value", "/valuation/dcf/sensitivity-analysis", "/valuation/dcf/enterprise-to-equity"]) assert.match(html, new RegExp(`href="${href}"`), `missing lesson link: ${href}`);
 for (const wording of ["教育目的", "実案件", "Microsoft Excel 2021", "Microsoft 365", "LibreOffice"]) assert.ok(html.includes(wording), `missing landing copy: ${wording}`);
 
-assert.equal(metadata.alternates?.canonical, "https://arsenal23vm-netizen.github.io/financial-modeling-lab/downloads/dcf-valuation-model");
+assert.equal(metadata.alternates?.canonical, "https://data-lab-23.github.io/financial-modeling-lab/downloads/dcf-valuation-model");
 assert.ok(sitemap().some((entry) => entry.url.endsWith(landingHref)), "sitemap must explicitly include the landing route");
 const catalogEntry = contentCatalog.find((entry) => entry.href === landingHref);
 assert.ok(catalogEntry);

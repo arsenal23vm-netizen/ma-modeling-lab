@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { TopicHub } from "@/components/TopicHub";
 
-const canonical = "https://arsenal23vm-netizen.github.io/financial-modeling-lab/excel-templates";
+const canonical = "https://data-lab-23.github.io/financial-modeling-lab/excel-templates";
 const title = "Excel教材・テンプレート";
 const description = "仕訳から財務三表、類似会社比較、モデル品質チェックまで、財務モデリング学習用のExcel教材をまとめています。";
 

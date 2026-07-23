@@ -3,7 +3,7 @@ import { DcfCommonErrors, DcfLessonShell, DcfReviewCheck } from "@/components/Dc
 import { EnterpriseToEquityFigure } from "@/components/DcfFigures";
 import { calculateDcf, calculateEquityBridge, dcfCase } from "@/data/dcf-series";
 
-const canonical = "https://arsenal23vm-netizen.github.io/financial-modeling-lab/valuation/dcf/enterprise-to-equity";
+const canonical = "https://data-lab-23.github.io/financial-modeling-lab/valuation/dcf/enterprise-to-equity";
 export const metadata: Metadata = {
   title: "Enterprise ValueからEquity Valueへの調整",
   description: "Enterprise Valueへ現金及び現金同等物を加え、有利子負債、有利子負債類似項目、非支配持分を控除してEquity Valueを計算します。",

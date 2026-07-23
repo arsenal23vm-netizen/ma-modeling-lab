@@ -3,7 +3,7 @@ import { lessons } from "@/data/site";
 
 export const dynamic = "force-static";
 
-const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://arsenal23vm-netizen.github.io/financial-modeling-lab";
+const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://data-lab-23.github.io/financial-modeling-lab";
 const lastModified = new Date("2026-07-11T00:00:00+09:00");
 
 export default function sitemap(): MetadataRoute.Sitemap {
