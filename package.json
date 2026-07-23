@@ -20,7 +20,8 @@
     "generate:comps-workbook": "tsx scripts/create-comps-selection-workbook.ts",
     "test:comps-workbook": "tsx scripts/test-comps-selection-workbook.ts",
     "generate:learning-workbooks": "tsx scripts/create-learning-workbooks.ts",
-    "test:learning-workbooks": "tsx scripts/test-learning-workbooks.ts"
+    "test:learning-workbooks": "tsx scripts/test-learning-workbooks.ts",
+    "validate:url-migration": "tsx scripts/validate-site-url-migration.ts"
   },
   "dependencies": {
     "next": "16.2.10",
