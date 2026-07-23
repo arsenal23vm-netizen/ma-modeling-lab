@@ -3,7 +3,7 @@ import { DcfCommonErrors, DcfLessonShell, DcfReviewCheck } from "@/components/Dc
 import { TerminalValueFigure } from "@/components/DcfFigures";
 import { calculateDcf, calculateFcff, dcfCase } from "@/data/dcf-series";
 
-const canonical = "https://arsenal23vm-netizen.github.io/ma-modeling-lab/valuation/dcf/terminal-value";
+const canonical = "https://arsenal23vm-netizen.github.io/financial-modeling-lab/valuation/dcf/terminal-value";
 export const metadata: Metadata = {
   title: "継続価値の計算方法｜継続価値と構成比を検証する",
   description: "永久成長法でFCFF(n+1)、WACC、永久成長率から継続価値を計算し、期末割引とEnterprise Valueに占める比率を確認します。",

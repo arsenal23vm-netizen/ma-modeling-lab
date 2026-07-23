@@ -5,7 +5,7 @@
 公開URL:
 
 ```txt
-https://arsenal23vm-netizen.github.io/ma-modeling-lab/
+https://arsenal23vm-netizen.github.io/financial-modeling-lab/
 ```
 
 ## 起動方法
@@ -24,7 +24,7 @@ http://localhost:3000
 GitHub Pages向けの本番ビルド確認（PowerShell）:
 
 ```powershell
-$env:PAGES_BASE_PATH='/ma-modeling-lab'
+$env:PAGES_BASE_PATH='/financial-modeling-lab'
 npx.cmd next build --webpack
 npm.cmd run validate:growth-static
 ```
@@ -105,7 +105,7 @@ Google Analytics 4に対応しています。
 
 ```txt
 NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
-NEXT_PUBLIC_SITE_URL=https://arsenal23vm-netizen.github.io/ma-modeling-lab
+NEXT_PUBLIC_SITE_URL=https://arsenal23vm-netizen.github.io/financial-modeling-lab
 ```
 
 GitHub Pagesの本番環境では、GitHubリポジトリの以下に登録します。
@@ -148,7 +148,7 @@ G-XXXXXXXXXX
 Search Consoleでは、以下のサイトマップを送信してください。
 
 ```txt
-https://arsenal23vm-netizen.github.io/ma-modeling-lab/sitemap.xml
+https://arsenal23vm-netizen.github.io/financial-modeling-lab/sitemap.xml
 ```
 
 ## 公開

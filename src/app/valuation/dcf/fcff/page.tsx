@@ -3,7 +3,7 @@ import { DcfCommonErrors, DcfLessonShell, DcfReviewCheck } from "@/components/Dc
 import { FcffFigure } from "@/components/DcfFigures";
 import { calculateFcff, dcfCase } from "@/data/dcf-series";
 
-const canonical = "https://arsenal23vm-netizen.github.io/ma-modeling-lab/valuation/dcf/fcff";
+const canonical = "https://arsenal23vm-netizen.github.io/financial-modeling-lab/valuation/dcf/fcff";
 export const metadata: Metadata = {
   title: "FCFFの計算方法｜EBITからExcelで作る5年予測",
   description: "EBIT、税率、減価償却費、設備投資、運転資本増加からFCFFを計算し、2026年度から2030年度までの予測をExcelセル式へ落とし込みます。",

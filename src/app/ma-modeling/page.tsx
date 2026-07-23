@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { TopicHub } from "@/components/TopicHub";
 
-const canonical = "https://arsenal23vm-netizen.github.io/ma-modeling-lab/ma-modeling";
+const canonical = "https://arsenal23vm-netizen.github.io/financial-modeling-lab/ma-modeling";
 const title = "M&Aモデリング";
 const description = "買収案件の分析、類似会社選定、モデルレビューに必要なM&Aモデリングの学習順序を案内します。";
 

@@ -6,7 +6,7 @@ type Breadcrumb = {
   href: string;
 };
 
-const SITE_ROOT = "https://arsenal23vm-netizen.github.io/ma-modeling-lab";
+const SITE_ROOT = "https://arsenal23vm-netizen.github.io/financial-modeling-lab";
 
 function absoluteUrl(href: string) {
   const relativeHref = href === "/" ? "" : href.replace(/^\//, "");

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { DcfWorkbookPreview } from "@/components/DcfWorkbookPreview";
 import { calculateDcf, calculateEquityBridge, calculateWacc, dcfCase } from "@/data/dcf-series";
 
-const canonical = "https://arsenal23vm-netizen.github.io/ma-modeling-lab/downloads/dcf-valuation-model";
+const canonical = "https://arsenal23vm-netizen.github.io/financial-modeling-lab/downloads/dcf-valuation-model";
 const workbookHref = "/downloads/06_DCF評価モデル.xlsx";
 
 export const metadata: Metadata = {

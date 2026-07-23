@@ -1,5 +1,5 @@
 import type { Metadata } from "next"; import Link from "next/link"; import { ArticleShell } from "@/components/article-shell";
-const canonical = "https://arsenal23vm-netizen.github.io/ma-modeling-lab/three-statements";
+const canonical = "https://arsenal23vm-netizen.github.io/financial-modeling-lab/three-statements";
 export const metadata: Metadata = {
   title: "財務三表を連動させる",
   description: "損益計算書、貸借対照表、キャッシュ・フロー計算書を一方向の参照で連動させる構築順序とExcel設計を解説します。",

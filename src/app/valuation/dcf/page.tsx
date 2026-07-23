@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { calculateDcf, calculateEquityBridge, calculateFcff, calculateWacc, dcfCase } from "@/data/dcf-series";
 
-const canonical = "https://arsenal23vm-netizen.github.io/ma-modeling-lab/valuation/dcf";
+const canonical = "https://arsenal23vm-netizen.github.io/financial-modeling-lab/valuation/dcf";
 
 export const metadata: Metadata = {
   title: "DCF評価の基礎｜FCFFから株主価値まで5ステップで学ぶ",

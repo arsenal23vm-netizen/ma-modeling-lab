@@ -19,7 +19,7 @@ import sitemap from "../src/app/sitemap";
 import { contentCatalog } from "../src/data/content-catalog";
 
 const siteOrigin = "https://arsenal23vm-netizen.github.io";
-const pagesBasePath = "/ma-modeling-lab";
+const pagesBasePath = "/financial-modeling-lab";
 const deploymentBase = `${siteOrigin}${pagesBasePath}`;
 const outRoot = path.resolve("out");
 const expectedLastModified = new Date("2026-07-22T00:00:00+09:00").getTime();

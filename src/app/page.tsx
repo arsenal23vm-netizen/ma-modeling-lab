@@ -4,7 +4,7 @@ import { CtaLink } from "@/components/CtaLink";
 import { lessons } from "@/data/site";
 
 export const metadata: Metadata = {
-  alternates: { canonical: "https://arsenal23vm-netizen.github.io/ma-modeling-lab/" },
+  alternates: { canonical: "https://arsenal23vm-netizen.github.io/financial-modeling-lab/" },
 };
 
 const principles = [

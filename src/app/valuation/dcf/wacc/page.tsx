@@ -3,7 +3,7 @@ import { DcfCommonErrors, DcfLessonShell, DcfReviewCheck } from "@/components/Dc
 import { WaccFigure } from "@/components/DcfFigures";
 import { calculateWacc, dcfCase } from "@/data/dcf-series";
 
-const canonical = "https://arsenal23vm-netizen.github.io/ma-modeling-lab/valuation/dcf/wacc";
+const canonical = "https://arsenal23vm-netizen.github.io/financial-modeling-lab/valuation/dcf/wacc";
 export const metadata: Metadata = {
   title: "WACCの計算方法｜資本コストをExcelで加重する",
   description: "CAPMによる株主資本コスト、税引後負債コスト、目標資本構成からWACCを計算し、永久成長率とのガードを確認します。",

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { TopicHub } from "@/components/TopicHub";
 
-const canonical = "https://arsenal23vm-netizen.github.io/ma-modeling-lab/valuation";
+const canonical = "https://arsenal23vm-netizen.github.io/financial-modeling-lab/valuation";
 const title = "Valuation";
 const description = "企業価値から株主価値まで、DCFと類似会社比較法を使ったValuationの考え方と教材を案内します。";
 
